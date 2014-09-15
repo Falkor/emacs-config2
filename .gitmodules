@@ -1,3 +1,6 @@
 [submodule ".submodules/Makefiles"]
 	path = .submodules/Makefiles
 	url = https://github.com/Falkor/Makefiles
+[submodule "include/emacs-modular-configuration"]
+	path = include/emacs-modular-configuration
+	url = https://github.com/targzeta/emacs-modular-configuration.git
