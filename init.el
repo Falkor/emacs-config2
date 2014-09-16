@@ -1,6 +1,7 @@
 ;; -------------------------------------------------------------------------
-;; .emacs -- my personnal Emacs Init File
-;;           see http://github.com/Falkor/emacs-config2
+;; Time-stamp: <Mer 2014-09-17 01:03 svarrette>
+;;
+;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
 ;;       _____     _ _              _
 ;;      |  ___|_ _| | | _____  _ __( )___     ___ _ __ ___   __ _  ___ ___
