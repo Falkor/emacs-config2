@@ -14,6 +14,10 @@
 ;;
 ;; -------------------------------------------------------------------------
 
+;; Common Lisp stuff all the time
+(require 'cl)
+(require 'cl-lib)
+
 ;; keep all emacs-related stuff under ~/emacs.d
 (defvar emacs-root "~/.emacs.d/"
   "the root of  personal emacs load-path.")
@@ -54,22 +58,20 @@
 (cl-labels ((add-path (p)
 		   (add-to-list 'load-path
 				(concat emacs-root p))))
-  (add-path "include")
+  (add-path "site-lisp")
 )
 (setq package-user-dir (concat emacs-root "elpa"))
 (setq custom-file      (concat emacs-root "custom.el"))
 (setq custom-dir       (concat emacs-root "rc.custom"))
 (setq defuns-dir       (concat emacs-root "defuns"))
 
-;; Common Lisp stuff all the time
-(require 'cl)
 
 ;; Load Lisp defined functions
 (load-directory defuns-dir) 
 
-(if-not-terminal
- ;; position window automatically based on display resolution
- (size-screen))
+;; (when (display-graphic-p)
+;;   ;; position window automatically based on display resolution
+;;   (size-screen))
 
 
 ;; === Emacs Modular Configuration entry point ===
