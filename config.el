@@ -135,6 +135,22 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/filladapt.el
+;; =============================================
+;; Activate fill adapt
+;; see http://www.emacswiki.org/emacs/FillAdapt
+;; =============================================
+(require 'filladapt)
+;; turn on filladapt mode everywhere but in ChangeLog files
+(setq-default filladapt-mode nil)
+(cond ((equal mode-name "Change Log")
+       t)
+      (t
+       (turn-on-filladapt-mode)))
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/global.el
 ;; Global configuration
 
@@ -279,6 +295,29 @@
       ad-do-it)
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/indent.el
+;; === Indenting configuration ===
+;; see http://www.emacswiki.org/emacs/IndentationBasics
+(setq-default tab-width 2)
+(defvaralias 'c-basic-offset 	 'tab-width)
+(defvaralias 'cperl-indent-level 'tab-width)
+
+
+(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
+;;(setq-default indent-tabs-mode t)
+(require 'smarttabs)
+
+(setq c-brace-offset -2)
+;;(setq c-auto-newline t)
+(add-hook 'c-mode-common-hook (lambda () (setq c-basic-offset 4)))
+(add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
+(add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
+(add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
+(add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
 ;; ############################################################################
 
 
