@@ -16,3 +16,6 @@
 [submodule "resources/emacs.d/larstvei"]
 	path = resources/emacs.d/larstvei
 	url = https://github.com/larstvei/dot-emacs.git
+[submodule "site-lisp/use-package"]
+	path = site-lisp/use-package
+	url = https://github.com/jwiegley/use-package.git
