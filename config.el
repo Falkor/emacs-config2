@@ -306,6 +306,10 @@
 (defvaralias 'c-basic-offset 	 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 
+;; === Show whitespaces/tabs etc. ===
+(setq x-stretch-cursor t)
+(require 'show-wspace)
+;
 
 (setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
 ;;(setq-default indent-tabs-mode t)
