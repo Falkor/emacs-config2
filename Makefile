@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mar 2014-09-16 15:42 svarrette>
+# Time-stamp: <Mar 2014-09-16 15:55 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -68,7 +68,7 @@ all: config.elc
 
 config.elc: config.el $(INIT_SOURCE)
 	$(BATCH_LOAD) --eval "(emc-merge-config-files)"
-	git commit -s -m "Update config"
+	git commit -s -m "Update centralized config" config.el
 
 %.elc: %.el
 	$(BATCH_LOAD) -f batch-byte-compile $<	
