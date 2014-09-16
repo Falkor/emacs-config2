@@ -14,8 +14,6 @@
 ;;
 ;; -------------------------------------------------------------------------
 
-;; Common Lisp stuff all the time
-(require 'cl)
 
 ;; keep all emacs-related stuff under ~/emacs.d
 (defvar emacs-root "~/.emacs.d/"
@@ -28,13 +26,19 @@
     (setq exec-path (split-string path-from-shell path-separator))))
 (when window-system (set-exec-path-from-shell-PATH))
 
-
+;; === Load path etc. ===
 ;; add all the elisp directories under ~/emacs.d to my load path
 (cl-labels ((add-path (p)
 		   (add-to-list 'load-path
 				(concat emacs-root p))))
   (add-path "include")
 )
+(setq package-user-dir (concat emacs-root "elpa"))
+(setq custom-file      (concat emacs-root "custom.el"))
+(setq custom-dir       (concat emacs-root "rc.custom"))
+
+;; Common Lisp stuff all the time
+(require 'cl)
 
 
 ;; Emacs Modular Configuration entry point
@@ -43,3 +47,19 @@
 
 
 (load (concat emacs-root "config"))
+
+;; ===== Custom settings ====
+;; Overwrite with the custom settings
+(defun load-directory (directory)
+  "Load recursively all `.el' files in DIRECTORY."
+  (dolist (element (directory-files-and-attributes directory nil nil nil))
+    (let* ((path (car element))
+           (fullpath (concat directory "/" path))
+           (isdir (car (cdr element)))
+           (ignore-dir (or (string= path ".") (string= path ".."))))
+      (cond
+       ((and (eq isdir t) (not ignore-dir))
+        (load-directory fullpath))
+       ((and (eq isdir nil) (string= (substring path -3) ".el"))
+        (load (file-name-sans-extension fullpath)))))))
+(load-directory custom-dir)
