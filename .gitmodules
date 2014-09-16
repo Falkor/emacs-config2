@@ -4,3 +4,9 @@
 [submodule "include/emacs-modular-configuration"]
 	path = include/emacs-modular-configuration
 	url = https://github.com/targzeta/emacs-modular-configuration.git
+[submodule "resources/emacs.d/jwiegley"]
+	path = resources/emacs.d/jwiegley
+	url = https://github.com/jwiegley/dot-emacs.git
+[submodule "resources/emacs.d/alexott"]
+	path = resources/emacs.d/alexott
+	url = https://github.com/alexott/emacs-configs.git
