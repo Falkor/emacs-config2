@@ -2,14 +2,6 @@
 ;; setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;;
 
-;; === Turn off mouse interface early in startup to avoid momentary display ===
-;; You really don't need these (except perhaps the menu-bar); trust me.
-;;(if (fboundp 'menu-bar-mode) (menu-bar-mode nil))
-(if (fboundp 'tool-bar-mode)   (tool-bar-mode nil))
-
-;; === disable scroll bar ===
-;; may be useful - replace 't' by 'nil' to disable right scrollbar
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode nil))
 
 ;; === defaults === 
 (setq truncate-partial-width-windows nil)
@@ -24,9 +16,6 @@
 ;; === remove the few annoyance of default emacs ===
 ;; Use "y or n" answers instead of full words "yes or no"
 (fset 'yes-or-no-p 'y-or-n-p) 
-
-;; remove initial message 
-(setq inhibit-startup-message t)
 
 ;; kill and move region directly 
 (delete-selection-mode t)

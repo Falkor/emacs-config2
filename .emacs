@@ -14,7 +14,6 @@
 ;;
 ;; -------------------------------------------------------------------------
 
-
 ;; keep all emacs-related stuff under ~/emacs.d
 (defvar emacs-root "~/.emacs.d/"
   "the root of  personal emacs load-path.")
@@ -42,6 +41,13 @@
         (load (file-name-sans-extension fullpath)))))))
 
 ;; ============================ Let's go! ============================
+;; Turn off mouse interface early in startup to avoid momentary display
+(if (fboundp 'menu-bar-mode)   (menu-bar-mode nil))
+(if (fboundp 'tool-bar-mode)   (tool-bar-mode nil))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode nil))
+
+;; No splash screen please ... 
+(setq inhibit-startup-message t)
 
 ;; === Load path etc. ===
 ;; add all the elisp directories under ~/emacs.d to my load path
@@ -76,4 +82,4 @@
 ;; Overwrite with the custom settings
 (load-directory custom-dir)
 
-(load custom-file 'noerror)
+;;(load custom-file 'noerror)
