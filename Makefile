@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mer 2014-09-17 01:13 svarrette>
+# Time-stamp: <Mer 2014-09-17 01:15 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -223,7 +223,7 @@ endif
 
 # Clean option
 clean:
-	rm *.elc
+	rm -f *.elc
 
 # # force recompilation
 # force :
