@@ -1,0 +1,27 @@
+[submodule ".submodules/Makefiles"]
+	path = .submodules/Makefiles
+	url = https://github.com/Falkor/Makefiles
+[submodule "site-lisp/emacs-modular-configuration"]
+	path = site-lisp/emacs-modular-configuration
+	url = https://github.com/targzeta/emacs-modular-configuration.git
+[submodule "resources/emacs.d/jwiegley"]
+	path = resources/emacs.d/jwiegley
+	url = https://github.com/jwiegley/dot-emacs.git
+[submodule "resources/emacs.d/alexott"]
+	path = resources/emacs.d/alexott
+	url = https://github.com/alexott/emacs-configs.git
+[submodule "resources/emacs.d/magnars"]
+	path = resources/emacs.d/magnars
+	url = https://github.com/magnars/.emacs.d.git
+[submodule "resources/emacs.d/larstvei"]
+	path = resources/emacs.d/larstvei
+	url = https://github.com/larstvei/dot-emacs.git
+[submodule "site-lisp/use-package"]
+	path = site-lisp/use-package
+	url = https://github.com/jwiegley/use-package.git
+[submodule "site-lisp/smart-tab"]
+	path = site-lisp/smart-tab
+	url = https://github.com/genehack/smart-tab.git
+[submodule "site-lisp/better-defaults"]
+	path = site-lisp/better-defaults
+	url = https://github.com/technomancy/better-defaults.git
