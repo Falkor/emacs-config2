@@ -319,6 +319,42 @@
 ;; =================================================================
 ;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
 (add-to-list 'default-frame-alist '(font . "Monaco-12")) 
+
+;; =================================================================
+;; Powerline Status Bar
+;; =================================================================
+;; See https://github.com/milkypostman/powerline
+;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
+(require 'powerline)
+(powerline-default-theme)
+(setq powerline-color1 "#222")      ;; dark grey; 
+(setq powerline-color2 "#444")      ;; slightly lighter grey
+;; shape...
+;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows, 
+;; (setq powerline-color1 "grey22")
+;; (setq powerline-color2 "grey40")
+(custom-set-faces
+   '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
+    '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+
+;; =================================================================
+;; Emacs Color Theme
+;; see http://www.emacswiki.org/emacs/ColorTheme
+;; see http://code.google.com/p/gnuemacscolorthemetest/ For direct
+;; screenshots
+;; =================================================================
+;; WITH color theme
+(require 'color-theme)
+(color-theme-initialize)
+(setq color-theme-is-global t)
+
+(color-theme-vim-colors)
+
+;; To better see the cursor
+(setq default-frame-alist
+      '((cursor-color . "green")
+        (cursor-type . box)))
+(set-default 'cursor-type 'box)
 ;; ############################################################################
 
 
@@ -328,10 +364,15 @@
 
 (setq search-highlight         t)       ; highlight search object
 (setq query-replace-highlight  t)       ; highlight query object
-(auto-compression-mode         1)       ; transparently edit compressed files
 (setq byte-compile-verbose     t)
 (setq initial-major-mode 'text-mode)    ; to avoid autoloads for lisp mode
 (setq require-final-newline t)          ; ensure a file ends in a newline when it
+
+;; Correct copy-paste to clipboard
+(setq x-select-enable-clipboard t)
+;; after mouse selection in X11, you can paste by `yank' in emacs
+;;(Setq x-select-enable-primary t)
+(setq mouse-drag-copy-region  t)
 
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 (require 'saveplace)
@@ -367,9 +408,6 @@
 ;; Move files to trash when deleting
 (setq delete-by-moving-to-trash t)
 
-;; Real emacs knights don't use shift to mark things
-(setq shift-select-mode nil)
-
 ;; Transparently open compressed files
 (auto-compression-mode t)
 
@@ -398,8 +436,11 @@
 ;; Don't highlight matches with jump-char - it's distracting
 (setq jump-char-lazy-highlight-face nil)
 
-;; Lines should be 80 characters wide, not 72
-(setq fill-column 80)
+;; === Auto-fill configuration ===
+;; automatic wrapping of lines and insertion of newlines when the cursor
+;; goes over the column limit.
+(setq-default fill-column 80)
+(setq auto-fill-mode t)                 ; activate by default
 
 ;; Save minibuffer history
 (savehist-mode 1)
@@ -421,7 +462,7 @@
 (setq-default truncate-lines t)
 
 ;; Keep cursor away from edges when scrolling up/down
-(require 'smooth-scrolling)
+;;(require 'smooth-scrolling)
 
 ;; Allow recursive minibuffers
 (setq enable-recursive-minibuffers t)
@@ -436,15 +477,12 @@
 (setq org-src-fontify-natively t)
 
 ;; Represent undo-history as an actual tree (visualize with C-x u)
-(setq undo-tree-mode-lighter "")
-(require 'undo-tree)
-(global-undo-tree-mode)
+;; (setq undo-tree-mode-lighter "")
+;; (require 'undo-tree)
+;; (global-undo-tree-mode)
 
 ;; Sentences do not need double spaces to end. Period.
 (set-default 'sentence-end-double-space nil)
-
-;; 80 chars is a good width.
-(set-default 'fill-column 80)
 
 ;; A saner ediff
 (setq ediff-diff-options "-w")
@@ -465,6 +503,42 @@
       ad-do-it)
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/parenthesis.el
+;; === Show matching parenthesis ===
+(require 'paren)
+(GNUEmacs
+ (show-paren-mode t)
+ (setq show-paren-ring-bell-on-mismatch t))
+(XEmacs
+ (paren-set-mode 'paren))
+
+(setq show-paren-style 'expression)
+(set-face-background 'show-paren-match-face "turquoise")
+;; (set-face-attribute 'show-paren-match-face nil 
+;;                     :weight 'bold :underline nil :overline nil :slant 'normal)
+(set-face-foreground 'show-paren-mismatch-face "red") 
+(set-face-attribute 'show-paren-mismatch-face nil 
+                    :weight 'bold :underline t :overline nil :slant 'normal)
+
+
+;; show matching parenthesis, even if found outside the present screen.
+;; see http://www.emacswiki.org/emacs/MicParen
+(require 'mic-paren)                    ; loading
+(paren-activate)                        ; activating
+
+
+;; ==============================================================
+;; Autopair: Automagically pair braces and quotes like TextMate
+;; see http://code.google.com/p/autopair/ or 
+;; http://www.emacswiki.org/emacs/AutoPairs
+;; ==============================================================
+(require 'autopair)
+(autopair-global-mode) ;; enable autopair in all buffers 
+(setq autopair-autowrap t) 
 ;; ############################################################################
 
 
