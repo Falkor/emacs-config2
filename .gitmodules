@@ -10,3 +10,9 @@
 [submodule "resources/emacs.d/alexott"]
 	path = resources/emacs.d/alexott
 	url = https://github.com/alexott/emacs-configs.git
+[submodule "resources/emacs.d/magnars"]
+	path = resources/emacs.d/magnars
+	url = https://github.com/magnars/.emacs.d.git
+[submodule "resources/emacs.d/larstvei"]
+	path = resources/emacs.d/larstvei
+	url = https://github.com/larstvei/dot-emacs.git
