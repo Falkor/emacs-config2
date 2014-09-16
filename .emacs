@@ -43,4 +43,3 @@
 
 
 (load (concat emacs-root "config"))
-;;(load ~/.emacs.d/config t)
