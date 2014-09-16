@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mer 2014-09-17 01:15 svarrette>
+# Time-stamp: <Mer 2014-09-17 01:22 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -66,7 +66,7 @@ BATCH_LOAD  = $(EMACS_BATCH) $(MY_LOADPATH)
 # Required rule : what's to be done each time 
 all: config.elc
 
-config.elc: config.el $(INIT_SOURCE)
+config.elc: $(INIT_SOURCE)
 	$(BATCH_LOAD) --eval "(emc-merge-config-files)"
 	git commit -s -m "Update centralized config" config.el
 

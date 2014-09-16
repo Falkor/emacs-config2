@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-09-17 01:03 svarrette>
+;; Time-stamp: <Mer 2014-09-17 01:35 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -26,7 +26,7 @@
 ;; Are we on a mac?
 (setq is-mac (equal system-type 'darwin))
 
-;; === Environement settings === 
+;; === Environement settings ===
 ;; init PATH & exec-path from current shell
 (defun set-exec-path-from-shell-PATH ()
   (let ((path-from-shell (shell-command-to-string "$SHELL -c 'echo $PATH'")))
@@ -54,16 +54,16 @@
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
-;; No splash screen please ... 
+;; No splash screen please ...
 (setq inhibit-startup-message t)
 
 ;; === Load path etc. ===
 ;; add all the elisp directories under ~/emacs.d to my load path
 (cl-labels ((add-path (p)
-		   (add-to-list 'load-path
-				(concat emacs-root p))))
+                      (add-to-list 'load-path
+                                   (concat emacs-root p))))
   (add-path "site-lisp")
-)
+  )
 (setq package-user-dir (concat emacs-root "elpa"))
 (setq custom-file      (concat emacs-root "custom.el"))
 (setq custom-dir       (concat emacs-root "rc.custom"))
@@ -71,11 +71,11 @@
 
 
 ;; Load Lisp defined functions
-(load-directory defuns-dir) 
+(load-directory defuns-dir)
 
 ;; === ELPA, the package manager ===
 ;; see http://tromey.com/elpa/
-;; The code below is no longer required on Emacs 24 
+;; The code below is no longer required on Emacs 24
 ;; (when
 ;;     (load
 ;;      (expand-file-name "~/.emacs.d/elpa/package.el"))
@@ -83,9 +83,9 @@
 ;;   (require 'init-elpa))
 (require 'package)
 (setq package-archives '(
-			 ("gnu"       . "http://elpa.gnu.org/packages/")
-			 ("marmalade" . "http://marmalade-repo.org/packages/")
-			 ("melpa"     . "http://melpa.milkbox.net/packages/")))
+                         ("gnu"       . "http://elpa.gnu.org/packages/")
+                         ("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa"     . "http://melpa.milkbox.net/packages/")))
 (package-initialize)
 
 (defvar falkor/packages '(auto-complete
@@ -102,7 +102,7 @@
                           haml-mode
                           haskell-mode
                           htmlize
-			  idle-highlight
+                          idle-highlight
                           jabber
                           js2-mode
                           magit
@@ -116,10 +116,10 @@
                           powerline
                           puppet-mode
                           restclient
-			  ruby-mode
-			  ruby-compilation
+                          ruby-mode
+                          ruby-compilation
                           rvm
-                          smart-tab
+                          smart-tabs-mode
                           smex
                           solarized-theme
                           web-mode
@@ -151,15 +151,15 @@
 
 ;; ECB for emacs 24
 (setq el-get-sources
-          '((:name ecb
-                   :type git
-                   :url "https://github.com/alexott/ecb.git"
-                   :load "ecb.el"
-                   :compile ("ecb.el"))
-            ))
-    (setq my-packages
-          (append '(el-get)
-                  (mapcar 'el-get-source-name el-get-sources))) 
+      '((:name ecb
+               :type git
+               :url "https://github.com/alexott/ecb.git"
+               :load "ecb.el"
+               :compile ("ecb.el"))
+        ))
+(setq my-packages
+      (append '(el-get)
+              (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
 
 

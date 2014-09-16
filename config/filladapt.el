@@ -9,3 +9,8 @@
        t)
       (t
        (turn-on-filladapt-mode)))
+
+;; (add-hook 'c-mode-common-hook
+;; 	  (lambda ()
+;; 	    (when (featurep 'filladapt)
+;; 	      (c-setup-filladapt))))
