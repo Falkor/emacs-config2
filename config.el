@@ -147,6 +147,11 @@
        t)
       (t
        (turn-on-filladapt-mode)))
+
+;; (add-hook 'c-mode-common-hook
+;; 	  (lambda ()
+;; 	    (when (featurep 'filladapt)
+;; 	      (c-setup-filladapt))))
 ;; ############################################################################
 
 
@@ -308,20 +313,22 @@
 
 ;; === Show whitespaces/tabs etc. ===
 (setq x-stretch-cursor t)
-(require 'show-wspace)
-;
 
-(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
+;;(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
 ;;(setq-default indent-tabs-mode t)
-(require 'smarttabs)
 
-(setq c-brace-offset -2)
+(setq-default c-basic-offset 4
+              tab-width 4
+              indent-tabs-mode t)
+
+
+;; (setq c-brace-offset -2)
 ;;(setq c-auto-newline t)
-(add-hook 'c-mode-common-hook (lambda () (setq c-basic-offset 4)))
-(add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
-(add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
-(add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
-(add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
+;; (add-hook 'c-mode-common-hook (lambda () (setq c-basic-offset 4)))
+;; (add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
+;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
+;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
+;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
 ;; ############################################################################
 
 
@@ -408,6 +415,15 @@
 ;; User configuration / Identity
 (setq user-full-name    "Sebastien Varrette")
 (setq user-mail-address "<Sebastien.Varrette@uni.lu>")
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/smart-tabs.el
+;; === Smart Tabs ===
+;; see http://www.emacswiki.org/emacs/SmartTabs
+
+(smart-tabs-insinuate 'c 'javascript 'ruby 'python)
 ;; ############################################################################
 
 
