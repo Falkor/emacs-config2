@@ -107,6 +107,7 @@
                           magit
                           markdown-mode
                           marmalade
+                          mic-paren
                           nodejs-repl
                           org
                           paredit
@@ -143,7 +144,7 @@
 
 (require 'el-get)
 (require 'el-get-status)
-(setq el-get-byte-compile nil)
+;;(setq el-get-byte-compile nil)
 ;; Load the local recipes
 (add-to-list 'el-get-recipe-path (concat emacs-root "el-get/recipes"))
 
