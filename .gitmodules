@@ -22,3 +22,6 @@
 [submodule "site-lisp/smart-tab"]
 	path = site-lisp/smart-tab
 	url = https://github.com/genehack/smart-tab.git
+[submodule "site-lisp/better-defaults"]
+	path = site-lisp/better-defaults
+	url = https://github.com/technomancy/better-defaults.git
