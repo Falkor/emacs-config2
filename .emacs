@@ -22,6 +22,9 @@
 (defvar emacs-root "~/.emacs.d/"
   "the root of  personal emacs load-path.")
 
+;; Are we on a mac?
+(setq is-mac (equal system-type 'darwin))
+
 ;; === Environement settings === 
 ;; init PATH & exec-path from current shell
 (defun set-exec-path-from-shell-PATH ()
@@ -69,9 +72,10 @@
 ;; Load Lisp defined functions
 (load-directory defuns-dir) 
 
-;; (when (display-graphic-p)
-;;   ;; position window automatically based on display resolution
-;;   (size-screen))
+
+
+;;(load-file-if-exists (concat custom-dir 'packages.el'))
+
 
 
 ;; === Emacs Modular Configuration entry point ===
@@ -82,6 +86,5 @@
 
 ;; ===== Custom settings ====
 ;; Overwrite with the custom settings
-(load-directory custom-dir)
-
+;;(load-directory custom-dir)
 ;;(load custom-file 'noerror)

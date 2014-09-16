@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mer 2014-03-26 17:18 svarrette>
+# Time-stamp: <Mar 2014-09-16 15:42 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -51,12 +51,27 @@ NEXT_MAJOR_VERSION = $(shell expr $(MAJOR) + 1).0.0-b$(BUILD)
 NEXT_MINOR_VERSION = $(MAJOR).$(shell expr $(MINOR) + 1).0-b$(BUILD)
 NEXT_PATCH_VERSION = $(MAJOR).$(MINOR).$(shell expr $(PATCH) + 1)-b$(BUILD)
 
+### Emacs stuff
+EMACS	    = emacs
+DIRS	    = site-lisp
+INIT_SOURCE = $(shell find config $(DIRS) -name '*.el')
+EMACS_BATCH = $(EMACS) -Q -batch -l ~/.emacs
+MY_LOADPATH = -L . $(patsubst %,-L %,$(DIRS))
+BATCH_LOAD  = $(EMACS_BATCH) $(MY_LOADPATH)
+
 ### Main variables
 .PHONY: all archive clean fetch help release setup start_bump_major start_bump_minor start_bump_patch subtree_setup subtree_up subtree_diff test upgrade versioninfo 
 
 ############################### Now starting rules ################################
 # Required rule : what's to be done each time 
-all: 
+all: config.elc
+
+config.elc: config.el $(INIT_SOURCE)
+	$(BATCH_LOAD) --eval "(emc-merge-config-files)"
+	git commit -s -m "Update config"
+
+%.elc: %.el
+	$(BATCH_LOAD) -f batch-byte-compile $<	
 
 # Test values of variables - for debug purposes  
 test:
@@ -72,6 +87,10 @@ test:
 	@echo "GIT_REMOTES        -> '$(GIT_REMOTES)'"
 	@echo "GIT_DIRTY          -> '$(GIT_DIRTY)'"
 	@echo "GIT_SUBTREE_REPOS  -> '$(GIT_SUBTREE_REPOS)'"
+	@echo ""
+	@echo "EMACS DIR          -> $(DIRS)"
+	@echo "EMACS INIT SOURCES -> $(INIT_SOURCE)"
+	@echo "EMACS BATCH LOAD   -> $(BATCH_LOAD)"
 	@echo ""
 	@echo "Consider running 'make versioninfo' to get info on git versionning variables"
 
@@ -204,8 +223,7 @@ endif
 
 # Clean option
 clean:
-	@echo nothing to be cleaned for the moment
-
+	rm *.elc
 
 # # force recompilation
 # force :
