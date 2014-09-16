@@ -49,9 +49,9 @@
 
 ;; ============================ Let's go! ============================
 ;; Turn off mouse interface early in startup to avoid momentary display
-(if (fboundp 'menu-bar-mode)   (menu-bar-mode nil))
-(if (fboundp 'tool-bar-mode)   (tool-bar-mode nil))
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode nil))
+(if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
+(if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
 ;; No splash screen please ... 
 (setq inhibit-startup-message t)
@@ -72,9 +72,93 @@
 ;; Load Lisp defined functions
 (load-directory defuns-dir) 
 
+;; === ELPA, the package manager ===
+;; see http://tromey.com/elpa/
+;; The code below is no longer required on Emacs 24 
+;; (when
+;;     (load
+;;      (expand-file-name "~/.emacs.d/elpa/package.el"))
+;;   (package-initialize)
+;;   (require 'init-elpa))
+(require 'package)
+(setq package-archives '(
+			 ("gnu"       . "http://elpa.gnu.org/packages/")
+			 ("marmalade" . "http://marmalade-repo.org/packages/")
+			 ("melpa"     . "http://melpa.milkbox.net/packages/")))
+(package-initialize)
+
+(defvar falkor/packages '(auto-complete
+                          autopair
+                          color-theme
+                          deft
+                          el-get
+                          erlang
+                          feature-mode
+                          flycheck
+                          gist
+                          go-mode
+                          graphviz-dot-mode
+                          haml-mode
+                          haskell-mode
+                          htmlize
+			  idle-highlight
+                          jabber
+                          js2-mode
+                          magit
+                          markdown-mode
+                          marmalade
+                          nodejs-repl
+                          org
+                          paredit
+                          php-mode
+                          powerline
+                          puppet-mode
+                          restclient
+			  ruby-mode
+			  ruby-compilation
+                          rvm
+                          smart-tab
+                          smex
+                          solarized-theme
+                          web-mode
+                          yaml-mode)
+  "Default packages")
+
+;; Now install the default packages
+(defun falkor/packages-installed-p ()
+  (loop for pkg in falkor/packages
+        when (not (package-installed-p pkg)) do (return nil)
+        finally (return t)))
+
+(unless (falkor/packages-installed-p)
+  (message "%s" "Refreshing package database...")
+  (package-refresh-contents)
+  (dolist (pkg falkor/packages)
+    (when (not (package-installed-p pkg))
+      (package-install pkg))))
 
 
-;;(load-file-if-exists (concat custom-dir 'packages.el'))
+;; =========== EL-Get =============
+;; See https://github.com/dimitri/el-get
+
+(require 'el-get)
+(require 'el-get-status)
+(setq el-get-byte-compile nil)
+;; Load the local recipes
+(add-to-list 'el-get-recipe-path (concat emacs-root "el-get/recipes"))
+
+;; ECB for emacs 24
+(setq el-get-sources
+          '((:name ecb
+                   :type git
+                   :url "https://github.com/alexott/ecb.git"
+                   :load "ecb.el"
+                   :compile ("ecb.el"))
+            ))
+    (setq my-packages
+          (append '(el-get)
+                  (mapcar 'el-get-source-name el-get-sources))) 
+(el-get 'sync my-packages)
 
 
 

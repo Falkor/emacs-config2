@@ -2,10 +2,15 @@
 
 (setq search-highlight         t)       ; highlight search object
 (setq query-replace-highlight  t)       ; highlight query object
-(auto-compression-mode         1)       ; transparently edit compressed files
 (setq byte-compile-verbose     t)
 (setq initial-major-mode 'text-mode)    ; to avoid autoloads for lisp mode
 (setq require-final-newline t)          ; ensure a file ends in a newline when it
+
+;; Correct copy-paste to clipboard
+(setq x-select-enable-clipboard t)
+;; after mouse selection in X11, you can paste by `yank' in emacs
+;;(Setq x-select-enable-primary t)
+(setq mouse-drag-copy-region  t)
 
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 (require 'saveplace)
@@ -41,9 +46,6 @@
 ;; Move files to trash when deleting
 (setq delete-by-moving-to-trash t)
 
-;; Real emacs knights don't use shift to mark things
-(setq shift-select-mode nil)
-
 ;; Transparently open compressed files
 (auto-compression-mode t)
 
@@ -72,8 +74,11 @@
 ;; Don't highlight matches with jump-char - it's distracting
 (setq jump-char-lazy-highlight-face nil)
 
-;; Lines should be 80 characters wide, not 72
-(setq fill-column 80)
+;; === Auto-fill configuration ===
+;; automatic wrapping of lines and insertion of newlines when the cursor
+;; goes over the column limit.
+(setq-default fill-column 80)
+(setq auto-fill-mode t)                 ; activate by default
 
 ;; Save minibuffer history
 (savehist-mode 1)
@@ -95,7 +100,7 @@
 (setq-default truncate-lines t)
 
 ;; Keep cursor away from edges when scrolling up/down
-(require 'smooth-scrolling)
+;;(require 'smooth-scrolling)
 
 ;; Allow recursive minibuffers
 (setq enable-recursive-minibuffers t)
@@ -110,15 +115,12 @@
 (setq org-src-fontify-natively t)
 
 ;; Represent undo-history as an actual tree (visualize with C-x u)
-(setq undo-tree-mode-lighter "")
-(require 'undo-tree)
-(global-undo-tree-mode)
+;; (setq undo-tree-mode-lighter "")
+;; (require 'undo-tree)
+;; (global-undo-tree-mode)
 
 ;; Sentences do not need double spaces to end. Period.
 (set-default 'sentence-end-double-space nil)
-
-;; 80 chars is a good width.
-(set-default 'fill-column 80)
 
 ;; A saner ediff
 (setq ediff-diff-options "-w")

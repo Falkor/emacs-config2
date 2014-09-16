@@ -51,3 +51,39 @@
 ;; =================================================================
 ;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
 (add-to-list 'default-frame-alist '(font . "Monaco-12")) 
+
+;; =================================================================
+;; Powerline Status Bar
+;; =================================================================
+;; See https://github.com/milkypostman/powerline
+;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
+(require 'powerline)
+(powerline-default-theme)
+(setq powerline-color1 "#222")      ;; dark grey; 
+(setq powerline-color2 "#444")      ;; slightly lighter grey
+;; shape...
+;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows, 
+;; (setq powerline-color1 "grey22")
+;; (setq powerline-color2 "grey40")
+(custom-set-faces
+   '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
+    '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+
+;; =================================================================
+;; Emacs Color Theme
+;; see http://www.emacswiki.org/emacs/ColorTheme
+;; see http://code.google.com/p/gnuemacscolorthemetest/ For direct
+;; screenshots
+;; =================================================================
+;; WITH color theme
+(require 'color-theme)
+(color-theme-initialize)
+(setq color-theme-is-global t)
+
+(color-theme-vim-colors)
+
+;; To better see the cursor
+(setq default-frame-alist
+      '((cursor-color . "green")
+        (cursor-type . box)))
+(set-default 'cursor-type 'box)
