@@ -19,6 +19,7 @@
 (defvar emacs-root "~/.emacs.d/"
   "the root of  personal emacs load-path.")
 
+;; === Environement settings === 
 ;; init PATH & exec-path from current shell
 (defun set-exec-path-from-shell-PATH ()
   (let ((path-from-shell (shell-command-to-string "$SHELL -c 'echo $PATH'")))
@@ -26,30 +27,7 @@
     (setq exec-path (split-string path-from-shell path-separator))))
 (when window-system (set-exec-path-from-shell-PATH))
 
-;; === Load path etc. ===
-;; add all the elisp directories under ~/emacs.d to my load path
-(cl-labels ((add-path (p)
-		   (add-to-list 'load-path
-				(concat emacs-root p))))
-  (add-path "include")
-)
-(setq package-user-dir (concat emacs-root "elpa"))
-(setq custom-file      (concat emacs-root "custom.el"))
-(setq custom-dir       (concat emacs-root "rc.custom"))
-
-;; Common Lisp stuff all the time
-(require 'cl)
-
-
-;; Emacs Modular Configuration entry point
-;; See https://github.com/targzeta/emacs-modular-configuration
-(require 'emacs-modular-configuration)
-
-
-(load (concat emacs-root "config"))
-
-;; ===== Custom settings ====
-;; Overwrite with the custom settings
+;; easy way to load recursively all .el files
 (defun load-directory (directory)
   "Load recursively all `.el' files in DIRECTORY."
   (dolist (element (directory-files-and-attributes directory nil nil nil))
@@ -62,4 +40,40 @@
         (load-directory fullpath))
        ((and (eq isdir nil) (string= (substring path -3) ".el"))
         (load (file-name-sans-extension fullpath)))))))
+
+;; ============================ Let's go! ============================
+
+;; === Load path etc. ===
+;; add all the elisp directories under ~/emacs.d to my load path
+(cl-labels ((add-path (p)
+		   (add-to-list 'load-path
+				(concat emacs-root p))))
+  (add-path "include")
+)
+(setq package-user-dir (concat emacs-root "elpa"))
+(setq custom-file      (concat emacs-root "custom.el"))
+(setq custom-dir       (concat emacs-root "rc.custom"))
+(setq defuns-dir       (concat emacs-root "defuns"))
+
+;; Common Lisp stuff all the time
+(require 'cl)
+
+;; Load Lisp defined functions
+(load-directory defuns-dir) 
+
+(if-not-terminal
+ ;; position window automatically based on display resolution
+ (size-screen))
+
+
+;; === Emacs Modular Configuration entry point ===
+;; See https://github.com/targzeta/emacs-modular-configuration
+(require 'emacs-modular-configuration)
+
+(load (concat emacs-root "config"))
+
+;; ===== Custom settings ====
+;; Overwrite with the custom settings
 (load-directory custom-dir)
+
+(load custom-file 'noerror)
