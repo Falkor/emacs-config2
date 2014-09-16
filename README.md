@@ -2,19 +2,47 @@
 Copyright (c) 2014 [Sebastien Varrette](mailto:<Sebastien.Varrette@uni.lu>) [www](http://varrette.gforge.uni.lu)
 
         Time-stamp: <>
+                        _____     _ _              _
+                       |  ___|_ _| | | _____  _ __( )___
+                       | |_ / _` | | |/ / _ \| '__|// __|
+                       |  _| (_| | |   < (_) | |    \__ \
+                       |_|  \__,_|_|_|\_\___/|_|    |___/
+         _____                             ____             __ _
+        | ____|_ __ ___   __ _  ___ ___   / ___|___  _ __  / _(_) __ _
+        |  _| | '_ ` _ \ / _` |/ __/ __| | |   / _ \| '_ \| |_| |/ _` |
+        | |___| | | | | | (_| | (__\__ \ | |__| (_) | | | |  _| | (_| |
+        |_____|_| |_| |_|\__,_|\___|___/  \____\___/|_| |_|_| |_|\__, |
+                                                                 |___/
 
 -------------------
 # emacs-config2
 
 ## Synopsis
 
+This repository host my new personal emacs configuration.
+
+
 ## Local repository setup
 
-This repository is hosted on out [UNKNOWN]().
+This repository is hosted on out [Github]().
 Once cloned, initiate the potential git submodules etc. by running:
 
     $> cd emacs-config2
     $> make setup
+    
+## Quick Start
+
+* install Emacs (instructions: [Mac OS](http://www.emacswiki.org/emacs/EmacsForMacOS))
+  * On mac, use [Homebrew](http://brew.sh/)
+  
+        $> brew install --cocoa --srgb emacs
+        $> brew linkapps
+            
+    The next step is probably to setup a new alias `emacs` to open the Cocoa version (by default it runs with the `-nw` option), typically as: 
+    
+        alias emacs='/usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs'
+                
+            
 
 ## Pre-requisites
 
