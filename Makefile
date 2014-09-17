@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mer 2014-09-17 01:38 svarrette>
+# Time-stamp: <Mer 2014-09-17 22:09 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -130,7 +130,7 @@ start_bump_patch start_bump_minor start_bump_major release:
 	@echo "Unable to find git-flow on your system. "
 	@echo "See https://github.com/nvie/gitflow for installation details"
 else
-start_bump_patch: clean config.elc
+start_bump_patch: config.elc
 	@echo "Start the patch release of the repository from $(VERSION) to $(NEXT_PATCH_VERSION)"
 	git pull origin
 	git flow release start $(NEXT_PATCH_VERSION)
@@ -139,7 +139,7 @@ start_bump_patch: clean config.elc
 	@echo "=> remember to update the version number in $(MAIN_TEX)"
 	@echo "=> run 'make release' once you finished the bump"
 
-start_bump_minor: clean config.elc
+start_bump_minor: config.elc
 	@echo "Start the minor release of the repository from $(VERSION) to $(NEXT_MINOR_VERSION)"
 	git pull origin
 	git flow release start $(NEXT_MINOR_VERSION)
@@ -148,7 +148,7 @@ start_bump_minor: clean config.elc
 	@echo "=> remember to update the version number in $(MAIN_TEX)"
 	@echo "=> run 'make release' once you finished the bump"
 
-start_bump_major: clean config.elc
+start_bump_major: config.elc
 	@echo "Start the major release of the repository from $(VERSION) to $(NEXT_MAJOR_VERSION)"
 	git pull origin
 	git flow release start $(NEXT_MAJOR_VERSION)
