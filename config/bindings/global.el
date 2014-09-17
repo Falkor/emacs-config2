@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 10:22 svarrette>
+;; Time-stamp: <Mer 2014-09-17 10:43 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -27,6 +27,14 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; ----------------------------------------------------------------------
 
+;; === Always indent on return ===
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; === Another comment binding (also M-;) ===
+(global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+
+;; === Git stuff ===
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;; === Buffer switching ===
 ;; C-x b permits to switch among the buffer by entering a buffer name,
@@ -84,10 +92,10 @@
 
 (global-set-key (kbd "M-n") 'goto-line)          ; goto line number
 
-;; ECB
+;; === ECB ===
 (global-set-key [(f2)]   'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
 
-;; Shell pop
+;; === Shell pop ===
 (global-set-key [(f3)]     'shell-pop)
 
 ;; Speedbar

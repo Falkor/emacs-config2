@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-09-17 09:21 svarrette>
+;; Time-stamp: <Mer 2014-09-17 10:44 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -68,7 +68,6 @@
 (setq custom-file      (concat emacs-root "custom.el"))
 (setq custom-dir       (concat emacs-root "rc.custom"))
 (setq defuns-dir       (concat emacs-root "defuns"))
-
 
 ;; Load Lisp defined functions
 (load-directory defuns-dir)
@@ -161,6 +160,30 @@
       (append '(el-get)
               (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
+
+;; ======= Enhance initialization speed =======
+;; Some features are not loaded by default to minimize initialization time, so
+;; they have to be required (or loaded, if you will). require-calls tends to
+;; lead to the largest bottleneck's in a configuration. idle-require delays the
+;; require-calls to a time where Emacs is in idle. So this is great for stuff
+;; you eventually want to load, but is not a high priority. 
+
+(require 'idle-require)             ; Need in order to use idle-require
+(dolist (feature
+         '(auto-compile             ; auto-compile .el files
+           deft
+		   erlang
+		   gist
+		   go-mode
+		   haml-mode
+		   recentf                  ; recently opened files
+		   restclient
+           smex                     ; M-x interface Ido-style.
+           tex-mode))               ; TeX, LaTeX, and SliTeX mode commands
+  (idle-require feature))
+
+(setq idle-require-idle-delay 5)
+(idle-require-mode 1)
 
 
 
