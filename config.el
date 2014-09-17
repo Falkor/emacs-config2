@@ -6,6 +6,97 @@
 ;; then run within emacs 'M-x emc-merge-config-files'
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/auto-insert.el
+;; ========================================================
+;; Auto-insert: automatic insertion of text into new files
+;; ========================================================
+
+(require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
+;; doc:  ~/.emacs.d/site-lisp/auto-insert-tkld.pdf
+(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
+;; trick to abstract the personal web page
+;;(setq auto-insert-organisation  user-www)
+(setq auto-insert-automatically t)
+;; associate file extention to a template name
+(setq auto-insert-alist
+      '(
+        ("\\.tex$"         . "LaTeX")            ; TeX or LaTeX
+        ("\\.bib$"         . "BibTeX")           ; BibTeX
+        ("\\.sty$"         . "LaTeX Style")      ; LaTeX Style
+        ("\\.el$"          . "Emacs Lisp")       ; Emacs Lisp
+        ("\\.java$"        . "Java")             ; Java
+        ("\\App.java$"     . "JavaSwing")        ; Java Swing app
+        ("[Tt]ools.h"      . "Tools C++")        ; Useful functions in C/C++
+        ("\\Logs.cpp"      . "Logs C++")         ; Macros for logs/debugging
+        ("\\Logs.h[+p]*"   . "Logs C++ Include") ; " header file
+        ("\\.c$"           . "C")                ; C
+        ("\\.h$"           . "C Include")        ; C header file
+        ("\\.cxx$"         . "C++")              ; C++
+        ("\\.c\\+\\+$"     . "C++")              ;
+        ("\\.cpp$"         . "C++")              ;
+        ("\\.cc$"          . "C++")              ;
+        ("\\.C$"           . "C++")              ;
+        ("[Mm]akefile$"    . "Makefile")         ; Makefile
+        ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
+        ("\\.md$"          . "Text")             ; Text
+        ("\\.txt$"         . "Text")             ; Text
+        ("\\.gpg$"         . "GPG")              ; GPG 
+        ("[Rr]eadme$"      . "Readme")           ; Readme
+        ("README$"         . "Readme")           ;
+        ("\\.sh$"          . "Shell")            ; Shell
+        ("\\.csh$"         . "Shell")            ;
+        ("\\.tcsh$"        . "Shell")            ;
+        ("\\.html"         . "Html")             ; HTML
+        ("\\.wml"          . "WML")              ; WML (Website Meta Language)
+        ("\\.php"          . "PHP")              ; PHP
+        ("\\.gnuplot"      . "Gnuplot")          ; Gnuplot
+        ("\\.pl$"          . "Perl")             ; Perl
+        ("\\.pm$"          . "Perl Module")      ; PerlModule
+        ("\\.t$"           . "Perl Test")        ; Perl Test script
+        ("\\.pp$"          . "Puppet")           ; Puppet manifest
+        ("\\.rb$"          . "Ruby")             ; Ruby
+        ("\\.R$"           . "R")                ; R
+        ("\\.admission_rule[s]?$" . "OAR")              ; OAR admission rule
+        (""                . "Shell") ; Shell (by default: assume a shell template)
+        ))
+;; now associate a template name to a template file
+(setq auto-insert-type-alist
+      '(
+        ("LaTeX"       . "insert.tex")
+        ("BibTeX"      . "insert.bib")
+        ("LaTeX Style" . "insert.sty")
+        ("Emacs Lisp"  . "insert.el")
+        ("Java"        . "insert.java")
+        ("JavaSwing"   . "insertApp.java")
+        ("C"           . "insert.c")
+        ("C Include"   . "insert.h")
+        ("C++"         . "insert.cpp")
+        ("Tools C++"   . "insert.tools_cpp.h")
+        ("Logs C++"    . "insert.logs.cpp")
+        ("Logs C++ Include" . "insert.logs.h")
+        ("Makefile"    . "insert.makefile")
+        ("Makefile.am" . "insert.makefile.am")
+        ("Text"        . "insert.md")
+        ("GPG"         . "insert.gpg")
+        ("Readme"      . "insert.readme")
+        ("Shell"       . "insert.shell")
+        ("Html"        . "insert.html")
+        ("WML"         . "insert.wml")
+        ("PHP"         . "insert.php")
+        ("Gnuplot"     . "insert.gnuplot")
+        ("Perl"        . "insert.pl")
+        ("Perl Module" . "insert.pm")
+        ("Perl Test"   . "insert.t")
+        ("Puppet"      . "insert.pp")
+        ("Ruby"        . "insert.rb")
+        ("R"           . "insert.R")
+        ("OAR"         . "insert.oar")
+        ))
+
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/backup.el
 ;; === Auto-save and backup files ===
 (setq auto-save-list-file-name nil)     ; no .saves files
@@ -47,21 +138,23 @@
 ;;
 
 
-;; === defaults === 
+;; === defaults ===
 (setq truncate-partial-width-windows nil)
-(setq line-number-mode         t)
-(setq column-number-mode       t)
-(setq visible-bell             t)
- 
-; === Default size of the frame ===
+(setq line-number-mode    t)
+(setq column-number-mode  t)
+
+;; === F... the beep ===
+(setq visible-bell        t)
+
+;; === Default size of the frame ===
 (set-frame-width (selected-frame) 120)
 (set-frame-height (selected-frame) 40)
 
 ;; === remove the few annoyance of default emacs ===
 ;; Use "y or n" answers instead of full words "yes or no"
-(fset 'yes-or-no-p 'y-or-n-p) 
+(fset 'yes-or-no-p 'y-or-n-p)
 
-;; kill and move region directly 
+;; kill and move region directly
 (delete-selection-mode t)
 ;; (pc-selection-mode)
 
@@ -74,7 +167,7 @@
 
 ;;
 ;; === Specify the frame title ===
-;; see http://www.emacswiki.org/emacs/FrameTitle 
+;; see http://www.emacswiki.org/emacs/FrameTitle
 ;; recognize the same special characters as mode-line-format variable, mainly:
 ;;    %b -- print buffer name.      %f -- print visited file name.
 ;;    %F -- print frame name.
@@ -94,7 +187,7 @@
 ;; Font selection (to use a mono-spaced (non-proportional) font)
 ;; =================================================================
 ;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
-(add-to-list 'default-frame-alist '(font . "Monaco-12")) 
+(add-to-list 'default-frame-alist '(font . "Monaco-12"))
 
 ;; =================================================================
 ;; Powerline Status Bar
@@ -102,16 +195,34 @@
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
 (require 'powerline)
-(powerline-default-theme)
-(setq powerline-color1 "#222")      ;; dark grey; 
-(setq powerline-color2 "#444")      ;; slightly lighter grey
+(powerline-center-theme)
 ;; shape...
-;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows, 
+;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
+;; (setq powerline-color1 "DarkGrey")
+;; (setq powerline-color2 "honeydew1")
+;; (custom-set-faces
+;;  '(powerline-active1 '((t (:background "DarkGrey"  :inherit mode-line))))
+;;  '(powerline-active2 '((t (:background "honeydew1" :inherit mode-line)))))
+
+;; (custom-theme-set-faces
+;;  'color-theme-vim-insert-mode
+;;  `(powerline-active1 ((t (:background "DarkGrey"    :inherit mode-line))))
+;;  `(powerline-active2 ((t (:background "honeydew1"   :inherit mode-line))))
+;;  `(powerline-inactive1 ((t (:background "gray71"    :inherit mode-line-inactive))))
+;;  `(powerline-inactive2 ((t (:background "honeydew3" :inherit mode-line-inactive)))))
+
 ;; (setq powerline-color1 "grey22")
 ;; (setq powerline-color2 "grey40")
-(custom-set-faces
-   '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
-    '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+;; (custom-set-faces
+;;  '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
+;;  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+
+;; (when (and (buffer-file-name (current-buffer)) vc-mode)
+;;     (if (vc-workfile-unchanged-p (buffer-file-name (current-buffer)))
+;;       (powerline-vc 'powerline-insert-face 'r)
+;;       (powerline-vc 'powerline-normal-face 'r)))
+
+
 
 ;; =================================================================
 ;; Emacs Color Theme
@@ -131,6 +242,14 @@
       '((cursor-color . "green")
         (cursor-type . box)))
 (set-default 'cursor-type 'box)
+
+;; === See the end of the file ===
+(setq-default indicate-empty-lines t)
+(when (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
+
+;; See also trailing whitespace
+(setq-default show-trailing-whitespace t)
 ;; ############################################################################
 
 
@@ -170,6 +289,9 @@
 ;; after mouse selection in X11, you can paste by `yank' in emacs
 ;;(Setq x-select-enable-primary t)
 (setq mouse-drag-copy-region  t)
+
+;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
+(require 'better-defaults)
 
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 (require 'saveplace)
@@ -300,6 +422,42 @@
       ad-do-it)
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
+
+;; Turn on auto completion
+;; See http://www.emacswiki.org/emacs/AutoComplete
+(require 'auto-complete-config)
+(ac-config-default)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/hotfix-x-popup.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Mer 2014-09-17 21:52 svarrette>
+;;
+;; hotfix-x-popup.el - Hotfix on emacs popup dialogs on Mac OS X that freeze
+;; see http://superuser.com/questions/125569/how-to-fix-emacs-popup-dialogs-on-mac-os-x
+;; ----------------------------------------------------------------------
+
+(when is-mac
+  (defadvice yes-or-no-p (around prevent-dialog activate)
+    "Prevent yes-or-no-p from activating a dialog"
+    (let ((use-dialog-box nil))
+      ad-do-it))
+  (defadvice y-or-n-p (around prevent-dialog-yorn activate)
+    "Prevent y-or-n-p from activating a dialog"
+    (let ((use-dialog-box nil))
+      ad-do-it)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/ido.el
+;; ido
+
+(ido-mode t)
+(setq ido-enable-flex-matching t
+      ido-use-virtual-buffers t)
 ;; ############################################################################
 
 
@@ -314,8 +472,8 @@
 ;; === Show whitespaces/tabs etc. ===
 (setq x-stretch-cursor t)
 
-;;(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
-;;(setq-default indent-tabs-mode t)
+;; === Get ride of tabs most of the time ===
+(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
 
 (setq-default c-basic-offset 4
               tab-width 4
@@ -357,14 +515,6 @@
 (paren-activate)                        ; activating
 
 
-;; ==============================================================
-;; Autopair: Automagically pair braces and quotes like TextMate
-;; see http://code.google.com/p/autopair/ or 
-;; http://www.emacswiki.org/emacs/AutoPairs
-;; ==============================================================
-(require 'autopair)
-(autopair-global-mode) ;; enable autopair in all buffers 
-(setq autopair-autowrap t) 
 ;; ############################################################################
 
 
@@ -415,6 +565,132 @@
 ;; User configuration / Identity
 (setq user-full-name    "Sebastien Varrette")
 (setq user-mail-address "<Sebastien.Varrette@uni.lu>")
+(setq user-www          "http://varrette.gforge.uni.lu")
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/autopair.el
+;; ==============================================================
+;; Autopair: Automagically pair braces and quotes like TextMate
+;; see http://code.google.com/p/autopair/ or 
+;; http://www.emacswiki.org/emacs/AutoPairs
+;; ==============================================================
+(require 'autopair)
+(autopair-global-mode) ;; enable autopair in all buffers 
+(setq autopair-autowrap t) 
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/helm.el
+;; Configure helm mode
+;; see http://emacs-helm.github.io/helm/
+;;(helm-mode 1)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/org.el
+;; Settings for org-mode
+;; See http://www.aaronbedra.com/emacs.d/#org-mode
+
+;; === Settings ===
+;; Enable logging when tasks are complete. This puts a time-stamp on the
+;; completed task. Since I usually am doing quite a few things at once, I added
+;; the INPROGRESS keyword and made the color blue. Finally, enable flyspell-mode
+;; and writegood-mode when org-mode is active.
+
+(setq org-log-done t
+      org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
+      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (flyspell-mode)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (writegood-mode)))
+
+;; === org-agenda ===
+
+(setq org-rootdir "~/Dropbox/SyncFolder/org/")
+
+(setq org-agenda-show-log t
+      org-agenda-todo-ignore-scheduled t
+      org-agenda-todo-ignore-deadlines t)
+(setq org-agenda-files (concat org-rootdir "personal.org"))
+;; (setq org-agenda-files (list "~/Dropbox/org/personal.org"
+;;                              "~/Dropbox/org/groupon.org"))
+
+;; === org-habbit ===
+(require 'org)
+(require 'org-install)
+(require 'org-habit)
+(add-to-list 'org-modules "org-habit")
+(setq org-habit-preceding-days 7
+      org-habit-following-days 1
+      org-habit-graph-column 80
+      org-habit-show-habits-only-for-today t
+      org-habit-show-all-today t)
+
+
+;; === org-babel ===
+;; org-babel is a feature inside of org-mode that makes this document possible.
+;; It allows for embedding languages inside of an org-mode document with all the
+;; proper font-locking. It also allows you to extract and execute code. It isn't
+;; aware of Clojure by default, so the following sets that up.
+(require 'ob)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sh . t)
+   (dot . t)
+   (ruby . t)))
+
+(add-to-list 'org-src-lang-modes (quote ("dot". graphviz-dot)))
+
+(defvar org-babel-default-header-args:clojure
+  '((:results . "silent") (:tangle . "yes")))
+
+(defun org-babel-execute:clojure (body params)
+  (lisp-eval-string body)
+  "Done!")
+
+(provide 'ob-clojure)
+
+(setq org-src-fontify-natively t
+      org-confirm-babel-evaluate nil)
+
+(add-hook 'org-babel-after-execute-hook (lambda ()
+                                          (condition-case nil
+                                              (org-display-inline-images)
+                                            (error nil)))
+          'append)
+
+
+;; ==== org-abbrev ===
+
+(add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
+
+(define-skeleton skel-org-block-elisp
+  "Insert an emacs-lisp block"
+  ""
+  "#+begin_src emacs-lisp\n"
+  _ - \n
+  "#+end_src\n")
+
+(define-abbrev org-mode-abbrev-table "selisp" "" 'skel-org-block-elisp)
+
+(define-skeleton skel-header-block
+  "Creates my default header"
+  ""
+  "#+TITLE: " str "\n"
+  "#+AUTHOR: Aaron Bedra\n"
+  "#+EMAIL: aaron@aaronbedra.com\n"
+  "#+OPTIONS: toc:3 num:nil\n"
+  "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
+
+(define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
 ;; ############################################################################
 
 
@@ -430,13 +706,13 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/bindings/global.el
 ;; ----------------------------------------------------------------------
-;; File: init-bindings.el - setup my key bindings in emacs
+;; File: bindings/global.el - setup my gloabl key bindings in emacs
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mar 2014-09-16 15:03 svarrette>
+;; Time-stamp: <Mer 2014-09-17 21:57 svarrette>
 ;;
-;; Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
 ;;
 ;; More information about Emacs Lisp:
@@ -458,18 +734,19 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; ----------------------------------------------------------------------
 
-;; === Specific Aquamacs configuration ===
-;; (Aquamacs
-;;  (require 'redo)
-;;  (require 'mac-key-mode)
-;;  (mac-key-mode 1)
-;;  (setq
-;;   ns-command-modifier 'meta         ; Apple/Command key is Meta
-;;   ns-alternate-modifier nil         ; Option is the Mac Option key
-;;   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
-;;   )
- 
-;;  )
+;; === Always indent on return ===
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; Use helm to open files
+;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
+
+
+;; === Another comment binding (also M-;) ===
+(global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+
+;; === Git stuff ===
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;; === Buffer switching ===
 ;; C-x b permits to switch among the buffer by entering a buffer name,
@@ -481,11 +758,15 @@
 (setq iswitchb-buffer-ignore '("^ " "*Buffer"))
 
 ;; Move from one buffer to another using 'C-<' and 'C->'
-                                        ;(load "cyclebuffer" nil 't)
-                                        ;(global-set-key (kbd "C-<") 'cyclebuffer-forward)
-                                        ;(global-set-key (kbd "C->") 'cyclebuffer-backward)
+;;(load "cyclebuffer" nil 't)
+;;(global-set-key (kbd "C-<") 'cyclebuffer-forward)
+;;(global-set-key (kbd "C->") 'cyclebuffer-backward)
 (global-set-key (kbd "C-<") 'previous-buffer)
 (global-set-key (kbd "C->") 'next-buffer)
+
+;; === helm ===
+(global-set-key (kbd "C-c h") 'helm-mini)
+(global-set-key (kbd "M-x")   'helm-M-x)
 
 ;; === Window switching ===
 (global-set-key [C-prior] 'other-window)
@@ -527,11 +808,16 @@
 
 (global-set-key (kbd "M-n") 'goto-line)          ; goto line number
 
-;; ECB
-(global-set-key [(f2)]   'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
+;; === ECB / NerdTree like ===
+;; (use-package  neotree
+;; 			  :bind "f1" 'neotree-toggle)
+(require 'neotree)
+(require 'find-file-in-project)
+(global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
+(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
 
-;; Shell pop
-(global-set-key [(f3)] 	 'shell-pop)
+;; === Shell pop ===
+(global-set-key [(f3)]     'shell-pop)
 
 ;; Speedbar
 
@@ -562,7 +848,11 @@
 (global-set-key (kbd "C-!") 'shell)
 
 ;; === Re-indent the full file (quite useful) ===
-(global-set-key (kbd "C-c i") 'indent-buffer)  ; see ~/.emacs.d/init-defuns
+(global-set-key (kbd "C-c i") 'indent-buffer)   ;
+(global-set-key (kbd "C-c n") 'cleanup-buffer)  ;
+
+
+
 ;; === yank and indent copied region ===
 (global-set-key (kbd "M-v")  'yank-and-indent)
 
@@ -623,10 +913,10 @@
 
 ;; * SVN: see menu Tools/Version Control (C-x v v to commit for instance)
 
-;; * GIT (i.e. magit): see ~/.emacs.d/init-emodes.el 
+;; * GIT (i.e. magit): see ~/.emacs.d/init-emodes.el
 
 ;; * Programming stuff:
-;;   Most useful: 
+;;   Most useful:
 ;;    - 'C-t C-t' to invoke a template from tempo (see ~/.emacs.d/tempo-c-cpp.el)
 ;;    - 'M-<ret>' to invoke a template from Yasnippet (see ~/.emacs.d/init-emodes.el)
 ;;    - 'C-<ret>' to invoke semantic menu (see ~/.emacs.d/init-cedet.el)
@@ -635,7 +925,7 @@
 
 ;; * nxHtml: see ~/.emacs.d/init-emodes.el, in particular C-<ret> is bind in
 ;;  this case to popup the complete-tag menu very useful when editing some
-;;  [x]html file 
+;;  [x]html file
 
 
 
@@ -648,6 +938,30 @@
 ;; Local Variables:
 ;; mode: lisp
 ;; End:
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/bindings/mac.el
+;; Special configuration for Mac 
+
+;; (Aquamacs
+(when is-mac
+  (setq
+   ns-command-modifier 'meta         ; Apple/Command key is Meta
+   ns-alternate-modifier nil         ; Option is the Mac Option key
+   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
+   ))
+
+;;  (require 'redo)
+;;  (require 'mac-key-mode)
+;;  (mac-key-mode 1)
+;;  (setq
+;;   ns-command-modifier 'meta         ; Apple/Command key is Meta
+;;   ns-alternate-modifier nil         ; Option is the Mac Option key
+;;   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
+;;   )
+;;  )
 ;; ############################################################################
 
 

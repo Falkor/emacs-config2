@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-09-17 01:35 svarrette>
+;; Time-stamp: <Mer 2014-09-17 21:31 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -50,7 +50,7 @@
 
 ;; ============================ Let's go! ============================
 ;; Turn off mouse interface early in startup to avoid momentary display
-(if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
+;;(if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
@@ -63,12 +63,12 @@
                       (add-to-list 'load-path
                                    (concat emacs-root p))))
   (add-path "site-lisp")
+  (add-path "site-lisp/use-package")
   )
 (setq package-user-dir (concat emacs-root "elpa"))
 (setq custom-file      (concat emacs-root "custom.el"))
 (setq custom-dir       (concat emacs-root "rc.custom"))
 (setq defuns-dir       (concat emacs-root "defuns"))
-
 
 ;; Load Lisp defined functions
 (load-directory defuns-dir)
@@ -95,13 +95,16 @@
                           el-get
                           erlang
                           feature-mode
+						  find-file-in-project
                           flycheck
                           gist
                           go-mode
                           graphviz-dot-mode
                           haml-mode
                           haskell-mode
+						  helm
                           htmlize
+                          idle-require
                           idle-highlight
                           jabber
                           js2-mode
@@ -109,7 +112,8 @@
                           markdown-mode
                           marmalade
                           mic-paren
-                          nodejs-repl
+						  neotree
+						  nodejs-repl
                           org
                           paredit
                           php-mode
@@ -142,12 +146,20 @@
 
 ;; =========== EL-Get =============
 ;; See https://github.com/dimitri/el-get
-
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+    (let (el-get-master-branch)
+      (goto-char (point-max))
+      (eval-print-last-sexp))))
 (require 'el-get)
 (require 'el-get-status)
+(setq el-get-dir (concat emacs-root "el-get/"))
+
 ;;(setq el-get-byte-compile nil)
 ;; Load the local recipes
-(add-to-list 'el-get-recipe-path (concat emacs-root "el-get/recipes"))
+(add-to-list 'el-get-recipe-path (concat el-get-dir "recipes"))
 
 ;; ECB for emacs 24
 (setq el-get-sources
@@ -162,6 +174,31 @@
               (mapcar 'el-get-source-name el-get-sources)))
 (el-get 'sync my-packages)
 
+;; ======= Enhance initialization speed =======
+;; Some features are not loaded by default to minimize initialization time, so
+;; they have to be required (or loaded, if you will). require-calls tends to
+;; lead to the largest bottleneck's in a configuration. idle-require delays the
+;; require-calls to a time where Emacs is in idle. So this is great for stuff
+;; you eventually want to load, but is not a high priority.
+
+(require 'idle-require)             ; Need in order to use idle-require
+(dolist (feature
+         '(auto-compile             ; auto-compile .el files
+           deft
+           erlang
+           gist
+           go-mode
+           haml-mode
+		   jabber
+           recentf                  ; recently opened files
+           restclient
+           smex                     ; M-x interface Ido-style.
+           tex-mode))               ; TeX, LaTeX, and SliTeX mode commands
+  (idle-require feature))
+
+(setq idle-require-idle-delay 5)
+(idle-require-mode 1)
+
 
 
 ;; === Emacs Modular Configuration entry point ===
@@ -173,4 +210,4 @@
 ;; ===== Custom settings ====
 ;; Overwrite with the custom settings
 ;;(load-directory custom-dir)
-;;(load custom-file 'noerror)
+(load custom-file 'noerror)

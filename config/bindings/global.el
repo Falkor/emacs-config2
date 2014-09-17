@@ -1,11 +1,11 @@
 ;; ----------------------------------------------------------------------
-;; File: init-bindings.el - setup my key bindings in emacs
+;; File: bindings/global.el - setup my gloabl key bindings in emacs
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mar 2014-09-16 15:03 svarrette>
+;; Time-stamp: <Mer 2014-09-17 21:57 svarrette>
 ;;
-;; Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
 ;;
 ;; More information about Emacs Lisp:
@@ -27,18 +27,19 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; ----------------------------------------------------------------------
 
-;; === Specific Aquamacs configuration ===
-;; (Aquamacs
-;;  (require 'redo)
-;;  (require 'mac-key-mode)
-;;  (mac-key-mode 1)
-;;  (setq
-;;   ns-command-modifier 'meta         ; Apple/Command key is Meta
-;;   ns-alternate-modifier nil         ; Option is the Mac Option key
-;;   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
-;;   )
- 
-;;  )
+;; === Always indent on return ===
+(global-set-key (kbd "RET") 'newline-and-indent)
+
+;; Use helm to open files
+;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
+
+
+;; === Another comment binding (also M-;) ===
+(global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+
+;; === Git stuff ===
+(global-set-key (kbd "C-x g") 'magit-status)
 
 ;; === Buffer switching ===
 ;; C-x b permits to switch among the buffer by entering a buffer name,
@@ -50,11 +51,15 @@
 (setq iswitchb-buffer-ignore '("^ " "*Buffer"))
 
 ;; Move from one buffer to another using 'C-<' and 'C->'
-                                        ;(load "cyclebuffer" nil 't)
-                                        ;(global-set-key (kbd "C-<") 'cyclebuffer-forward)
-                                        ;(global-set-key (kbd "C->") 'cyclebuffer-backward)
+;;(load "cyclebuffer" nil 't)
+;;(global-set-key (kbd "C-<") 'cyclebuffer-forward)
+;;(global-set-key (kbd "C->") 'cyclebuffer-backward)
 (global-set-key (kbd "C-<") 'previous-buffer)
 (global-set-key (kbd "C->") 'next-buffer)
+
+;; === helm ===
+(global-set-key (kbd "C-c h") 'helm-mini)
+(global-set-key (kbd "M-x")   'helm-M-x)
 
 ;; === Window switching ===
 (global-set-key [C-prior] 'other-window)
@@ -96,11 +101,16 @@
 
 (global-set-key (kbd "M-n") 'goto-line)          ; goto line number
 
-;; ECB
-(global-set-key [(f2)]   'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
+;; === ECB / NerdTree like ===
+;; (use-package  neotree
+;; 			  :bind "f1" 'neotree-toggle)
+(require 'neotree)
+(require 'find-file-in-project)
+(global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
+(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
 
-;; Shell pop
-(global-set-key [(f3)] 	 'shell-pop)
+;; === Shell pop ===
+(global-set-key [(f3)]     'shell-pop)
 
 ;; Speedbar
 
@@ -131,7 +141,11 @@
 (global-set-key (kbd "C-!") 'shell)
 
 ;; === Re-indent the full file (quite useful) ===
-(global-set-key (kbd "C-c i") 'indent-buffer)  ; see ~/.emacs.d/init-defuns
+(global-set-key (kbd "C-c i") 'indent-buffer)   ;
+(global-set-key (kbd "C-c n") 'cleanup-buffer)  ;
+
+
+
 ;; === yank and indent copied region ===
 (global-set-key (kbd "M-v")  'yank-and-indent)
 
@@ -192,10 +206,10 @@
 
 ;; * SVN: see menu Tools/Version Control (C-x v v to commit for instance)
 
-;; * GIT (i.e. magit): see ~/.emacs.d/init-emodes.el 
+;; * GIT (i.e. magit): see ~/.emacs.d/init-emodes.el
 
 ;; * Programming stuff:
-;;   Most useful: 
+;;   Most useful:
 ;;    - 'C-t C-t' to invoke a template from tempo (see ~/.emacs.d/tempo-c-cpp.el)
 ;;    - 'M-<ret>' to invoke a template from Yasnippet (see ~/.emacs.d/init-emodes.el)
 ;;    - 'C-<ret>' to invoke semantic menu (see ~/.emacs.d/init-cedet.el)
@@ -204,7 +218,7 @@
 
 ;; * nxHtml: see ~/.emacs.d/init-emodes.el, in particular C-<ret> is bind in
 ;;  this case to popup the complete-tag menu very useful when editing some
-;;  [x]html file 
+;;  [x]html file
 
 
 
