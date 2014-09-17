@@ -47,21 +47,23 @@
 ;;
 
 
-;; === defaults === 
+;; === defaults ===
 (setq truncate-partial-width-windows nil)
-(setq line-number-mode         t)
-(setq column-number-mode       t)
-(setq visible-bell             t)
- 
-; === Default size of the frame ===
+(setq line-number-mode    t)
+(setq column-number-mode  t)
+
+;; === F... the beep ===
+(setq visible-bell        t)
+
+;; === Default size of the frame ===
 (set-frame-width (selected-frame) 120)
 (set-frame-height (selected-frame) 40)
 
 ;; === remove the few annoyance of default emacs ===
 ;; Use "y or n" answers instead of full words "yes or no"
-(fset 'yes-or-no-p 'y-or-n-p) 
+(fset 'yes-or-no-p 'y-or-n-p)
 
-;; kill and move region directly 
+;; kill and move region directly
 (delete-selection-mode t)
 ;; (pc-selection-mode)
 
@@ -74,7 +76,7 @@
 
 ;;
 ;; === Specify the frame title ===
-;; see http://www.emacswiki.org/emacs/FrameTitle 
+;; see http://www.emacswiki.org/emacs/FrameTitle
 ;; recognize the same special characters as mode-line-format variable, mainly:
 ;;    %b -- print buffer name.      %f -- print visited file name.
 ;;    %F -- print frame name.
@@ -94,7 +96,7 @@
 ;; Font selection (to use a mono-spaced (non-proportional) font)
 ;; =================================================================
 ;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
-(add-to-list 'default-frame-alist '(font . "Monaco-12")) 
+(add-to-list 'default-frame-alist '(font . "Monaco-12"))
 
 ;; =================================================================
 ;; Powerline Status Bar
@@ -103,15 +105,13 @@
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
 (require 'powerline)
 (powerline-default-theme)
-(setq powerline-color1 "#222")      ;; dark grey; 
-(setq powerline-color2 "#444")      ;; slightly lighter grey
 ;; shape...
-;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows, 
-;; (setq powerline-color1 "grey22")
-;; (setq powerline-color2 "grey40")
+(setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
+(setq powerline-color1 "grey22")
+(setq powerline-color2 "grey40")
 (custom-set-faces
-   '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
-    '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+ '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
+ '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
 
 ;; =================================================================
 ;; Emacs Color Theme
@@ -131,6 +131,14 @@
       '((cursor-color . "green")
         (cursor-type . box)))
 (set-default 'cursor-type 'box)
+
+;; === See the end of the file ===
+(setq-default indicate-empty-lines t)
+(when (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
+
+;; See also trailing whitespace
+(setq-default show-trailing-whitespace t)
 ;; ############################################################################
 
 
@@ -170,6 +178,9 @@
 ;; after mouse selection in X11, you can paste by `yank' in emacs
 ;;(Setq x-select-enable-primary t)
 (setq mouse-drag-copy-region  t)
+
+;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
+(require 'better-defaults)
 
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 (require 'saveplace)
@@ -300,6 +311,11 @@
       ad-do-it)
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
+
+;; Turn on auto completion
+;; See http://www.emacswiki.org/emacs/AutoComplete
+(require 'auto-complete-config)
+(ac-config-default)
 ;; ############################################################################
 
 
@@ -314,8 +330,8 @@
 ;; === Show whitespaces/tabs etc. ===
 (setq x-stretch-cursor t)
 
-;;(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
-;;(setq-default indent-tabs-mode t)
+;; === Get ride of tabs most of the time ===
+(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
 
 (setq-default c-basic-offset 4
               tab-width 4
@@ -419,6 +435,123 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/autopair.el
+;; ==============================================================
+;; Autopair: Automagically pair braces and quotes like TextMate
+;; see http://code.google.com/p/autopair/ or 
+;; http://www.emacswiki.org/emacs/AutoPairs
+;; ==============================================================
+(require 'autopair)
+(autopair-global-mode) ;; enable autopair in all buffers 
+(setq autopair-autowrap t) 
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/org.el
+;; Settings for org-mode
+;; See http://www.aaronbedra.com/emacs.d/#org-mode
+
+;; === Settings ===
+;; Enable logging when tasks are complete. This puts a time-stamp on the
+;; completed task. Since I usually am doing quite a few things at once, I added
+;; the INPROGRESS keyword and made the color blue. Finally, enable flyspell-mode
+;; and writegood-mode when org-mode is active.
+
+(setq org-log-done t
+      org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
+      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (flyspell-mode)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (writegood-mode)))
+
+;; === org-agenda ===
+
+(setq org-rootdir "~/Dropbox/SyncFolder/org/")
+
+(setq org-agenda-show-log t
+      org-agenda-todo-ignore-scheduled t
+      org-agenda-todo-ignore-deadlines t)
+(setq org-agenda-files (concat org-rootdir "personal.org"))
+;; (setq org-agenda-files (list "~/Dropbox/org/personal.org"
+;;                              "~/Dropbox/org/groupon.org"))
+
+;; === org-habbit ===
+(require 'org)
+(require 'org-install)
+(require 'org-habit)
+(add-to-list 'org-modules "org-habit")
+(setq org-habit-preceding-days 7
+      org-habit-following-days 1
+      org-habit-graph-column 80
+      org-habit-show-habits-only-for-today t
+      org-habit-show-all-today t)
+
+
+;; === org-babel ===
+;; org-babel is a feature inside of org-mode that makes this document possible.
+;; It allows for embedding languages inside of an org-mode document with all the
+;; proper font-locking. It also allows you to extract and execute code. It isn't
+;; aware of Clojure by default, so the following sets that up.
+(require 'ob)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sh . t)
+   (dot . t)
+   (ruby . t)))
+
+(add-to-list 'org-src-lang-modes (quote ("dot". graphviz-dot)))
+
+(defvar org-babel-default-header-args:clojure
+  '((:results . "silent") (:tangle . "yes")))
+
+(defun org-babel-execute:clojure (body params)
+  (lisp-eval-string body)
+  "Done!")
+
+(provide 'ob-clojure)
+
+(setq org-src-fontify-natively t
+      org-confirm-babel-evaluate nil)
+
+(add-hook 'org-babel-after-execute-hook (lambda ()
+                                          (condition-case nil
+                                              (org-display-inline-images)
+                                            (error nil)))
+          'append)
+
+
+;; ==== org-abbrev ===
+
+(add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
+
+(define-skeleton skel-org-block-elisp
+  "Insert an emacs-lisp block"
+  ""
+  "#+begin_src emacs-lisp\n"
+  _ - \n
+  "#+end_src\n")
+
+(define-abbrev org-mode-abbrev-table "selisp" "" 'skel-org-block-elisp)
+
+(define-skeleton skel-header-block
+  "Creates my default header"
+  ""
+  "#+TITLE: " str "\n"
+  "#+AUTHOR: Aaron Bedra\n"
+  "#+EMAIL: aaron@aaronbedra.com\n"
+  "#+OPTIONS: toc:3 num:nil\n"
+  "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
+
+(define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/smart-tabs.el
 ;; === Smart Tabs ===
 ;; see http://www.emacswiki.org/emacs/SmartTabs
@@ -430,13 +563,13 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/bindings/global.el
 ;; ----------------------------------------------------------------------
-;; File: init-bindings.el - setup my key bindings in emacs
+;; File: bindings/global.el - setup my gloabl key bindings in emacs
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mar 2014-09-16 15:03 svarrette>
+;; Time-stamp: <Mer 2014-09-17 10:22 svarrette>
 ;;
-;; Copyright (c) 2010 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
 ;;
 ;; More information about Emacs Lisp:
@@ -458,18 +591,6 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; ----------------------------------------------------------------------
 
-;; === Specific Aquamacs configuration ===
-;; (Aquamacs
-;;  (require 'redo)
-;;  (require 'mac-key-mode)
-;;  (mac-key-mode 1)
-;;  (setq
-;;   ns-command-modifier 'meta         ; Apple/Command key is Meta
-;;   ns-alternate-modifier nil         ; Option is the Mac Option key
-;;   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
-;;   )
- 
-;;  )
 
 ;; === Buffer switching ===
 ;; C-x b permits to switch among the buffer by entering a buffer name,
@@ -531,7 +652,7 @@
 (global-set-key [(f2)]   'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
 
 ;; Shell pop
-(global-set-key [(f3)] 	 'shell-pop)
+(global-set-key [(f3)]     'shell-pop)
 
 ;; Speedbar
 
@@ -562,7 +683,11 @@
 (global-set-key (kbd "C-!") 'shell)
 
 ;; === Re-indent the full file (quite useful) ===
-(global-set-key (kbd "C-c i") 'indent-buffer)  ; see ~/.emacs.d/init-defuns
+(global-set-key (kbd "C-c i") 'indent-buffer)   ;
+(global-set-key (kbd "C-c n") 'cleanup-buffer)  ;
+
+
+
 ;; === yank and indent copied region ===
 (global-set-key (kbd "M-v")  'yank-and-indent)
 
@@ -623,10 +748,10 @@
 
 ;; * SVN: see menu Tools/Version Control (C-x v v to commit for instance)
 
-;; * GIT (i.e. magit): see ~/.emacs.d/init-emodes.el 
+;; * GIT (i.e. magit): see ~/.emacs.d/init-emodes.el
 
 ;; * Programming stuff:
-;;   Most useful: 
+;;   Most useful:
 ;;    - 'C-t C-t' to invoke a template from tempo (see ~/.emacs.d/tempo-c-cpp.el)
 ;;    - 'M-<ret>' to invoke a template from Yasnippet (see ~/.emacs.d/init-emodes.el)
 ;;    - 'C-<ret>' to invoke semantic menu (see ~/.emacs.d/init-cedet.el)
@@ -635,7 +760,7 @@
 
 ;; * nxHtml: see ~/.emacs.d/init-emodes.el, in particular C-<ret> is bind in
 ;;  this case to popup the complete-tag menu very useful when editing some
-;;  [x]html file 
+;;  [x]html file
 
 
 
@@ -648,6 +773,30 @@
 ;; Local Variables:
 ;; mode: lisp
 ;; End:
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/bindings/mac.el
+;; Special configuration for Mac 
+
+;; (Aquamacs
+(when is-mac
+  (setq
+   ns-command-modifier 'meta         ; Apple/Command key is Meta
+   ns-alternate-modifier nil         ; Option is the Mac Option key
+   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
+   ))
+
+;;  (require 'redo)
+;;  (require 'mac-key-mode)
+;;  (mac-key-mode 1)
+;;  (setq
+;;   ns-command-modifier 'meta         ; Apple/Command key is Meta
+;;   ns-alternate-modifier nil         ; Option is the Mac Option key
+;;   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
+;;   )
+;;  )
 ;; ############################################################################
 
 

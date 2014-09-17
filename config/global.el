@@ -12,6 +12,9 @@
 ;;(Setq x-select-enable-primary t)
 (setq mouse-drag-copy-region  t)
 
+;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
+(require 'better-defaults)
+
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 (require 'saveplace)
 (setq-default save-place t)
@@ -141,3 +144,8 @@
       ad-do-it)
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
+
+;; Turn on auto completion
+;; See http://www.emacswiki.org/emacs/AutoComplete
+(require 'auto-complete-config)
+(ac-config-default)
