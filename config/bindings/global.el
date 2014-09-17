@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 10:43 svarrette>
+;; Time-stamp: <Mer 2014-09-17 21:19 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -30,6 +30,11 @@
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
 
+;; Use helm to open files
+;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
+
+
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
 
@@ -46,11 +51,14 @@
 (setq iswitchb-buffer-ignore '("^ " "*Buffer"))
 
 ;; Move from one buffer to another using 'C-<' and 'C->'
-                                        ;(load "cyclebuffer" nil 't)
-                                        ;(global-set-key (kbd "C-<") 'cyclebuffer-forward)
-                                        ;(global-set-key (kbd "C->") 'cyclebuffer-backward)
+;;(load "cyclebuffer" nil 't)
+;;(global-set-key (kbd "C-<") 'cyclebuffer-forward)
+;;(global-set-key (kbd "C->") 'cyclebuffer-backward)
 (global-set-key (kbd "C-<") 'previous-buffer)
 (global-set-key (kbd "C->") 'next-buffer)
+
+;; === helm ===
+(global-set-key (kbd "C-c h") 'helm-mini)
 
 ;; === Window switching ===
 (global-set-key [C-prior] 'other-window)
@@ -92,8 +100,12 @@
 
 (global-set-key (kbd "M-n") 'goto-line)          ; goto line number
 
-;; === ECB ===
-(global-set-key [(f2)]   'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
+;; === ECB / NerdTree like ===
+;; (use-package  neotree
+;; 			  :bind "f1" 'neotree-toggle)
+(require 'neotree)
+(global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
+(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
 
 ;; === Shell pop ===
 (global-set-key [(f3)]     'shell-pop)

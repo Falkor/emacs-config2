@@ -60,14 +60,34 @@
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
 (require 'powerline)
-(powerline-default-theme)
+(powerline-center-theme)
 ;; shape...
-(setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
-(setq powerline-color1 "grey22")
-(setq powerline-color2 "grey40")
-(custom-set-faces
- '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
- '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
+;; (setq powerline-color1 "DarkGrey")
+;; (setq powerline-color2 "honeydew1")
+;; (custom-set-faces
+;;  '(powerline-active1 '((t (:background "DarkGrey"  :inherit mode-line))))
+;;  '(powerline-active2 '((t (:background "honeydew1" :inherit mode-line)))))
+
+;; (custom-theme-set-faces
+;;  'color-theme-vim-insert-mode
+;;  `(powerline-active1 ((t (:background "DarkGrey"    :inherit mode-line))))
+;;  `(powerline-active2 ((t (:background "honeydew1"   :inherit mode-line))))
+;;  `(powerline-inactive1 ((t (:background "gray71"    :inherit mode-line-inactive))))
+;;  `(powerline-inactive2 ((t (:background "honeydew3" :inherit mode-line-inactive)))))
+
+;; (setq powerline-color1 "grey22")
+;; (setq powerline-color2 "grey40")
+;; (custom-set-faces
+;;  '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
+;;  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+
+;; (when (and (buffer-file-name (current-buffer)) vc-mode)
+;;     (if (vc-workfile-unchanged-p (buffer-file-name (current-buffer)))
+;;       (powerline-vc 'powerline-insert-face 'r)
+;;       (powerline-vc 'powerline-normal-face 'r)))
+
+
 
 ;; =================================================================
 ;; Emacs Color Theme
