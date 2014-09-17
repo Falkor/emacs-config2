@@ -689,7 +689,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 21:19 svarrette>
+;; Time-stamp: <Mer 2014-09-17 21:28 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -790,6 +790,7 @@
 ;; (use-package  neotree
 ;; 			  :bind "f1" 'neotree-toggle)
 (require 'neotree)
+(require 'find-file-in-project)
 (global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
 (global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
 
