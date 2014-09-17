@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-09-17 21:05 svarrette>
+;; Time-stamp: <Mer 2014-09-17 21:31 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -95,6 +95,7 @@
                           el-get
                           erlang
                           feature-mode
+						  find-file-in-project
                           flycheck
                           gist
                           go-mode
