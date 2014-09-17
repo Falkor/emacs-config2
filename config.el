@@ -6,6 +6,97 @@
 ;; then run within emacs 'M-x emc-merge-config-files'
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/auto-insert.el
+;; ========================================================
+;; Auto-insert: automatic insertion of text into new files
+;; ========================================================
+
+(require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
+;; doc:  ~/.emacs.d/site-lisp/auto-insert-tkld.pdf
+(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
+;; trick to abstract the personal web page
+;;(setq auto-insert-organisation  user-www)
+(setq auto-insert-automatically t)
+;; associate file extention to a template name
+(setq auto-insert-alist
+      '(
+        ("\\.tex$"         . "LaTeX")            ; TeX or LaTeX
+        ("\\.bib$"         . "BibTeX")           ; BibTeX
+        ("\\.sty$"         . "LaTeX Style")      ; LaTeX Style
+        ("\\.el$"          . "Emacs Lisp")       ; Emacs Lisp
+        ("\\.java$"        . "Java")             ; Java
+        ("\\App.java$"     . "JavaSwing")        ; Java Swing app
+        ("[Tt]ools.h"      . "Tools C++")        ; Useful functions in C/C++
+        ("\\Logs.cpp"      . "Logs C++")         ; Macros for logs/debugging
+        ("\\Logs.h[+p]*"   . "Logs C++ Include") ; " header file
+        ("\\.c$"           . "C")                ; C
+        ("\\.h$"           . "C Include")        ; C header file
+        ("\\.cxx$"         . "C++")              ; C++
+        ("\\.c\\+\\+$"     . "C++")              ;
+        ("\\.cpp$"         . "C++")              ;
+        ("\\.cc$"          . "C++")              ;
+        ("\\.C$"           . "C++")              ;
+        ("[Mm]akefile$"    . "Makefile")         ; Makefile
+        ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
+        ("\\.md$"          . "Text")             ; Text
+        ("\\.txt$"         . "Text")             ; Text
+        ("\\.gpg$"         . "GPG")              ; GPG 
+        ("[Rr]eadme$"      . "Readme")           ; Readme
+        ("README$"         . "Readme")           ;
+        ("\\.sh$"          . "Shell")            ; Shell
+        ("\\.csh$"         . "Shell")            ;
+        ("\\.tcsh$"        . "Shell")            ;
+        ("\\.html"         . "Html")             ; HTML
+        ("\\.wml"          . "WML")              ; WML (Website Meta Language)
+        ("\\.php"          . "PHP")              ; PHP
+        ("\\.gnuplot"      . "Gnuplot")          ; Gnuplot
+        ("\\.pl$"          . "Perl")             ; Perl
+        ("\\.pm$"          . "Perl Module")      ; PerlModule
+        ("\\.t$"           . "Perl Test")        ; Perl Test script
+        ("\\.pp$"          . "Puppet")           ; Puppet manifest
+        ("\\.rb$"          . "Ruby")             ; Ruby
+        ("\\.R$"           . "R")                ; R
+        ("\\.admission_rule[s]?$" . "OAR")              ; OAR admission rule
+        (""                . "Shell") ; Shell (by default: assume a shell template)
+        ))
+;; now associate a template name to a template file
+(setq auto-insert-type-alist
+      '(
+        ("LaTeX"       . "insert.tex")
+        ("BibTeX"      . "insert.bib")
+        ("LaTeX Style" . "insert.sty")
+        ("Emacs Lisp"  . "insert.el")
+        ("Java"        . "insert.java")
+        ("JavaSwing"   . "insertApp.java")
+        ("C"           . "insert.c")
+        ("C Include"   . "insert.h")
+        ("C++"         . "insert.cpp")
+        ("Tools C++"   . "insert.tools_cpp.h")
+        ("Logs C++"    . "insert.logs.cpp")
+        ("Logs C++ Include" . "insert.logs.h")
+        ("Makefile"    . "insert.makefile")
+        ("Makefile.am" . "insert.makefile.am")
+        ("Text"        . "insert.md")
+        ("GPG"         . "insert.gpg")
+        ("Readme"      . "insert.readme")
+        ("Shell"       . "insert.shell")
+        ("Html"        . "insert.html")
+        ("WML"         . "insert.wml")
+        ("PHP"         . "insert.php")
+        ("Gnuplot"     . "insert.gnuplot")
+        ("Perl"        . "insert.pl")
+        ("Perl Module" . "insert.pm")
+        ("Perl Test"   . "insert.t")
+        ("Puppet"      . "insert.pp")
+        ("Ruby"        . "insert.rb")
+        ("R"           . "insert.R")
+        ("OAR"         . "insert.oar")
+        ))
+
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/backup.el
 ;; === Auto-save and backup files ===
 (setq auto-save-list-file-name nil)     ; no .saves files
@@ -340,6 +431,16 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/ido.el
+;; ido
+
+(ido-mode t)
+(setq ido-enable-flex-matching t
+      ido-use-virtual-buffers t)
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/indent.el
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
@@ -443,6 +544,7 @@
 ;; User configuration / Identity
 (setq user-full-name    "Sebastien Varrette")
 (setq user-mail-address "<Sebastien.Varrette@uni.lu>")
+(setq user-www          "http://varrette.gforge.uni.lu")
 ;; ############################################################################
 
 
@@ -456,6 +558,14 @@
 (require 'autopair)
 (autopair-global-mode) ;; enable autopair in all buffers 
 (setq autopair-autowrap t) 
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/helm.el
+;; Configure helm mode
+;; see http://emacs-helm.github.io/helm/
+(helm-mode 1)
 ;; ############################################################################
 
 
@@ -579,7 +689,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 10:43 svarrette>
+;; Time-stamp: <Mer 2014-09-17 21:11 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -606,6 +716,11 @@
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
 
+;; Use helm to open files
+;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
+
+
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
 
@@ -622,11 +737,14 @@
 (setq iswitchb-buffer-ignore '("^ " "*Buffer"))
 
 ;; Move from one buffer to another using 'C-<' and 'C->'
-                                        ;(load "cyclebuffer" nil 't)
-                                        ;(global-set-key (kbd "C-<") 'cyclebuffer-forward)
-                                        ;(global-set-key (kbd "C->") 'cyclebuffer-backward)
+;;(load "cyclebuffer" nil 't)
+;;(global-set-key (kbd "C-<") 'cyclebuffer-forward)
+;;(global-set-key (kbd "C->") 'cyclebuffer-backward)
 (global-set-key (kbd "C-<") 'previous-buffer)
 (global-set-key (kbd "C->") 'next-buffer)
+
+;; === helm ===
+(global-set-key (kbd "C-c h") 'helm-mini)
 
 ;; === Window switching ===
 (global-set-key [C-prior] 'other-window)
@@ -668,8 +786,12 @@
 
 (global-set-key (kbd "M-n") 'goto-line)          ; goto line number
 
-;; === ECB ===
-(global-set-key [(f2)]   'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
+;; === ECB / NerdTree like ===
+;; (use-package  neotree
+;; 			  :bind "f1" 'neotree-toggle)
+(require 'neotree)
+(global-set-key [(f1)] 'neotree-toggle)
+(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
 
 ;; === Shell pop ===
 (global-set-key [(f3)]     'shell-pop)
