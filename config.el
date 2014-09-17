@@ -431,6 +431,27 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/hotfix-x-popup.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Mer 2014-09-17 21:52 svarrette>
+;;
+;; hotfix-x-popup.el - Hotfix on emacs popup dialogs on Mac OS X that freeze
+;; see http://superuser.com/questions/125569/how-to-fix-emacs-popup-dialogs-on-mac-os-x
+;; ----------------------------------------------------------------------
+
+(when is-mac
+  (defadvice yes-or-no-p (around prevent-dialog activate)
+    "Prevent yes-or-no-p from activating a dialog"
+    (let ((use-dialog-box nil))
+      ad-do-it))
+  (defadvice y-or-n-p (around prevent-dialog-yorn activate)
+    "Prevent y-or-n-p from activating a dialog"
+    (let ((use-dialog-box nil))
+      ad-do-it)))
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/ido.el
 ;; ido
 
@@ -565,7 +586,7 @@
 ;; Config file: ~/.emacs.d/config/modes/helm.el
 ;; Configure helm mode
 ;; see http://emacs-helm.github.io/helm/
-(helm-mode 1)
+;;(helm-mode 1)
 ;; ############################################################################
 
 
@@ -689,7 +710,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 21:37 svarrette>
+;; Time-stamp: <Mer 2014-09-17 21:57 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -745,6 +766,7 @@
 
 ;; === helm ===
 (global-set-key (kbd "C-c h") 'helm-mini)
+(global-set-key (kbd "M-x")   'helm-M-x)
 
 ;; === Window switching ===
 (global-set-key [C-prior] 'other-window)
@@ -790,7 +812,7 @@
 ;; (use-package  neotree
 ;; 			  :bind "f1" 'neotree-toggle)
 (require 'neotree)
-
+(require 'find-file-in-project)
 (global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
 (global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
 
