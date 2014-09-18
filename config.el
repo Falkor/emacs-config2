@@ -531,6 +531,43 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/ispell.el
+;; -*- mode: lisp; -*-
+
+;; LaTeX-sensitive spell checking
+(setq ispell-enable-tex-parser t)
+
+;; defautl dictionnary
+(setq ispell-local-dictionary "en")
+
+;; save the personal dictionary without confirmation
+(setq ispell-silently-savep t)
+
+;; enable the likeness criteria
+;;(setq flyspell-sort-corrections nil)
+
+;; dash character (`-') is considered as a word delimiter
+;;(setq flyspell-consider-dash-as-word-delimiter-flag t)
+
+;; Add flyspell to the following major modes
+(dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
+  (add-hook hook (lambda ()
+                   (turn-on-auto-fill)
+                   (flyspell-mode t))))
+
+;; disable flyspell in change log and log-edit mode that derives from text-mode
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode nil))))
+
+;; flyspell comments and strings in programming modes
+;; (preventing it from finding mistakes in the code)
+(dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
+                                   sh-mode-hook))
+  (add-hook hook 'flyspell-prog-mode))
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/parenthesis.el
 ;; === Show matching parenthesis ===
 (require 'paren)
@@ -767,13 +804,31 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/yasnippet.el
+;; -*- mode: lisp; -*-
+
+;; === Yasnippet ===
+;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
+;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
+;; Installation notes: see README
+(require 'yasnippet)
+(yas/initialize)
+(setq yas/root-directory (concat emacs-root "snippets")) 
+(yas/load-directory yas/root-directory)          ; Load the snippets
+
+(yas-global-mode 1)
+(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/bindings/global.el
 ;; ----------------------------------------------------------------------
 ;; File: bindings/global.el - setup my gloabl key bindings in emacs
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 22:50 svarrette>
+;; Time-stamp: <Jeu 2014-09-18 15:42 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -796,6 +851,7 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; ----------------------------------------------------------------------
+(require 'use-package)
 
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
@@ -950,8 +1006,28 @@
 (define-key global-map "\C-ca" 'org-agenda)
 
 ;; === Flyspell ===
-(global-set-key (kbd "C-c C-i w")  'ispell-word)
-(global-set-key (kbd "C-c C-i b")  'ispell-buffer)
+(use-package ispell
+             :bind (("C-c i c" . ispell-comments-and-strings)
+                    ("C-c i d" . ispell-change-dictionary)
+                    ("C-c i k" . ispell-kill-ispell)
+                    ("C-c i m" . ispell-message)
+                    ("C-c i r" . ispell-region)))
+
+(use-package flyspell
+             :bind (("C-c i b" . flyspell-buffer)
+                    ("C-c i f" . flyspell-mode))
+             :config
+             (define-key flyspell-mode-map [(control ?.)] nil))
+
+;; === Yasnippet ===
+;; Use only own snippets, do not use bundled ones
+
+
+
+
+
+
+
 
 
 

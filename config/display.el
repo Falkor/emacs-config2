@@ -115,3 +115,11 @@
 
 ;; See also trailing whitespace
 (setq-default show-trailing-whitespace t)
+
+;; === Auto fit the size of the frame to the buffer content ===
+;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
+;; run 'M-x fit-frame' for that
+(require 'fit-frame)
+(add-hook 'after-make-frame-functions 'fit-frame)
+
+
