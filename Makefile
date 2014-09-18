@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Jeu 2014-09-18 17:02 svarrette>
+# Time-stamp: <Jeu 2014-09-18 17:07 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -33,7 +33,7 @@ GIT_REMOTES    = $(shell git remote | xargs echo )
 GIT_DIRTY      = $(shell git diff --shortstat 2> /dev/null | tail -n1 )
 # Git subtrees repositories 
 # Format: '<url>[|<branch>]' - don't forget the quotes. if branch is ignored, 'master' is used
-GIT_SUBTREE_REPOS = 'https://github.com/Falkor/yasnippet-snippets.git'
+GIT_SUBTREE_REPOS = 'snippets|https://github.com/Falkor/yasnippet-snippets.git'
 # 'https://github.com/ULHPC/easybuild-framework.git|develop'  \
 # 					 'https://github.com/hpcugent/easybuild-wiki.git'
 
@@ -186,7 +186,7 @@ subtree_setup subtree_diff subtree_up:
 else
 subtree_setup:
 	@for elem in $(GIT_SUBTREE_REPOS); do \
-		url=`echo $$elem | cut -d '|' -f 1`; \
+		url=`echo $$elem | cut -d '|' -f 2`; \
 		repo=`basename $$url .git`; \
 		if [[ ! "$(GIT_REMOTES)" =~ "$$repo"  ]]; then \
 			echo "=> initializing Git remote '$$repo'"; \
@@ -196,10 +196,10 @@ subtree_setup:
 
 subtree_diff:
 	@for elem in $(GIT_SUBTREE_REPOS); do \
-		url=`echo $$elem | cut -d '|' -f 1`; \
+		path=`echo $$elem | cut -d '|' -f 1`; \
+		url=`echo $$elem  | cut -d '|' -f 2`; \
+		br=`echo $$elem   | cut -d '|' -f 3`;  \
 		repo=`basename $$url .git`; \
-		path=`echo $$repo | tr '-' '/'`; \
-		br=`echo $$elem | cut -d '|' -f 2`;  \
 		[ "$$br" == "$$url" ] && br='master'; \
 		echo -e "\n============ diff on subtree '$$path' with remote '$$repo/$$br' ===========\n"; \
 		git diff $${repo}/$$br $(CURRENT_BRANCH):$$path; \
@@ -208,16 +208,16 @@ subtree_diff:
 subtree_up: 
 	$(if $(GIT_DIRTY), $(error "Unable to pull subtree(s): Dirty Git repository"))
 	@for elem in $(GIT_SUBTREE_REPOS); do \
-		url=`echo $$elem | cut -d '|' -f 1`; \
+		path=`echo $$elem | cut -d '|' -f 1`; \
+		url=`echo $$elem  | cut -d '|' -f 2`; \
+		br=`echo $$elem   | cut -d '|' -f 3`;  \
 		repo=`basename $$url .git`; \
-		path=`echo $$repo | tr '-' '/'`; \
-		br=`echo $$elem | cut -d '|' -f 2`;  \
 		[ "$$br" == "$$url" ] && br='master'; \
 		echo -e "\n===> pulling changes into subtree '$$path' using remote '$$repo/$$br'"; \
 		echo -e "     \__ fetching remote '$$repo'"; \
 		git fetch $$repo; \
 		echo -e "     \__ pulling changes"; \
-		git subtree pull --prefix $$path --squash $${repo} $${br}; \
+		echo git subtree pull --prefix $$path --squash $${repo} $${br}; \
 	done
 endif
 
