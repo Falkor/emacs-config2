@@ -9,4 +9,3 @@
 (yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
 
 (yas-global-mode 1)
-(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)

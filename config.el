@@ -295,6 +295,20 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/easypg.el
+;; -*- mode: lisp; -*-
+;; =======================================
+;; === Auto Encryption (with GPG etc.) ===
+;; =======================================
+;; See http://www.emacswiki.org/emacs/EasyPG
+;;(if (equal emacs-major-version 23)
+;;  (require 'epa-setup))
+(require 'epa-file)
+(epa-file-enable)
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/filladapt.el
 ;; =============================================
 ;; Activate fill adapt
@@ -691,6 +705,29 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/markdown.el
+;; -*- mode: lisp; -*-
+;; === Markdown ===
+;; see http://jblevins.org/projects/markdown-mode/
+
+
+(require 'markdown-mode)
+
+(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
+
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (visual-line-mode t)
+            (writegood-mode t)
+            (flyspell-mode t)))
+
+(setq markdown-command "pandoc --smart -f markdown -t html")
+(setq markdown-css-path (expand-file-name "markdown.css" emacs-root))
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/org.el
 ;; Settings for org-mode
 ;; See http://www.aaronbedra.com/emacs.d/#org-mode
@@ -795,11 +832,48 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/ruby.el
+;; -*- mode: lisp; -*-
+
+(setq auto-mode-alist
+      (append
+       '(("\\.rake$"        . ruby-mode)
+         ("\\.gemspec$"     . ruby-mode)
+         ("\\.rb$"          . ruby-mode)
+         ("Rakefile$"       . ruby-mode)
+         ("Gemfile$"        . ruby-mode)
+         ("Capfile$"        . ruby-mode)
+         ("Vagrantfile"     . ruby-mode))
+       auto-mode-alist))
+
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/smart-tabs.el
 ;; === Smart Tabs ===
 ;; see http://www.emacswiki.org/emacs/SmartTabs
 
 (smart-tabs-insinuate 'c 'javascript 'ruby 'python)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/web.el
+;; -*- mode: lisp; -*-
+;; ===== Web management =====
+
+(add-to-list 'auto-mode-alist '("\\.hbs$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb$" . web-mode))
+
+
+;; Webgen (static website generation)
+;; see http://webgen.rubyforge.org/
+;; Webgen mode: http://www.emacswiki.org/emacs/WebgenMode
+(require 'webgen-mode nil t)
+(add-to-list 'auto-mode-alist '("\\.page$" .     (lambda () (markdown-mode) (webgen-mode))))
+(add-to-list 'auto-mode-alist '("\\.template$" . (lambda () (html-mode)     (webgen-mode))))
+(add-to-list 'auto-mode-alist '("[Mm]etainfo$" . (lambda () (text-mode)     (webgen-mode))))
 ;; ############################################################################
 
 
@@ -816,7 +890,6 @@
 (yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
 
 (yas-global-mode 1)
-(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
 ;; ############################################################################
 
 
@@ -827,7 +900,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-09-18 17:01 svarrette>
+;; Time-stamp: <Jeu 2014-09-18 22:38 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1019,10 +1092,8 @@
              (define-key flyspell-mode-map [(control ?.)] nil))
 
 ;; === Yasnippet ===
-;; Use only own snippets, do not use bundled ones
-
-
-
+;; see config/modes/yasnippets for the setup
+(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
 
 
 
@@ -1102,6 +1173,14 @@
 ;;   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
 ;;   )
 ;;  )
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/bindings/ruby.el
+;; -*- mode: lisp; -*-
+
+(define-key ruby-mode-map (kbd "C-c t") 'ruby-jump-to-other)
 ;; ############################################################################
 
 

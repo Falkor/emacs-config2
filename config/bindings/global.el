@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-09-18 17:01 svarrette>
+;; Time-stamp: <Jeu 2014-09-18 22:38 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -195,10 +195,8 @@
              (define-key flyspell-mode-map [(control ?.)] nil))
 
 ;; === Yasnippet ===
-;; Use only own snippets, do not use bundled ones
-
-
-
+;; see config/modes/yasnippets for the setup
+(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
 
 
 

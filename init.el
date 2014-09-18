@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Jeu 2014-09-18 16:46 svarrette>
+;; Time-stamp: <Jeu 2014-09-18 22:54 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -106,6 +106,7 @@
 (package-initialize)
 
 (defvar falkor/packages '(alert
+						  apache-mode
 						  auto-complete
                           autopair
                           color-theme
@@ -146,6 +147,7 @@
                           smex
                           solarized-theme
                           web-mode
+						  webgen-mode
 						  yaml-mode
 						  yasnippet)
   "Default packages")
@@ -204,17 +206,20 @@
 (require 'idle-require)             ; Need in order to use idle-require
 (dolist (feature
          '(alert
+		   apache-mode
 		   auto-compile             ; auto-compile .el files
            deft
            erlang
            gist
            go-mode
+		   gnuplot
            haml-mode
 		   jabber
            recentf                  ; recently opened files
            restclient
            smex                     ; M-x interface Ido-style.
-           tex-mode))               ; TeX, LaTeX, and SliTeX mode commands
+           tex-mode
+		   webgen-mode))               ; TeX, LaTeX, and SliTeX mode commands
   (idle-require feature))
 
 (setq idle-require-idle-delay 5)
