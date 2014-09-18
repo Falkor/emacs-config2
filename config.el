@@ -6,6 +6,23 @@
 ;; then run within emacs 'M-x emc-merge-config-files'
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/aquamacs.el
+;; -*- mode: lisp; -*-
+;; =================================================================
+;; Aquamacs specific 
+;; =================================================================
+;; see http://www.emacswiki.org/emacs/AquamacsEmacsCompatibilitySettings
+(Aquamacs
+ (aquamacs-autoface-mode -1)  ; no mode-specific faces, everything in Monaco
+ ;; do not load persistent scratch buffer
+ (setq aquamacs-scratch-file nil)
+ ;; do not make initial frame visible
+ (setq show-scratch-buffer-on-startup nil)
+)
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/auto-insert.el
 ;; ========================================================
 ;; Auto-insert: automatic insertion of text into new files
@@ -103,10 +120,26 @@
 (setq auto-save-default        t)       ; auto saving
 (setq make-backup-files        t)       ; make  backup files
 ;; see http://www.emacswiki.org/emacs/BackupDirectory
+
+(setq  backup-directory (concat emacs-root ".backup/"))
+;; Set backup directory
+;; store all backup and autosave files there
+(setq backup-directory-alist
+      `((".*" . ,backup-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" , backup-directory t)))
+
+;; ;; Set backup directory in /tmp
+;; ;; store all backup and autosave files in the /tmp dir
+;; (setq backup-directory-alist
+;;       `((".*" . ,temporary-file-directory)))
+;; (setq auto-save-file-name-transforms
+;;       `((".*" ,temporary-file-directory t)))
+
 (setq
  backup-by-copying t                    ; don't clobber symlinks
- backup-directory-alist
- '(("." . "~/.saves"))                  ; don't litter my fs tree
+ ;; backup-directory-alist
+ ;; '(("." . "~/.saves"))                  ; don't litter my fs tree
  delete-old-versions t                  ; delete excess backup versions
                                         ; silently
  kept-new-versions 6
@@ -250,6 +283,14 @@
 
 ;; See also trailing whitespace
 (setq-default show-trailing-whitespace t)
+
+;; === Auto fit the size of the frame to the buffer content ===
+;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
+;; run 'M-x fit-frame' for that
+(require 'fit-frame)
+(add-hook 'after-make-frame-functions 'fit-frame)
+
+
 ;; ############################################################################
 
 
@@ -330,8 +371,6 @@
 ;; Transparently open compressed files
 (auto-compression-mode t)
 
-;; Enable syntax highlighting for older Emacsen that have it off
-(global-font-lock-mode t)
 
 ;; Answering just 'y' or 'n' will do
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -466,6 +505,7 @@
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
 (setq-default tab-width 2)
+
 (defvaralias 'c-basic-offset 	 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 
@@ -579,6 +619,29 @@
 (require 'autopair)
 (autopair-global-mode) ;; enable autopair in all buffers 
 (setq autopair-autowrap t) 
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/font-lock.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Jeu 2014-09-18 14:46 svarrette>
+;;
+;; =================================================================
+;; Font Lock configuration
+;; Note: minor mode, always local to a particular buffer, which
+;; highlights (or “fontifies”) the buffer contents according to the
+;; syntax of the text you are editing.
+;; =================================================================
+;; Enable syntax highlighting for older Emacsen that have it off
+(if (fboundp 'global-font-lock-mode)
+    (global-font-lock-mode     1)    ; GNU Emacs
+  (setq font-lock-auto-fontify t))   ; XEmacs
+
+(setq font-lock-maximum-decoration t)
+(setq font-lock-maximum-size       nil)
+
+(setq font-lock-support-mode 'jit-lock-mode)
 ;; ############################################################################
 
 
@@ -710,7 +773,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 21:57 svarrette>
+;; Time-stamp: <Mer 2014-09-17 22:50 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -737,8 +800,10 @@
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
 
-;; Use helm to open files
-;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; Use helm to open files / recentf to open recent files
+;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
 ;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
 
 
