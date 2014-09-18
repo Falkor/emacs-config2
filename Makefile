@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Jeu 2014-09-18 17:07 svarrette>
+# Time-stamp: <Jeu 2014-09-18 17:10 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -187,7 +187,6 @@ else
 subtree_setup:
 	@for elem in $(GIT_SUBTREE_REPOS); do \
 		url=`echo $$elem | cut -d '|' -f 2`; \
-		repo=`basename $$url .git`; \
 		if [[ ! "$(GIT_REMOTES)" =~ "$$repo"  ]]; then \
 			echo "=> initializing Git remote '$$repo'"; \
 			git remote add -f $$repo $$url; \
@@ -200,7 +199,7 @@ subtree_diff:
 		url=`echo $$elem  | cut -d '|' -f 2`; \
 		br=`echo $$elem   | cut -d '|' -f 3`;  \
 		repo=`basename $$url .git`; \
-		[ "$$br" == "$$url" ] && br='master'; \
+		[ -z "$$br" ] && br='master'; \
 		echo -e "\n============ diff on subtree '$$path' with remote '$$repo/$$br' ===========\n"; \
 		git diff $${repo}/$$br $(CURRENT_BRANCH):$$path; \
 	done
@@ -211,8 +210,9 @@ subtree_up:
 		path=`echo $$elem | cut -d '|' -f 1`; \
 		url=`echo $$elem  | cut -d '|' -f 2`; \
 		br=`echo $$elem   | cut -d '|' -f 3`;  \
+		echo $$br; \
 		repo=`basename $$url .git`; \
-		[ "$$br" == "$$url" ] && br='master'; \
+		[ -z "$$br" ] && br='master'; \
 		echo -e "\n===> pulling changes into subtree '$$path' using remote '$$repo/$$br'"; \
 		echo -e "     \__ fetching remote '$$repo'"; \
 		git fetch $$repo; \
