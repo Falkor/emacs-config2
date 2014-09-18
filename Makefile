@@ -187,6 +187,7 @@ else
 subtree_setup:
 	@for elem in $(GIT_SUBTREE_REPOS); do \
 		url=`echo $$elem | cut -d '|' -f 2`; \
+		repo=`basename $$url .git`; \
 		if [[ ! "$(GIT_REMOTES)" =~ "$$repo"  ]]; then \
 			echo "=> initializing Git remote '$$repo'"; \
 			git remote add -f $$repo $$url; \
