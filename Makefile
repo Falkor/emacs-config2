@@ -217,7 +217,7 @@ subtree_up:
 		echo -e "     \__ fetching remote '$$repo'"; \
 		git fetch $$repo; \
 		echo -e "     \__ pulling changes"; \
-		echo git subtree pull --prefix $$path --squash $${repo} $${br}; \
+		git subtree pull --prefix $$path --squash $${repo} $${br}; \
 	done
 endif
 
