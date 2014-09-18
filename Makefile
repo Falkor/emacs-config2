@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mer 2014-09-17 22:09 svarrette>
+# Time-stamp: <Jeu 2014-09-18 17:02 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -33,8 +33,9 @@ GIT_REMOTES    = $(shell git remote | xargs echo )
 GIT_DIRTY      = $(shell git diff --shortstat 2> /dev/null | tail -n1 )
 # Git subtrees repositories 
 # Format: '<url>[|<branch>]' - don't forget the quotes. if branch is ignored, 'master' is used
-#GIT_SUBTREE_REPOS = 'https://github.com/ULHPC/easybuild-framework.git|develop'  \
-					 'https://github.com/hpcugent/easybuild-wiki.git'
+GIT_SUBTREE_REPOS = 'https://github.com/Falkor/yasnippet-snippets.git'
+# 'https://github.com/ULHPC/easybuild-framework.git|develop'  \
+# 					 'https://github.com/hpcugent/easybuild-wiki.git'
 
 VERSION  = $(shell [ -f VERSION ] && head VERSION || echo "0.0.1")
 # OR try to guess directly from the last git tag

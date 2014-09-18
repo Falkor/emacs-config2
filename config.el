@@ -812,9 +812,8 @@
 ;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
 ;; Installation notes: see README
 (require 'yasnippet)
-(yas/initialize)
-(setq yas/root-directory (concat emacs-root "snippets")) 
-(yas/load-directory yas/root-directory)          ; Load the snippets
+;;(yas/initialize)
+(yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
 
 (yas-global-mode 1)
 (global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
@@ -828,7 +827,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-09-18 15:42 svarrette>
+;; Time-stamp: <Jeu 2014-09-18 17:01 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1007,15 +1006,15 @@
 
 ;; === Flyspell ===
 (use-package ispell
-             :bind (("C-c i c" . ispell-comments-and-strings)
-                    ("C-c i d" . ispell-change-dictionary)
-                    ("C-c i k" . ispell-kill-ispell)
-                    ("C-c i m" . ispell-message)
-                    ("C-c i r" . ispell-region)))
+             :bind (("C-c C-i c" . ispell-comments-and-strings)
+                    ("C-c C-i d" . ispell-change-dictionary)
+                    ("C-c C-i k" . ispell-kill-ispell)
+                    ("C-c C-i m" . ispell-message)
+                    ("C-c C-i r" . ispell-region)))
 
 (use-package flyspell
-             :bind (("C-c i b" . flyspell-buffer)
-                    ("C-c i f" . flyspell-mode))
+             :bind (("C-c C-i b" . flyspell-buffer)
+                    ("C-c C-i f" . flyspell-mode))
              :config
              (define-key flyspell-mode-map [(control ?.)] nil))
 
