@@ -7,6 +7,6 @@
 (require 'yasnippet)
 ;;(yas/initialize)
 
-(setq yas/verbosity 0)
+(setq yas-verbosity 0)
 (yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
 (yas-global-mode 1)

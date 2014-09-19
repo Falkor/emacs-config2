@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Ven 2014-09-19 09:48 svarrette>
+;; Time-stamp: <Ven 2014-09-19 11:58 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -65,10 +65,12 @@
   (add-path "site-lisp")
   (add-path "site-lisp/use-package")
   )
-(setq package-user-dir (concat emacs-root "elpa"))
-(setq custom-file      (concat emacs-root "custom.el"))
-(setq custom-dir       (concat emacs-root "rc.custom"))
-(setq defuns-dir       (concat emacs-root "defuns"))
+(setq config-dir       (concat emacs-root  "config"))
+(setq defuns-dir       (concat emacs-root  "defuns"))
+(setq package-user-dir (concat emacs-root  "elpa"))
+(setq custom-file      (concat emacs-root  "custom.el"))
+(setq custom-dir       (concat emacs-root  "rc.custom"))
+
 
 ;; Load Lisp defined functions
 (load-directory defuns-dir)

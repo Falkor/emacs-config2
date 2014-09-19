@@ -1,5 +1,5 @@
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Jeu 2014-09-18 14:46 svarrette>
+;; Time-stamp: <Ven 2014-09-19 11:22 svarrette>
 ;;
 ;; =================================================================
 ;; Font Lock configuration
@@ -13,6 +13,8 @@
   (setq font-lock-auto-fontify t))   ; XEmacs
 
 (setq font-lock-maximum-decoration t)
-(setq font-lock-maximum-size       nil)
+
+;; Obsolete in emacs 24
+;; (setq font-lock-maximum-size       nil)
 
 (setq font-lock-support-mode 'jit-lock-mode)
