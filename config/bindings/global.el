@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 21:57 svarrette>
+;; Time-stamp: <Jeu 2014-09-18 22:38 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -26,12 +26,15 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; ----------------------------------------------------------------------
+(require 'use-package)
 
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
 
-;; Use helm to open files
-;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; Use helm to open files / recentf to open recent files
+;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
 ;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
 
 
@@ -178,8 +181,26 @@
 (define-key global-map "\C-ca" 'org-agenda)
 
 ;; === Flyspell ===
-(global-set-key (kbd "C-c C-i w")  'ispell-word)
-(global-set-key (kbd "C-c C-i b")  'ispell-buffer)
+(use-package ispell
+             :bind (("C-c C-i c" . ispell-comments-and-strings)
+                    ("C-c C-i d" . ispell-change-dictionary)
+                    ("C-c C-i k" . ispell-kill-ispell)
+                    ("C-c C-i m" . ispell-message)
+                    ("C-c C-i r" . ispell-region)))
+
+(use-package flyspell
+             :bind (("C-c C-i b" . flyspell-buffer)
+                    ("C-c C-i f" . flyspell-mode))
+             :config
+             (define-key flyspell-mode-map [(control ?.)] nil))
+
+;; === Yasnippet ===
+;; see config/modes/yasnippets for the setup
+(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
+
+
+
+
 
 
 

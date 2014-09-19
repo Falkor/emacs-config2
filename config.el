@@ -6,6 +6,23 @@
 ;; then run within emacs 'M-x emc-merge-config-files'
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/aquamacs.el
+;; -*- mode: lisp; -*-
+;; =================================================================
+;; Aquamacs specific 
+;; =================================================================
+;; see http://www.emacswiki.org/emacs/AquamacsEmacsCompatibilitySettings
+(Aquamacs
+ (aquamacs-autoface-mode -1)  ; no mode-specific faces, everything in Monaco
+ ;; do not load persistent scratch buffer
+ (setq aquamacs-scratch-file nil)
+ ;; do not make initial frame visible
+ (setq show-scratch-buffer-on-startup nil)
+)
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/auto-insert.el
 ;; ========================================================
 ;; Auto-insert: automatic insertion of text into new files
@@ -103,10 +120,26 @@
 (setq auto-save-default        t)       ; auto saving
 (setq make-backup-files        t)       ; make  backup files
 ;; see http://www.emacswiki.org/emacs/BackupDirectory
+
+(setq  backup-directory (concat emacs-root ".backup/"))
+;; Set backup directory
+;; store all backup and autosave files there
+(setq backup-directory-alist
+      `((".*" . ,backup-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" , backup-directory t)))
+
+;; ;; Set backup directory in /tmp
+;; ;; store all backup and autosave files in the /tmp dir
+;; (setq backup-directory-alist
+;;       `((".*" . ,temporary-file-directory)))
+;; (setq auto-save-file-name-transforms
+;;       `((".*" ,temporary-file-directory t)))
+
 (setq
  backup-by-copying t                    ; don't clobber symlinks
- backup-directory-alist
- '(("." . "~/.saves"))                  ; don't litter my fs tree
+ ;; backup-directory-alist
+ ;; '(("." . "~/.saves"))                  ; don't litter my fs tree
  delete-old-versions t                  ; delete excess backup versions
                                         ; silently
  kept-new-versions 6
@@ -250,6 +283,28 @@
 
 ;; See also trailing whitespace
 (setq-default show-trailing-whitespace t)
+
+;; === Auto fit the size of the frame to the buffer content ===
+;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
+;; run 'M-x fit-frame' for that
+(require 'fit-frame)
+(add-hook 'after-make-frame-functions 'fit-frame)
+
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/easypg.el
+;; -*- mode: lisp; -*-
+;; =======================================
+;; === Auto Encryption (with GPG etc.) ===
+;; =======================================
+;; See http://www.emacswiki.org/emacs/EasyPG
+;;(if (equal emacs-major-version 23)
+;;  (require 'epa-setup))
+(require 'epa-file)
+(epa-file-enable)
 ;; ############################################################################
 
 
@@ -330,8 +385,6 @@
 ;; Transparently open compressed files
 (auto-compression-mode t)
 
-;; Enable syntax highlighting for older Emacsen that have it off
-(global-font-lock-mode t)
 
 ;; Answering just 'y' or 'n' will do
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -456,8 +509,10 @@
 ;; ido
 
 (ido-mode t)
-(setq ido-enable-flex-matching t
-      ido-use-virtual-buffers t)
+(setq
+ confirm-nonexistent-file-or-buffer nil
+ ido-enable-flex-matching t
+ ido-use-virtual-buffers t)
 ;; ############################################################################
 
 
@@ -466,6 +521,7 @@
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
 (setq-default tab-width 2)
+
 (defvaralias 'c-basic-offset 	 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 
@@ -487,6 +543,43 @@
 ;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
 ;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
 ;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/ispell.el
+;; -*- mode: lisp; -*-
+
+;; LaTeX-sensitive spell checking
+(setq ispell-enable-tex-parser t)
+
+;; defautl dictionnary
+(setq ispell-local-dictionary "en")
+
+;; save the personal dictionary without confirmation
+(setq ispell-silently-savep t)
+
+;; enable the likeness criteria
+;;(setq flyspell-sort-corrections nil)
+
+;; dash character (`-') is considered as a word delimiter
+;;(setq flyspell-consider-dash-as-word-delimiter-flag t)
+
+;; Add flyspell to the following major modes
+(dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
+  (add-hook hook (lambda ()
+                   (turn-on-auto-fill)
+                   (flyspell-mode t))))
+
+;; disable flyspell in change log and log-edit mode that derives from text-mode
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode nil))))
+
+;; flyspell comments and strings in programming modes
+;; (preventing it from finding mistakes in the code)
+(dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
+                                   sh-mode-hook))
+  (add-hook hook 'flyspell-prog-mode))
 ;; ############################################################################
 
 
@@ -583,10 +676,58 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/font-lock.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Ven 2014-09-19 11:22 svarrette>
+;;
+;; =================================================================
+;; Font Lock configuration
+;; Note: minor mode, always local to a particular buffer, which
+;; highlights (or “fontifies”) the buffer contents according to the
+;; syntax of the text you are editing.
+;; =================================================================
+;; Enable syntax highlighting for older Emacsen that have it off
+(if (fboundp 'global-font-lock-mode)
+    (global-font-lock-mode     1)    ; GNU Emacs
+  (setq font-lock-auto-fontify t))   ; XEmacs
+
+(setq font-lock-maximum-decoration t)
+
+;; Obsolete in emacs 24
+;; (setq font-lock-maximum-size       nil)
+
+(setq font-lock-support-mode 'jit-lock-mode)
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/helm.el
 ;; Configure helm mode
 ;; see http://emacs-helm.github.io/helm/
 ;;(helm-mode 1)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/markdown.el
+;; -*- mode: lisp; -*-
+;; === Markdown ===
+;; see http://jblevins.org/projects/markdown-mode/
+
+
+(require 'markdown-mode)
+
+(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
+
+(add-hook 'markdown-mode-hook
+          (lambda ()
+            (visual-line-mode t)
+            (writegood-mode t)
+            (flyspell-mode t)))
+
+(setq markdown-command "pandoc --smart -f markdown -t html")
+(setq markdown-css-path (expand-file-name "markdown.css" emacs-root))
 ;; ############################################################################
 
 
@@ -695,11 +836,65 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/ruby.el
+;; -*- mode: lisp; -*-
+
+(setq auto-mode-alist
+      (append
+       '(("\\.rake$"        . ruby-mode)
+         ("\\.gemspec$"     . ruby-mode)
+         ("\\.rb$"          . ruby-mode)
+         ("Rakefile$"       . ruby-mode)
+         ("Gemfile$"        . ruby-mode)
+         ("Capfile$"        . ruby-mode)
+         ("Vagrantfile"     . ruby-mode))
+       auto-mode-alist))
+
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/smart-tabs.el
 ;; === Smart Tabs ===
 ;; see http://www.emacswiki.org/emacs/SmartTabs
 
 (smart-tabs-insinuate 'c 'javascript 'ruby 'python)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/web.el
+;; -*- mode: lisp; -*-
+;; ===== Web management =====
+
+(add-to-list 'auto-mode-alist '("\\.hbs$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb$" . web-mode))
+
+
+;; Webgen (static website generation)
+;; see http://webgen.rubyforge.org/
+;; Webgen mode: http://www.emacswiki.org/emacs/WebgenMode
+;; (require 'webgen-mode nil t)
+;; (add-to-list 'auto-mode-alist '("\\.page$" .     (lambda () (markdown-mode) (webgen-mode))))
+;; (add-to-list 'auto-mode-alist '("\\.template$" . (lambda () (html-mode)     (webgen-mode))))
+;;(add-to-list 'auto-mode-alist '("[Mm]etainfo$" . (lambda () (text-mode)     (webgen-mode))))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/yasnippet.el
+;; -*- mode: lisp; -*-
+
+;; === Yasnippet ===
+;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
+;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
+;; Installation notes: see README
+(require 'yasnippet)
+;;(yas/initialize)
+
+(setq yas-verbosity 0)
+(yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
+(yas-global-mode 1)
 ;; ############################################################################
 
 
@@ -710,7 +905,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-17 21:57 svarrette>
+;; Time-stamp: <Jeu 2014-09-18 22:38 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -733,12 +928,15 @@
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; ----------------------------------------------------------------------
+(require 'use-package)
 
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
 
-;; Use helm to open files
-;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; Use helm to open files / recentf to open recent files
+;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+
 ;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
 
 
@@ -885,8 +1083,26 @@
 (define-key global-map "\C-ca" 'org-agenda)
 
 ;; === Flyspell ===
-(global-set-key (kbd "C-c C-i w")  'ispell-word)
-(global-set-key (kbd "C-c C-i b")  'ispell-buffer)
+(use-package ispell
+             :bind (("C-c C-i c" . ispell-comments-and-strings)
+                    ("C-c C-i d" . ispell-change-dictionary)
+                    ("C-c C-i k" . ispell-kill-ispell)
+                    ("C-c C-i m" . ispell-message)
+                    ("C-c C-i r" . ispell-region)))
+
+(use-package flyspell
+             :bind (("C-c C-i b" . flyspell-buffer)
+                    ("C-c C-i f" . flyspell-mode))
+             :config
+             (define-key flyspell-mode-map [(control ?.)] nil))
+
+;; === Yasnippet ===
+;; see config/modes/yasnippets for the setup
+(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
+
+
+
+
 
 
 
@@ -962,6 +1178,16 @@
 ;;   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
 ;;   )
 ;;  )
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/bindings/ruby.el
+;; -*- mode: lisp; -*-
+
+(eval-after-load 'ruby-mode
+  '(progn
+	 (define-key ruby-mode-map (kbd "C-c t") 'ruby-jump-to-other)))
 ;; ############################################################################
 
 

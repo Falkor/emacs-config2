@@ -1,11 +1,11 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mer 2014-09-17 22:09 svarrette>
-#     __  __       _         __ _ _       
-#    |  \/  | __ _| | _____ / _(_) | ___  
+# Time-stamp: <Ven 2014-09-19 12:17 svarrette>
+#     __  __       _         __ _ _
+#    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
-#    | |  | | (_| |   <  __/  _| | |  __/ 
-#    |_|  |_|\__,_|_|\_\___|_| |_|_|\___| 
+#    | |  | | (_| |   <  __/  _| | |  __/
+#    |_|  |_|\__,_|_|\_\___|_| |_|_|\___|
 #
 # Copyright (c) 2012 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 # .             http://varrette.gforge.uni.lu
@@ -31,10 +31,11 @@ GITFLOW_BR_DEVELOP=devel
 CURRENT_BRANCH = $(shell git rev-parse --abbrev-ref HEAD)
 GIT_REMOTES    = $(shell git remote | xargs echo )
 GIT_DIRTY      = $(shell git diff --shortstat 2> /dev/null | tail -n1 )
-# Git subtrees repositories 
+# Git subtrees repositories
 # Format: '<url>[|<branch>]' - don't forget the quotes. if branch is ignored, 'master' is used
-#GIT_SUBTREE_REPOS = 'https://github.com/ULHPC/easybuild-framework.git|develop'  \
-					 'https://github.com/hpcugent/easybuild-wiki.git'
+GIT_SUBTREE_REPOS = 'snippets|https://github.com/Falkor/yasnippet-snippets.git'
+# 'https://github.com/ULHPC/easybuild-framework.git|develop'  \
+# 					 'https://github.com/hpcugent/easybuild-wiki.git'
 
 VERSION  = $(shell [ -f VERSION ] && head VERSION || echo "0.0.1")
 # OR try to guess directly from the last git tag
@@ -42,7 +43,7 @@ VERSION  = $(shell [ -f VERSION ] && head VERSION || echo "0.0.1")
 MAJOR      = $(shell echo $(VERSION) | sed "s/^\([0-9]*\).*/\1/")
 MINOR      = $(shell echo $(VERSION) | sed "s/[0-9]*\.\([0-9]*\).*/\1/")
 PATCH      = $(shell echo $(VERSION) | sed "s/[0-9]*\.[0-9]*\.\([0-9]*\).*/\1/")
-# total number of commits 		
+# total number of commits
 BUILD      = $(shell git log --oneline | wc -l | sed -e "s/[ \t]*//g")
 
 #REVISION   = $(shell git rev-list $(LAST_TAG).. --count)
@@ -51,29 +52,64 @@ NEXT_MAJOR_VERSION = $(shell expr $(MAJOR) + 1).0.0-b$(BUILD)
 NEXT_MINOR_VERSION = $(MAJOR).$(shell expr $(MINOR) + 1).0-b$(BUILD)
 NEXT_PATCH_VERSION = $(MAJOR).$(MINOR).$(shell expr $(PATCH) + 1)-b$(BUILD)
 
+### displayed colors
+COLOR_GREEN  =\033[0;32m
+COLOR_RED    =\033[0;31m
+COLOR_YELLOW =\033[0;33m
+NO_COLOR     =\033[0m
+
 ### Emacs stuff
-EMACS	    = emacs
-DIRS	    = site-lisp
-INIT_SOURCE = $(shell find config $(DIRS) -name '*.el')
-EMACS_BATCH = $(EMACS) -Q -batch -l ~/.emacs
-MY_LOADPATH = -L . $(patsubst %,-L %,$(DIRS))
-BATCH_LOAD  = $(EMACS_BATCH) $(MY_LOADPATH)
+EMACS	         = emacs
+DIRS	         = site-lisp defuns
+CONFIG_SOURCES   = $(shell find config   -name '*.el')
+SNIPPETS_SOURCES = $(shell find snippets -name '*.el')
+LIB_SOURCES    = $(foreach dir,$(DIRS),$(wildcard $(dir)/*.el)) $(SNIPPETS_SOURCES)
+INIT_SOURCES   = $(CONFIG_SOURCES) $(SNIPPETS_SOURCES) $(LIB_SOURCES) 
+TARGET	       = config.elc $(patsubst %.el,%.elc, $(LIB_SOURCES)) init.elc
+
+EMACS_BATCH  = $(EMACS) -Q -batch -l ~/.emacs
+MY_LOADPATH  = -L . $(patsubst %,-L %,$(DIRS))
+BATCH_LOAD   = $(EMACS_BATCH) $(MY_LOADPATH)
 
 ### Main variables
-.PHONY: all archive clean fetch help release setup start_bump_major start_bump_minor start_bump_patch subtree_setup subtree_up subtree_diff test upgrade versioninfo 
+.PHONY: all archive clean dirs eval_boottime fetch help release setup snippets start_bump_major start_bump_minor start_bump_patch subtree_setup subtree_up subtree_diff test upgrade versioninfo 
 
 ############################### Now starting rules ################################
-# Required rule : what's to be done each time 
-all: config.elc
+# Required rule : what's to be done each time
+all: $(TARGET)
 
-config.elc: $(INIT_SOURCE)
+dirs:
+	@for dir in $(DIRS); do \
+		echo -e "$(COLOR_GREEN)==> Byte compiling the directory '$$dir/'$(NO_COLOR)"; \
+	    $(BATCH_LOAD) -f batch-byte-compile $$dir/*.el; \
+	done
+
+snippets: $(SNIPPETS_SOURCES)
+	@for f in $%; do \
+		$(MAKE) `basename $$f .el`.elc; \
+	done
+
+config.elc: $(CONFIG_SOURCES)
+	@echo -e "$(COLOR_GREEN)==> Generating centralised config.el[c] file from config/ directory$(NO_COLOR)"
 	$(BATCH_LOAD) --eval "(emc-merge-config-files)"
 	git commit -s -m "Update centralized config" config.el
 
 %.elc: %.el
-	$(BATCH_LOAD) -f batch-byte-compile $<	
+	@echo -e "$(COLOR_GREEN)==> Byte compiling '$<' to generate $@$(NO_COLOR)"
+	$(BATCH_LOAD) -f batch-byte-compile $<
 
-# Test values of variables - for debug purposes  
+eval_boottime:
+	@echo "==> Evaluate starting time of Emacs"
+	$(BATCH_LOAD) --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
+
+# Clean option
+clean:
+	rm -f *.elc
+#	rm -f $(TARGET)
+
+
+
+# Test values of variables - for debug purposes 
 test:
 	@echo "--- Compilation commands --- "
 	@echo "GITFLOW      -> '$(GITFLOW)'"
@@ -89,7 +125,11 @@ test:
 	@echo "GIT_SUBTREE_REPOS  -> '$(GIT_SUBTREE_REPOS)'"
 	@echo ""
 	@echo "EMACS DIR          -> $(DIRS)"
-	@echo "EMACS INIT SOURCES -> $(INIT_SOURCE)"
+	@echo "EMACS INIT SOURCES -> $(INIT_SOURCES)"
+	@echo "EMACS CONF SOURCES -> $(CONFIG_SOURCES)"
+	@echo "EMACS LIB SOURCES  -> $(LIB_SOURCES)"
+	@echo "SNIPPET SOURCES    -> $(SNIPPETS_SOURCES)"
+	@echo "TARGET             -> $(TARGET)"
 	@echo "EMACS BATCH LOAD   -> $(BATCH_LOAD)"
 	@echo ""
 	@echo "Consider running 'make versioninfo' to get info on git versionning variables"
@@ -109,7 +149,7 @@ setup:
 	git config gitflow.prefix.hotfix     hotfix/
 	git config gitflow.prefix.support    support/
 	git config gitflow.prefix.versiontag $(TAG_PREFIX)
-	$(MAKE) update 
+	$(MAKE) update
 	$(if $(GIT_SUBTREE_REPOS), $(MAKE) subtree_setup)
 
 fetch:
@@ -124,9 +164,9 @@ versioninfo:
 	@echo "next minor version: $(NEXT_MINOR_VERSION)"
 	@echo "next patch version: $(NEXT_PATCH_VERSION)"
 
-### Git flow management - this should be factorized 
+### Git flow management - this should be factorized
 ifeq ($(GITFLOW),)
-start_bump_patch start_bump_minor start_bump_major release: 
+start_bump_patch start_bump_minor start_bump_major release:
 	@echo "Unable to find git-flow on your system. "
 	@echo "See https://github.com/nvie/gitflow for installation details"
 else
@@ -185,7 +225,7 @@ subtree_setup subtree_diff subtree_up:
 else
 subtree_setup:
 	@for elem in $(GIT_SUBTREE_REPOS); do \
-		url=`echo $$elem | cut -d '|' -f 1`; \
+		url=`echo $$elem | cut -d '|' -f 2`; \
 		repo=`basename $$url .git`; \
 		if [[ ! "$(GIT_REMOTES)" =~ "$$repo"  ]]; then \
 			echo "=> initializing Git remote '$$repo'"; \
@@ -195,11 +235,11 @@ subtree_setup:
 
 subtree_diff:
 	@for elem in $(GIT_SUBTREE_REPOS); do \
-		url=`echo $$elem | cut -d '|' -f 1`; \
+		path=`echo $$elem | cut -d '|' -f 1`; \
+		url=`echo $$elem  | cut -d '|' -f 2`; \
+		br=`echo $$elem   | cut -d '|' -f 3`;  \
 		repo=`basename $$url .git`; \
-		path=`echo $$repo | tr '-' '/'`; \
-		br=`echo $$elem | cut -d '|' -f 2`;  \
-		[ "$$br" == "$$url" ] && br='master'; \
+		[ -z "$$br" ] && br='master'; \
 		echo -e "\n============ diff on subtree '$$path' with remote '$$repo/$$br' ===========\n"; \
 		git diff $${repo}/$$br $(CURRENT_BRANCH):$$path; \
 	done
@@ -207,11 +247,12 @@ subtree_diff:
 subtree_up: 
 	$(if $(GIT_DIRTY), $(error "Unable to pull subtree(s): Dirty Git repository"))
 	@for elem in $(GIT_SUBTREE_REPOS); do \
-		url=`echo $$elem | cut -d '|' -f 1`; \
+		path=`echo $$elem | cut -d '|' -f 1`; \
+		url=`echo $$elem  | cut -d '|' -f 2`; \
+		br=`echo $$elem   | cut -d '|' -f 3`;  \
+		echo $$br; \
 		repo=`basename $$url .git`; \
-		path=`echo $$repo | tr '-' '/'`; \
-		br=`echo $$elem | cut -d '|' -f 2`;  \
-		[ "$$br" == "$$url" ] && br='master'; \
+		[ -z "$$br" ] && br='master'; \
 		echo -e "\n===> pulling changes into subtree '$$path' using remote '$$repo/$$br'"; \
 		echo -e "     \__ fetching remote '$$repo'"; \
 		git fetch $$repo; \
@@ -220,10 +261,6 @@ subtree_up:
 	done
 endif
 
-
-# Clean option
-clean:
-	rm -f *.elc
 
 # # force recompilation
 # force :

@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-09-17 21:31 svarrette>
+;; Time-stamp: <Ven 2014-09-19 11:58 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -65,13 +65,32 @@
   (add-path "site-lisp")
   (add-path "site-lisp/use-package")
   )
-(setq package-user-dir (concat emacs-root "elpa"))
-(setq custom-file      (concat emacs-root "custom.el"))
-(setq custom-dir       (concat emacs-root "rc.custom"))
-(setq defuns-dir       (concat emacs-root "defuns"))
+(setq config-dir       (concat emacs-root  "config"))
+(setq defuns-dir       (concat emacs-root  "defuns"))
+(setq package-user-dir (concat emacs-root  "elpa"))
+(setq custom-file      (concat emacs-root  "custom.el"))
+(setq custom-dir       (concat emacs-root  "rc.custom"))
+
 
 ;; Load Lisp defined functions
 (load-directory defuns-dir)
+
+;; === Special Mac OS X configuration (Carbon emacs and aquamacs)
+;; Enhanced Carbon EMacs (ECE) plugin
+;; see http://www.inf.unibz.it/~franconi/mac-emacs/
+;; (CarbonEmacs
+;;  (unless   (or (boundp 'enhanced-carbon-emacs) (boundp 'aquamacs-version))
+;;    (defun load-local-site-start (site-lisp-directory)
+;;      "Load site-start.el from a given site-lisp directory"
+;;      (let ((current-default-directory default-directory))
+;;        (setq default-directory site-lisp-directory)
+;;        (normal-top-level-add-subdirs-to-load-path)
+;;        (setq default-directory current-default-directory)
+;;        (setq load-path (cons site-lisp-directory load-path))
+;;        (load (concat site-lisp-directory "/site-start.el"))
+;;        ))
+;;    (load-local-site-start "/Library/Application Support/emacs/ec-emacs/site-lisp")))
+
 
 ;; === ELPA, the package manager ===
 ;; see http://tromey.com/elpa/
@@ -84,25 +103,29 @@
 (require 'package)
 (setq package-archives '(
                          ("gnu"       . "http://elpa.gnu.org/packages/")
-                         ("marmalade" . "http://marmalade-repo.org/packages/")
-                         ("melpa"     . "http://melpa.milkbox.net/packages/")))
+                         ("melpa"     . "http://melpa.milkbox.net/packages/")
+                                        ;("marmalade" . "http://marmalade-repo.org/packages/")
+                         ))
 (package-initialize)
 
-(defvar falkor/packages '(auto-complete
+(defvar falkor/packages '(alert
+                          apache-mode
+                          auto-complete
                           autopair
                           color-theme
                           deft
                           el-get
                           erlang
                           feature-mode
-						  find-file-in-project
+                          fit-frame
+                          find-file-in-project
                           flycheck
                           gist
                           go-mode
                           graphviz-dot-mode
                           haml-mode
                           haskell-mode
-						  helm
+                          helm
                           htmlize
                           idle-require
                           idle-highlight
@@ -112,22 +135,22 @@
                           markdown-mode
                           marmalade
                           mic-paren
-						  neotree
-						  nodejs-repl
+                          neotree
+                          nodejs-repl
                           org
                           paredit
                           php-mode
                           powerline
                           puppet-mode
                           restclient
-                          ruby-mode
                           ruby-compilation
                           rvm
                           smart-tabs-mode
                           smex
                           solarized-theme
                           web-mode
-                          yaml-mode)
+                          yaml-mode
+                          yasnippet)
   "Default packages")
 
 ;; Now install the default packages
@@ -183,17 +206,21 @@
 
 (require 'idle-require)             ; Need in order to use idle-require
 (dolist (feature
-         '(auto-compile             ; auto-compile .el files
+         '(alert
+           apache-mode
+           auto-compile             ; auto-compile .el files
            deft
            erlang
            gist
            go-mode
+           gnuplot
            haml-mode
-		   jabber
+           jabber
            recentf                  ; recently opened files
            restclient
            smex                     ; M-x interface Ido-style.
-           tex-mode))               ; TeX, LaTeX, and SliTeX mode commands
+           tex-mode
+           webgen-mode))               ; TeX, LaTeX, and SliTeX mode commands
   (idle-require feature))
 
 (setq idle-require-idle-delay 5)

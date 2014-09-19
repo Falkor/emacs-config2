@@ -52,8 +52,6 @@
 ;; Transparently open compressed files
 (auto-compression-mode t)
 
-;; Enable syntax highlighting for older Emacsen that have it off
-(global-font-lock-mode t)
 
 ;; Answering just 'y' or 'n' will do
 (defalias 'yes-or-no-p 'y-or-n-p)
