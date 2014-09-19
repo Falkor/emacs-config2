@@ -1,0 +1,10 @@
+;; Custom packages you wish to see installed in addition to the one installed
+;; from the [packages.el](packages.el).
+;; DO NOT modify the variable name
+
+
+(defvar falkor/custom/packages '(
+                                 browse-kill-ring
+								 expand-region
+                                 )
+  "Custom Packages to install in addition to the default packages defined in falkor/packages")
