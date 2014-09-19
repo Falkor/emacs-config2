@@ -25,3 +25,6 @@
 [submodule "site-lisp/better-defaults"]
 	path = site-lisp/better-defaults
 	url = https://github.com/technomancy/better-defaults.git
+[submodule "resources/emacs.d/jimeh"]
+	path = resources/emacs.d/jimeh
+	url = https://github.com/jimeh/.emacs.d.git
