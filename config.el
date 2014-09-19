@@ -678,7 +678,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/font-lock.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Jeu 2014-09-18 14:46 svarrette>
+;; Time-stamp: <Ven 2014-09-19 11:22 svarrette>
 ;;
 ;; =================================================================
 ;; Font Lock configuration
@@ -692,7 +692,9 @@
   (setq font-lock-auto-fontify t))   ; XEmacs
 
 (setq font-lock-maximum-decoration t)
-(setq font-lock-maximum-size       nil)
+
+;; Obsolete in emacs 24
+;; (setq font-lock-maximum-size       nil)
 
 (setq font-lock-support-mode 'jit-lock-mode)
 ;; ############################################################################
@@ -872,9 +874,9 @@
 ;; Webgen (static website generation)
 ;; see http://webgen.rubyforge.org/
 ;; Webgen mode: http://www.emacswiki.org/emacs/WebgenMode
-(require 'webgen-mode nil t)
-(add-to-list 'auto-mode-alist '("\\.page$" .     (lambda () (markdown-mode) (webgen-mode))))
-(add-to-list 'auto-mode-alist '("\\.template$" . (lambda () (html-mode)     (webgen-mode))))
+;; (require 'webgen-mode nil t)
+;; (add-to-list 'auto-mode-alist '("\\.page$" .     (lambda () (markdown-mode) (webgen-mode))))
+;; (add-to-list 'auto-mode-alist '("\\.template$" . (lambda () (html-mode)     (webgen-mode))))
 ;;(add-to-list 'auto-mode-alist '("[Mm]etainfo$" . (lambda () (text-mode)     (webgen-mode))))
 ;; ############################################################################
 
@@ -890,7 +892,7 @@
 (require 'yasnippet)
 ;;(yas/initialize)
 
-(setq yas/verbosity 0)
+(setq yas-verbosity 0)
 (yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
 (yas-global-mode 1)
 ;; ############################################################################
