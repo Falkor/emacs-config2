@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Ven 2014-09-19 11:58 svarrette>
+;; Time-stamp: <Ven 2014-09-19 12:37 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -63,7 +63,7 @@
                       (add-to-list 'load-path
                                    (concat emacs-root p))))
   (add-path "site-lisp")
-  (add-path "site-lisp/use-package")
+  ;;(add-path "site-lisp/use-package")
   )
 (setq config-dir       (concat emacs-root  "config"))
 (setq defuns-dir       (concat emacs-root  "defuns"))
@@ -112,6 +112,7 @@
                           apache-mode
                           auto-complete
                           autopair
+                          better-defaults
                           color-theme
                           deft
                           el-get
@@ -145,9 +146,11 @@
                           restclient
                           ruby-compilation
                           rvm
+                          smart-tab
                           smart-tabs-mode
                           smex
                           solarized-theme
+						  use-package
                           web-mode
                           yaml-mode
                           yasnippet)

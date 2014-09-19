@@ -16,15 +16,6 @@
 [submodule "resources/emacs.d/larstvei"]
 	path = resources/emacs.d/larstvei
 	url = https://github.com/larstvei/dot-emacs.git
-[submodule "site-lisp/use-package"]
-	path = site-lisp/use-package
-	url = https://github.com/jwiegley/use-package.git
-[submodule "site-lisp/smart-tab"]
-	path = site-lisp/smart-tab
-	url = https://github.com/genehack/smart-tab.git
-[submodule "site-lisp/better-defaults"]
-	path = site-lisp/better-defaults
-	url = https://github.com/technomancy/better-defaults.git
 [submodule "resources/emacs.d/jimeh"]
 	path = resources/emacs.d/jimeh
 	url = https://github.com/jimeh/.emacs.d.git
