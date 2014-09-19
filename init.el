@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Jeu 2014-09-18 22:54 svarrette>
+;; Time-stamp: <Ven 2014-09-19 09:48 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -102,28 +102,28 @@
 (setq package-archives '(
                          ("gnu"       . "http://elpa.gnu.org/packages/")
                          ("melpa"     . "http://melpa.milkbox.net/packages/")
-                         ;("marmalade" . "http://marmalade-repo.org/packages/")
-			 ))
+                                        ;("marmalade" . "http://marmalade-repo.org/packages/")
+                         ))
 (package-initialize)
 
 (defvar falkor/packages '(alert
-						  apache-mode
-						  auto-complete
+                          apache-mode
+                          auto-complete
                           autopair
                           color-theme
                           deft
                           el-get
                           erlang
                           feature-mode
-						  fit-frame
-						  find-file-in-project
+                          fit-frame
+                          find-file-in-project
                           flycheck
                           gist
                           go-mode
                           graphviz-dot-mode
                           haml-mode
                           haskell-mode
-						  helm
+                          helm
                           htmlize
                           idle-require
                           idle-highlight
@@ -133,23 +133,22 @@
                           markdown-mode
                           marmalade
                           mic-paren
-						  neotree
-						  nodejs-repl
+                          neotree
+                          nodejs-repl
                           org
                           paredit
                           php-mode
                           powerline
                           puppet-mode
                           restclient
-                          ruby-mode
                           ruby-compilation
                           rvm
                           smart-tabs-mode
                           smex
                           solarized-theme
                           web-mode
-						  yaml-mode
-						  yasnippet)
+                          yaml-mode
+                          yasnippet)
   "Default packages")
 
 ;; Now install the default packages
@@ -206,20 +205,20 @@
 (require 'idle-require)             ; Need in order to use idle-require
 (dolist (feature
          '(alert
-		   apache-mode
-		   auto-compile             ; auto-compile .el files
+           apache-mode
+           auto-compile             ; auto-compile .el files
            deft
            erlang
            gist
            go-mode
-		   gnuplot
+           gnuplot
            haml-mode
-		   jabber
+           jabber
            recentf                  ; recently opened files
            restclient
            smex                     ; M-x interface Ido-style.
            tex-mode
-		   webgen-mode))               ; TeX, LaTeX, and SliTeX mode commands
+           webgen-mode))               ; TeX, LaTeX, and SliTeX mode commands
   (idle-require feature))
 
 (setq idle-require-idle-delay 5)
