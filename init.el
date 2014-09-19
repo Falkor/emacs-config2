@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Ven 2014-09-19 16:06 svarrette>
+;; Time-stamp: <Ven 2014-09-19 16:59 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -14,6 +14,19 @@
 ;; .             http://varrette.gforge.uni.lu
 ;;
 ;; -------------------------------------------------------------------------
+
+;; Definitions
+(defgroup falkor nil
+  "Personal Emacs.d Settings"
+  :version "0.1")
+
+;; Customization
+(defcustom falkor-custom-packages
+  '()
+  "Custom Packages to install in addition to the default packages defined in falkor/packages"
+  :group 'falkor
+  :type  'list
+  )
 
 ;; Common Lisp stuff all the time
 (require 'cl)
@@ -82,11 +95,11 @@
   "Appends argument at the end of custom-dir using expand-file-name"
   (expand-file-name path custom-dir))
 
-;; === setup and evantiually install [missing] packages ===
+;; === setup and evantually install [missing] packages ===
 ;; load falkor/custom/packages is existing
-(setq custom-package-file (get-custom-path "packages.el"))
-(if (file-readable-p custom-package-file)
-	(load-file custom-package-file))
+;; (setq custom-package-file (get-custom-path "packages.el"))
+;; (if (file-readable-p custom-package-file)
+;; 	(load-file custom-package-file))
 
 ;; Now load/setup packages
 (load-file (get-conf-path "packages.el"))

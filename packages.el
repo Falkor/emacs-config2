@@ -88,14 +88,14 @@
 
 ;; Now install the default packages
 (defun falkor/packages-installed-p ()
-  (loop for pkg in '(append '(falkor/packages) '(falkor/custom/packages))
+  (loop for pkg in falkor/packages
         when (not (package-installed-p pkg)) do (return nil)
         finally (return t)))
 
 (unless (falkor/packages-installed-p)
   (message "%s" "Refreshing package database...")
   (package-refresh-contents)
-  (dolist (pkg falkor/packages falkor/custom/packages)
+  (dolist (pkg falkor/packages)
     (when (not (package-installed-p pkg))
       (package-install pkg))))
 
