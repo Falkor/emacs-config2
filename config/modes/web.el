@@ -11,4 +11,4 @@
 (require 'webgen-mode nil t)
 (add-to-list 'auto-mode-alist '("\\.page$" .     (lambda () (markdown-mode) (webgen-mode))))
 (add-to-list 'auto-mode-alist '("\\.template$" . (lambda () (html-mode)     (webgen-mode))))
-(add-to-list 'auto-mode-alist '("[Mm]etainfo$" . (lambda () (text-mode)     (webgen-mode))))
+;;(add-to-list 'auto-mode-alist '("[Mm]etainfo$" . (lambda () (text-mode)     (webgen-mode))))

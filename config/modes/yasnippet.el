@@ -6,6 +6,7 @@
 ;; Installation notes: see README
 (require 'yasnippet)
 ;;(yas/initialize)
-(yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
 
+(setq yas/verbosity 0)
+(yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
 (yas-global-mode 1)

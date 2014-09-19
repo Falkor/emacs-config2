@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Jeu 2014-09-18 17:10 svarrette>
+# Time-stamp: <Ven 2014-09-19 10:16 svarrette>
 #     __  __       _         __ _ _       
 #    |  \/  | __ _| | _____ / _(_) | ___  
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -73,6 +73,9 @@ config.elc: $(INIT_SOURCE)
 
 %.elc: %.el
 	$(BATCH_LOAD) -f batch-byte-compile $<	
+
+starttime:
+	$(BATCH_LOAD) --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
 
 # Test values of variables - for debug purposes  
 test:
