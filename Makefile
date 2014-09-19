@@ -105,7 +105,9 @@ eval_boottime:
 # Clean option
 clean:
 	rm -f *.elc
-#	rm -f $(TARGET)
+
+clobber: clean
+	rm -f $(TARGET)
 
 
 

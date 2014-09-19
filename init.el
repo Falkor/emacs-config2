@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Ven 2014-09-19 12:37 svarrette>
+;; Time-stamp: <Ven 2014-09-19 13:57 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -63,13 +63,13 @@
                       (add-to-list 'load-path
                                    (concat emacs-root p))))
   (add-path "site-lisp")
-  ;;(add-path "site-lisp/use-package")
   )
-(setq config-dir       (concat emacs-root  "config"))
+;;(add-path "site-lisp/use-package")
+(setq config-dir       (concat emacs-root  "config/"))
 (setq defuns-dir       (concat emacs-root  "defuns"))
-(setq package-user-dir (concat emacs-root  "elpa"))
+(setq packages-dir     (concat emacs-root  "packages/"))
 (setq custom-file      (concat emacs-root  "custom.el"))
-(setq custom-dir       (concat emacs-root  "rc.custom"))
+(setq custom-dir       (concat emacs-root  "rc.custom/"))
 
 
 ;; Load Lisp defined functions
@@ -106,6 +106,7 @@
                          ("melpa"     . "http://melpa.milkbox.net/packages/")
                                         ;("marmalade" . "http://marmalade-repo.org/packages/")
                          ))
+(setq package-user-dir  (concat packages-dir "elpa/"))
 (package-initialize)
 
 (defvar falkor/packages '(alert
@@ -150,7 +151,7 @@
                           smart-tabs-mode
                           smex
                           solarized-theme
-						  use-package
+			  use-package
                           web-mode
                           yaml-mode
                           yasnippet)
@@ -165,7 +166,7 @@
 (unless (falkor/packages-installed-p)
   (message "%s" "Refreshing package database...")
   (package-refresh-contents)
-  (dolist (pkg falkor/packages)
+  (dolist (pkg falkor/packages falkor/custom/packages)
     (when (not (package-installed-p pkg))
       (package-install pkg))))
 
@@ -179,9 +180,13 @@
     (let (el-get-master-branch)
       (goto-char (point-max))
       (eval-print-last-sexp))))
+
+
+(setq el-get-dir (concat packages-dir "el-get/"))
+(setq el-get-status-file   (concat el-get-dir ".status.el"))
+(setq el-get-autoload-file (concat el-get-dir ".loaddefs.el"))
+
 (require 'el-get)
-(require 'el-get-status)
-(setq el-get-dir (concat emacs-root "el-get/"))
 
 ;;(setq el-get-byte-compile nil)
 ;; Load the local recipes
