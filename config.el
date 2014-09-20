@@ -29,6 +29,9 @@
 ;; ========================================================
 
 (require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
+;; (autoload 'auto-insert-tkld
+;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
+
 ;; doc:  ~/.emacs.d/site-lisp/auto-insert-tkld.pdf
 (setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
 ;; trick to abstract the personal web page
@@ -287,8 +290,8 @@
 ;; === Auto fit the size of the frame to the buffer content ===
 ;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
 ;; run 'M-x fit-frame' for that
-(require 'fit-frame)
-(add-hook 'after-make-frame-functions 'fit-frame)
+;;(require 'fit-frame)
+;;(add-hook 'after-make-frame-functions 'fit-frame)
 
 
 ;; ############################################################################
@@ -348,7 +351,7 @@
 
 ;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
 ;;(require 'better-defaults)
-(use-package )
+(use-package better-defaults)
 
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 (require 'saveplace)
