@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: use
+# key: use
+# --
+(use-package {1:package}
+  :init
+    (progn
+        $0))
