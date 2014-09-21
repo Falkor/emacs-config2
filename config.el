@@ -163,8 +163,12 @@
 ;; see http://www.emacswiki.org/emacs/TabCompletion
 
 
-(require 'smart-tab)
-(global-smart-tab-mode t)
+;;(require 'smart-tab)
+(use-package smart-tab
+  :init
+  (progn
+	(global-smart-tab-mode t)))
+
 
 ;; Disable indent "smart" alignement to insert real tabs
 (defun indent-with-real-tab-hook ()
@@ -317,8 +321,13 @@
 ;; See http://www.emacswiki.org/emacs/EasyPG
 ;;(if (equal emacs-major-version 23)
 ;;  (require 'epa-setup))
-(require 'epa-file)
-(epa-file-enable)
+
+;;(require 'epa-file)
+(use-package epa-file
+  :init
+  (progn
+	(epa-file-enable)))
+
 ;; ############################################################################
 
 
@@ -328,18 +337,24 @@
 ;; Activate fill adapt
 ;; see http://www.emacswiki.org/emacs/FillAdapt
 ;; =============================================
-(require 'filladapt)
+
+;;(require 'filladapt)
+(use-package filladapt
+  :init
+  (progn
+    (setq-default filladapt-mode nil)
+    (cond ((equal mode-name "Change Log")
+           t)
+          (t
+           (turn-on-filladapt-mode)))))
+
+
 ;; turn on filladapt mode everywhere but in ChangeLog files
-(setq-default filladapt-mode nil)
-(cond ((equal mode-name "Change Log")
-       t)
-      (t
-       (turn-on-filladapt-mode)))
 
 ;; (add-hook 'c-mode-common-hook
-;; 	  (lambda ()
-;; 	    (when (featurep 'filladapt)
-;; 	      (c-setup-filladapt))))
+;;    (lambda ()
+;;      (when (featurep 'filladapt)
+;;        (c-setup-filladapt))))
 ;; ############################################################################
 
 
@@ -364,8 +379,15 @@
 (use-package better-defaults)
 
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
-(require 'saveplace)
-(setq-default save-place t)
+(use-package saveplace
+  :init
+  (progn
+	(setq-default save-place t)))
+
+
+
+;; (require 'saveplace)
+;; (setq-default save-place t)
 
 ;; Finding Files (and URLs) At Point (FFAP)
 ;; see http://www.gnu.org/software/emacs/manual/html_node/emacs/FFAP.html
