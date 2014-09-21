@@ -34,10 +34,10 @@
 ;;
 (defvar falkor/packages '(alert
                           apache-mode
+						  auctex
                           auto-complete
                           autopair
                           better-defaults
-                          cl-lib
                           color-theme
                           deft
                           el-get
@@ -50,8 +50,6 @@
                           gist
                           go-mode
                           graphviz-dot-mode
-                          haml-mode
-                          haskell-mode
                           helm
                           htmlize
                           idle-require
