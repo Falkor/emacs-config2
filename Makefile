@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Sam 2014-09-20 11:42 svarrette>
+# Time-stamp: <Dim 2014-09-21 09:28 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -63,6 +63,7 @@ EMACS	         = emacs
 DIRS	         = site-lisp defuns
 CONFIG_SOURCES   = $(shell find config   -name '*.el')
 SNIPPETS_SOURCES = $(shell find snippets -name '*.el')
+SNIPPETS_TARGET  = $(patsubst %.el,%.elc, $(SNIPPETS_SOURCES))
 LIB_SOURCES    = $(foreach dir,$(DIRS),$(wildcard $(dir)/*.el)) $(SNIPPETS_SOURCES)
 INIT_SOURCES   = $(CONFIG_SOURCES) $(SNIPPETS_SOURCES) $(LIB_SOURCES) 
 TARGET	       = config.elc $(patsubst %.el,%.elc, $(LIB_SOURCES)) init.elc
@@ -84,10 +85,7 @@ dirs:
 	    $(BATCH_LOAD) -f batch-byte-compile $$dir/*.el; \
 	done
 
-snippets: $(SNIPPETS_SOURCES)
-	@for f in $%; do \
-		$(MAKE) `basename $$f .el`.elc; \
-	done
+snippets: $(SNIPPETS_TARGET)
 
 config.elc: $(CONFIG_SOURCES)
 	@echo -e "$(COLOR_GREEN)==> Generating centralised config.el[c] file from config/ directory$(NO_COLOR)"

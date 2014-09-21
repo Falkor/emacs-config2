@@ -371,6 +371,7 @@
 ;; Increase the lisp interpretor depth 
 (setq max-lisp-eval-depth 10000)
 
+
 ;; Correct copy-paste to clipboard
 (setq x-select-enable-clipboard t)
 ;; after mouse selection in X11, you can paste by `yank' in emacs

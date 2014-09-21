@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Dim 2014-09-21 08:20 svarrette>
+;; Time-stamp: <Dim 2014-09-21 09:30 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -159,12 +159,14 @@
 
 ;; Load use-package early enough
 (require 'use-package)
-(setq use-package-verbose t)
+(setq use-package-verbose nil)
 
 
 ;; === Emacs Modular Configuration entry point ===
 ;; See https://github.com/targzeta/emacs-modular-configuration
 (require 'emacs-modular-configuration)
+
+
 
 (load (concat emacs-root "config"))
 
