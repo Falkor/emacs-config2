@@ -2,8 +2,12 @@
 ;; see http://www.emacswiki.org/emacs/TabCompletion
 
 
-(require 'smart-tab)
-(global-smart-tab-mode t)
+;;(require 'smart-tab)
+(use-package smart-tab
+  :init
+  (progn
+	(global-smart-tab-mode t)))
+
 
 ;; Disable indent "smart" alignement to insert real tabs
 (defun indent-with-real-tab-hook ()

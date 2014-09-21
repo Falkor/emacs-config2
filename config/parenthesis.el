@@ -17,7 +17,10 @@
 
 ;; show matching parenthesis, even if found outside the present screen.
 ;; see http://www.emacswiki.org/emacs/MicParen
-(require 'mic-paren)                    ; loading
-(paren-activate)                        ; activating
-
+;; (require 'mic-paren)                    ; loading
+;; (paren-activate)                        ; activating
+(use-package mic-paren
+  :init
+  (progn
+	(paren-activate)))
 

@@ -368,6 +368,9 @@
 (setq initial-major-mode 'text-mode)    ; to avoid autoloads for lisp mode
 (setq require-final-newline t)          ; ensure a file ends in a newline when it
 
+;; Increase the lisp interpretor depth 
+(setq max-lisp-eval-depth 10000)
+
 ;; Correct copy-paste to clipboard
 (setq x-select-enable-clipboard t)
 ;; after mouse selection in X11, you can paste by `yank' in emacs
@@ -378,28 +381,21 @@
 ;;(require 'better-defaults)
 (use-package better-defaults)
 
-;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
-(use-package saveplace
-  :init
-  (progn
-	(setq-default save-place t)))
-
-
-
-;; (require 'saveplace)
-;; (setq-default save-place t)
-
 ;; Finding Files (and URLs) At Point (FFAP)
 ;; see http://www.gnu.org/software/emacs/manual/html_node/emacs/FFAP.html
-(require 'ffap)
+;;(require 'ffap)
+(use-package ffap)
+
 
 ;; Unique buffer names dependent on file name
-(require 'uniquify)
+;;(require 'uniquify)
+(use-package uniquify)
+
 ;; style used for uniquifying buffer names with parts of directory name
 (setq uniquify-buffer-name-style 'forward)
 
-(require 'ansi-color)
-
+;;(require 'ansi-color)
+(use-package ansi-color)
 
 ;; === Sane defaults configurations ===
 
@@ -515,8 +511,13 @@
 
 ;; Turn on auto completion
 ;; See http://www.emacswiki.org/emacs/AutoComplete
-(require 'auto-complete-config)
-(ac-config-default)
+;;(require 'auto-complete-config)
+(use-package auto-complete-config
+  :init
+  (progn
+	(ac-config-default)))
+
+
 ;; ############################################################################
 
 
@@ -538,18 +539,6 @@
     "Prevent y-or-n-p from activating a dialog"
     (let ((use-dialog-box nil))
       ad-do-it)))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/ido.el
-;; ido
-
-(ido-mode t)
-(setq
- confirm-nonexistent-file-or-buffer nil
- ido-enable-flex-matching t
- ido-use-virtual-buffers t)
 ;; ############################################################################
 
 
@@ -641,9 +630,12 @@
 
 ;; show matching parenthesis, even if found outside the present screen.
 ;; see http://www.emacswiki.org/emacs/MicParen
-(require 'mic-paren)                    ; loading
-(paren-activate)                        ; activating
-
+;; (require 'mic-paren)                    ; loading
+;; (paren-activate)                        ; activating
+(use-package mic-paren
+  :init
+  (progn
+	(paren-activate)))
 
 ;; ############################################################################
 
@@ -653,40 +645,53 @@
 ;; === Recentf mode ===
 ;; see http://www.emacswiki.org/emacs/RecentFiles
 ;; A minor mode that builds a list of recently opened files
-(require 'recentf)
+;;(require 'recentf)
+(use-package recentf
+  :init
+  (progn
+    ;;  file to save the recent list into
+    (setq recentf-save-file "~/.emacs.d/.recentf")
 
-;;  file to save the recent list into
-(setq recentf-save-file "~/.emacs.d/.recentf")
+    ;; maximum number of items in the recentf menu
+    (setq recentf-max-menu-items 30)
 
-;; maximum number of items in the recentf menu
-(setq recentf-max-menu-items 30)
+    ;; save file names relative to my current home directory
+    (setq recentf-filename-handlers '(abbreviate-file-name))
 
-;; save file names relative to my current home directory
-(setq recentf-filename-handlers '(abbreviate-file-name))
-
-(recentf-mode t)                        ; activate it
+    (recentf-mode t)                        ; activate it
+    ))
 ;; ############################################################################
 
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/saveplace.el
+;; -*- mode: lisp; -*-
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
-(require 'saveplace)
-(setq-default save-place t)
+;; (require 'saveplace)
+;; (setq-default save-place t)
+(use-package saveplace
+  :init
+  (progn
+	(setq-default save-place t)))
 ;; ############################################################################
 
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/time-stamp.el
-
-;; === Maintain last change time stamps (via Time-stamp: <>) ===
-(require 'time-stamp)
-;; format of the string inserted by `M-x time-stamp'
-(setq time-stamp-format "%3a %:y-%02m-%02d %02H:%02M %u")
+;; -*- mode:lisp; -*-
+;; === Maintain last change time stamps (via Time-stamp: <Dim 2014-09-21 09:21 svarrette>) ===
+;;(require 'time-stamp)
+(use-package time-stamp
+  :init
+  (progn
+	;; format of the string inserted by `M-x time-stamp'
+	(setq time-stamp-format "%3a %:y-%02m-%02d %02H:%02M %u")
                                         ; `Weekday YYYY-MM-DD HH:MM USER'
 
-;; update time stamps every time you save a buffer
-(add-hook 'write-file-hooks 'time-stamp)
+	;; update time stamps every time you save a buffer
+	(add-hook 'write-file-hooks 'time-stamp)))
+
+
 ;; ############################################################################
 
 
@@ -742,6 +747,18 @@
 ;; Configure helm mode
 ;; see http://emacs-helm.github.io/helm/
 ;;(helm-mode 1)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/ido.el
+;; ido
+
+(ido-mode t)
+(setq
+ confirm-nonexistent-file-or-buffer nil
+ ido-enable-flex-matching t
+ ido-use-virtual-buffers t)
 ;; ############################################################################
 
 
@@ -942,7 +959,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-09-21 08:35 svarrette>
+;; Time-stamp: <Dim 2014-09-21 09:00 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1135,7 +1152,7 @@
 
 ;; === Yasnippet ===
 ;; see config/modes/yasnippets for the setup
-(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
+(global-set-key (read-kbd-macro "C-<return>") 'yas-expand)
 
 
 

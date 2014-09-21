@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-09-21 08:35 svarrette>
+;; Time-stamp: <Dim 2014-09-21 09:00 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -196,7 +196,7 @@
 
 ;; === Yasnippet ===
 ;; see config/modes/yasnippets for the setup
-(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
+(global-set-key (read-kbd-macro "C-<return>") 'yas-expand)
 
 
 

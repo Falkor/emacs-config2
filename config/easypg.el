@@ -5,5 +5,10 @@
 ;; See http://www.emacswiki.org/emacs/EasyPG
 ;;(if (equal emacs-major-version 23)
 ;;  (require 'epa-setup))
-(require 'epa-file)
-(epa-file-enable)
+
+;;(require 'epa-file)
+(use-package epa-file
+  :init
+  (progn
+	(epa-file-enable)))
+

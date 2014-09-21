@@ -1,15 +1,18 @@
 ;; === Recentf mode ===
 ;; see http://www.emacswiki.org/emacs/RecentFiles
 ;; A minor mode that builds a list of recently opened files
-(require 'recentf)
+;;(require 'recentf)
+(use-package recentf
+  :init
+  (progn
+    ;;  file to save the recent list into
+    (setq recentf-save-file "~/.emacs.d/.recentf")
 
-;;  file to save the recent list into
-(setq recentf-save-file "~/.emacs.d/.recentf")
+    ;; maximum number of items in the recentf menu
+    (setq recentf-max-menu-items 30)
 
-;; maximum number of items in the recentf menu
-(setq recentf-max-menu-items 30)
+    ;; save file names relative to my current home directory
+    (setq recentf-filename-handlers '(abbreviate-file-name))
 
-;; save file names relative to my current home directory
-(setq recentf-filename-handlers '(abbreviate-file-name))
-
-(recentf-mode t)                        ; activate it
+    (recentf-mode t)                        ; activate it
+    ))

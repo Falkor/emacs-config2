@@ -6,6 +6,10 @@
 (setq initial-major-mode 'text-mode)    ; to avoid autoloads for lisp mode
 (setq require-final-newline t)          ; ensure a file ends in a newline when it
 
+;; Increase the lisp interpretor depth 
+(setq max-lisp-eval-depth 10000)
+
+
 ;; Correct copy-paste to clipboard
 (setq x-select-enable-clipboard t)
 ;; after mouse selection in X11, you can paste by `yank' in emacs
@@ -16,21 +20,21 @@
 ;;(require 'better-defaults)
 (use-package better-defaults)
 
-;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
-(require 'saveplace)
-(setq-default save-place t)
-
 ;; Finding Files (and URLs) At Point (FFAP)
 ;; see http://www.gnu.org/software/emacs/manual/html_node/emacs/FFAP.html
-(require 'ffap)
+;;(require 'ffap)
+(use-package ffap)
+
 
 ;; Unique buffer names dependent on file name
-(require 'uniquify)
+;;(require 'uniquify)
+(use-package uniquify)
+
 ;; style used for uniquifying buffer names with parts of directory name
 (setq uniquify-buffer-name-style 'forward)
 
-(require 'ansi-color)
-
+;;(require 'ansi-color)
+(use-package ansi-color)
 
 ;; === Sane defaults configurations ===
 
@@ -146,5 +150,10 @@
 
 ;; Turn on auto completion
 ;; See http://www.emacswiki.org/emacs/AutoComplete
-(require 'auto-complete-config)
-(ac-config-default)
+;;(require 'auto-complete-config)
+(use-package auto-complete-config
+  :init
+  (progn
+	(ac-config-default)))
+
+
