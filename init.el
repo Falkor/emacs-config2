@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Dim 2014-09-21 09:30 svarrette>
+;; Time-stamp: <Dim 2014-09-21 16:43 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -15,22 +15,22 @@
 ;;
 ;; -------------------------------------------------------------------------
 
-;; Definitions
-(defgroup falkor nil
-  "Personal Emacs.d Settings"
-  :version "0.1")
+;; ;; Definitions
+;; (defgroup falkor nil
+;;   "Personal Emacs.d Settings"
+;;   :version "0.1")
 
-;; Customization
-(defcustom falkor-custom-packages
-  '()
-  "Custom Packages to install in addition to the default packages defined in falkor/packages"
-  :group 'falkor
-  :type  'list
-  )
+;; ;; Customization
+;; (defcustom falkor-custom-packages
+;;   '()
+;;   "Custom Packages to install in addition to the default packages defined in falkor/packages"
+;;   :group 'falkor
+;;   :type  'list
+;;   )
 
 ;; Common Lisp stuff all the time
 (require 'cl)
-(require 'cl-lib)
+;;(use-package cl-lib)
 
 ;; keep all emacs-related stuff under ~/emacs.d
 (defvar emacs-root "~/.emacs.d/"
@@ -69,7 +69,7 @@
 
 ;; ============================ Let's go! ============================
 ;; Turn off mouse interface early in startup to avoid momentary display
-;;(if (fboundp 'menu-bar-mode)   (menu-bar-mode   -1))
+;;(if (fboundp 'menu-bar-mode)   (menu-bar-mode   t))
 (if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
 (if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
 
@@ -103,6 +103,7 @@
 
 ;; Now load/setup packages
 (load-file (get-conf-path "packages.el"))
+
 
 (require 'load-dir)
 ;; Load Lisp defined functions
@@ -159,6 +160,7 @@
 
 ;; Load use-package early enough
 (require 'use-package)
+;;(require 'cl-lib)
 (setq use-package-verbose nil)
 
 

@@ -4,5 +4,6 @@
 ;; http://www.emacswiki.org/emacs/AutoPairs
 ;; ==============================================================
 (require 'autopair)
+
 (autopair-global-mode) ;; enable autopair in all buffers 
 (setq autopair-autowrap t) 

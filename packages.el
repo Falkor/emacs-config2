@@ -37,9 +37,11 @@
                           auto-complete
                           autopair
                           better-defaults
+						  cl-lib
                           color-theme
                           deft
                           el-get
+						  erc-terminal-notifier
                           erlang
                           feature-mode
                           fit-frame
@@ -71,6 +73,7 @@
                           restclient
                           ruby-compilation
                           rvm
+						  smart-compile
                           smart-tab
                           smart-tabs-mode
                           smex

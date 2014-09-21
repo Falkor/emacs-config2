@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-09-21 09:00 svarrette>
+;; Time-stamp: <Dim 2014-09-21 16:20 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -34,6 +34,7 @@
 ;; Use helm to open files / recentf to open recent files
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x C-r") 'helm-recentf)
+(global-set-key (kbd "C-x C-g") 'helm-do-grep)
 
 ;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
 
@@ -134,7 +135,9 @@
 (global-set-key (kbd "C-x C-i") 'ido-imenu)
 
 ;; === Compilation ===
-(global-set-key (kbd "C-x C-e") 'smart-compile)
+(use-package smart-compile
+  :bind ("C-x C-e" . smart-compile))
+;;(global-set-key (kbd "C-x C-e") 'smart-compile)
 ;;(define-key ruby-mode-map [remap ruby-send-last-sexp ] nil)
 
 ;; === Kill this buffer ===
@@ -196,7 +199,7 @@
 
 ;; === Yasnippet ===
 ;; see config/modes/yasnippets for the setup
-(global-set-key (read-kbd-macro "C-<return>") 'yas-expand)
+;; Normally bind to C-RET and M-RET
 
 
 

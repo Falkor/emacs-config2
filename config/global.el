@@ -1,5 +1,8 @@
 ;; Global configuration
 
+;; Add menu bar
+(menu-bar-mode   t)
+
 (setq search-highlight         t)       ; highlight search object
 (setq query-replace-highlight  t)       ; highlight query object
 (setq byte-compile-verbose     t)
@@ -7,7 +10,7 @@
 (setq require-final-newline t)          ; ensure a file ends in a newline when it
 
 ;; Increase the lisp interpretor depth 
-(setq max-lisp-eval-depth 10000)
+;;(setq max-lisp-eval-depth 10000)
 
 
 ;; Correct copy-paste to clipboard
