@@ -947,14 +947,19 @@
 ;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
 ;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
 ;; Installation notes: see README
-(require 'cl-lib)
-(require 'yasnippet)
+;;(require 'yasnippet)
+
+(use-package yasnippet
+  :config
+  (progn
+	(setq yas-verbosity 0)
+	(yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
+	(yas-global-mode 1))
+  :bind (("C-<return>" . yas-expand)
+		 ("M-<return>" . yas-expand)))
 
 ;;(yas/initialize)
 
-(setq yas-verbosity 0)
-(yas-load-directory (concat emacs-root "snippets"))          ; Load the snippets
-(yas-global-mode 1)
 ;; ############################################################################
 
 
@@ -965,7 +970,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-09-21 14:09 svarrette>
+;; Time-stamp: <Dim 2014-09-21 16:20 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1161,7 +1166,7 @@
 
 ;; === Yasnippet ===
 ;; see config/modes/yasnippets for the setup
-(global-set-key (read-kbd-macro "C-<return>") 'yas-expand)
+;; Normally bind to C-RET and M-RET
 
 
 
