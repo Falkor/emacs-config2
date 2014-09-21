@@ -37,11 +37,11 @@
                           auto-complete
                           autopair
                           better-defaults
-						  cl-lib
+                          cl-lib
                           color-theme
                           deft
                           el-get
-						  erc-terminal-notifier
+                          erc-terminal-notifier
                           erlang
                           feature-mode
                           fit-frame
@@ -73,7 +73,7 @@
                           restclient
                           ruby-compilation
                           rvm
-						  smart-compile
+                          smart-compile
                           smart-tab
                           smart-tabs-mode
                           smex
@@ -85,7 +85,7 @@
   "Default packages")
 
 ;; Eventually load custom configuration
-;; (defvar falkor/custom/packages 
+;; (defvar falkor/custom/packages
 ;;   nil
 ;;   "Custom List of packages")
 
