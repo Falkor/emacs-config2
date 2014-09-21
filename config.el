@@ -362,6 +362,9 @@
 ;; Config file: ~/.emacs.d/config/global.el
 ;; Global configuration
 
+;; Add menu bar
+(menu-bar-mode   t)
+
 (setq search-highlight         t)       ; highlight search object
 (setq query-replace-highlight  t)       ; highlight query object
 (setq byte-compile-verbose     t)
@@ -369,7 +372,7 @@
 (setq require-final-newline t)          ; ensure a file ends in a newline when it
 
 ;; Increase the lisp interpretor depth 
-(setq max-lisp-eval-depth 10000)
+;;(setq max-lisp-eval-depth 10000)
 
 
 ;; Correct copy-paste to clipboard
@@ -944,7 +947,9 @@
 ;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
 ;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
 ;; Installation notes: see README
+(require 'cl-lib)
 (require 'yasnippet)
+
 ;;(yas/initialize)
 
 (setq yas-verbosity 0)
@@ -960,7 +965,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-09-21 09:00 svarrette>
+;; Time-stamp: <Dim 2014-09-21 14:09 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -991,6 +996,7 @@
 ;; Use helm to open files / recentf to open recent files
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x C-r") 'helm-recentf)
+(global-set-key (kbd "C-x C-g") 'helm-do-grep)
 
 ;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
 
@@ -1091,7 +1097,9 @@
 (global-set-key (kbd "C-x C-i") 'ido-imenu)
 
 ;; === Compilation ===
-(global-set-key (kbd "C-x C-e") 'smart-compile)
+(use-package smart-compile
+  :bind ("C-x C-e" . smart-compile))
+;;(global-set-key (kbd "C-x C-e") 'smart-compile)
 ;;(define-key ruby-mode-map [remap ruby-send-last-sexp ] nil)
 
 ;; === Kill this buffer ===
