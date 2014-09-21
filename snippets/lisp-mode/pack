@@ -1,8 +1,0 @@
-# -*- mode: snippet -*-
-# name: pack
-# key: pack
-# --
-(use-package {$1:package}
-  :init
-    (progn
-        $0))

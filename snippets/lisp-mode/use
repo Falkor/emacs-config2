@@ -2,7 +2,8 @@
 # name: use
 # key: use
 # --
-(use-package {$1:package}
-  :init
+(use-package ${1:package}
+  :config
     (progn
-        $0))
+        $0)
+  :bind ())
