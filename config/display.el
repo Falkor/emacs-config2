@@ -12,8 +12,8 @@
 (setq visible-bell        t)
 
 ;; === Default size of the frame ===
-(set-frame-width (selected-frame) 120)
-(set-frame-height (selected-frame) 40)
+(set-frame-width (selected-frame) 145)
+(set-frame-height (selected-frame) 60)
 
 ;; === remove the few annoyance of default emacs ===
 ;; Use "y or n" answers instead of full words "yes or no"
@@ -59,7 +59,7 @@
 ;; =================================================================
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
-(require 'powerline)
+(use-package powerline)
 (powerline-center-theme)
 ;; shape...
 ;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
@@ -96,11 +96,14 @@
 ;; screenshots
 ;; =================================================================
 ;; WITH color theme
-(require 'color-theme)
-(color-theme-initialize)
-(setq color-theme-is-global t)
+(use-package color-theme
+  :init
+  (progn
+	(color-theme-initialize)
+	(setq color-theme-is-global t)
+	(color-theme-vim-colors)))
 
-(color-theme-vim-colors)
+
 
 ;; To better see the cursor
 (setq default-frame-alist
@@ -119,7 +122,7 @@
 ;; === Auto fit the size of the frame to the buffer content ===
 ;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
 ;; run 'M-x fit-frame' for that
-(require 'fit-frame)
-(add-hook 'after-make-frame-functions 'fit-frame)
+;;(require 'fit-frame)
+;;(add-hook 'after-make-frame-functions 'fit-frame)
 
 

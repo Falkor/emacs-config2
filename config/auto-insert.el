@@ -2,12 +2,21 @@
 ;; Auto-insert: automatic insertion of text into new files
 ;; ========================================================
 
-(require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
+;;(require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
+;; (autoload 'auto-insert-tkld
+;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
+(use-package auto-insert-tkld
+  :init
+  (progn
+	(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
+	(setq auto-insert-automatically t)
+	)
+  )
 ;; doc:  ~/.emacs.d/site-lisp/auto-insert-tkld.pdf
-(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
+
 ;; trick to abstract the personal web page
 ;;(setq auto-insert-organisation  user-www)
-(setq auto-insert-automatically t)
+
 ;; associate file extention to a template name
 (setq auto-insert-alist
       '(

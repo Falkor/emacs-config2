@@ -1,5 +1,7 @@
 ;; === Code completion ===
 ;; see http://www.emacswiki.org/emacs/TabCompletion
+
+
 (require 'smart-tab)
 (global-smart-tab-mode t)
 

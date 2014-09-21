@@ -28,15 +28,21 @@
 ;; Auto-insert: automatic insertion of text into new files
 ;; ========================================================
 
-(require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
+;;(require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
 ;; (autoload 'auto-insert-tkld
 ;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
-
+(use-package auto-insert-tkld
+  :init
+  (progn
+	(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
+	(setq auto-insert-automatically t)
+	)
+  )
 ;; doc:  ~/.emacs.d/site-lisp/auto-insert-tkld.pdf
-(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
+
 ;; trick to abstract the personal web page
 ;;(setq auto-insert-organisation  user-www)
-(setq auto-insert-automatically t)
+
 ;; associate file extention to a template name
 (setq auto-insert-alist
       '(
@@ -155,6 +161,8 @@
 ;; Config file: ~/.emacs.d/config/completion.el
 ;; === Code completion ===
 ;; see http://www.emacswiki.org/emacs/TabCompletion
+
+
 (require 'smart-tab)
 (global-smart-tab-mode t)
 
@@ -183,8 +191,8 @@
 (setq visible-bell        t)
 
 ;; === Default size of the frame ===
-(set-frame-width (selected-frame) 120)
-(set-frame-height (selected-frame) 40)
+(set-frame-width (selected-frame) 145)
+(set-frame-height (selected-frame) 60)
 
 ;; === remove the few annoyance of default emacs ===
 ;; Use "y or n" answers instead of full words "yes or no"
@@ -230,7 +238,7 @@
 ;; =================================================================
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
-(require 'powerline)
+(use-package powerline)
 (powerline-center-theme)
 ;; shape...
 ;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
@@ -267,11 +275,14 @@
 ;; screenshots
 ;; =================================================================
 ;; WITH color theme
-(require 'color-theme)
-(color-theme-initialize)
-(setq color-theme-is-global t)
+(use-package color-theme
+  :init
+  (progn
+	(color-theme-initialize)
+	(setq color-theme-is-global t)
+	(color-theme-vim-colors)))
 
-(color-theme-vim-colors)
+
 
 ;; To better see the cursor
 (setq default-frame-alist
@@ -335,7 +346,6 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/global.el
 ;; Global configuration
-(require 'use-package)
 
 (setq search-highlight         t)       ; highlight search object
 (setq query-replace-highlight  t)       ; highlight query object
@@ -910,7 +920,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-09-18 22:38 svarrette>
+;; Time-stamp: <Dim 2014-09-21 08:35 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -940,7 +950,7 @@
 
 ;; Use helm to open files / recentf to open recent files
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+(global-set-key (kbd "C-x C-r") 'helm-recentf)
 
 ;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
 

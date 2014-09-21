@@ -1,5 +1,4 @@
 ;; Global configuration
-(require 'use-package)
 
 (setq search-highlight         t)       ; highlight search object
 (setq query-replace-highlight  t)       ; highlight query object
@@ -15,7 +14,7 @@
 
 ;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
 ;;(require 'better-defaults)
-(use-package )
+(use-package better-defaults)
 
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 (require 'saveplace)

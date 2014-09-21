@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Ven 2014-09-19 16:59 svarrette>
+;; Time-stamp: <Dim 2014-09-21 08:20 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -88,7 +88,7 @@
 (setq defuns-dir     (get-conf-path "defuns"))
 (setq packages-dir   (get-conf-path "packages/"))
 (setq custom-file    (get-conf-path "custom.el"))
-(setq custom-dir     (get-conf-path  "rc.custom/"))
+(setq custom-dir     (get-conf-path "rc.custom/"))
 
 ;; Helper function to access custom files
 (defun get-custom-path(path)
@@ -157,6 +157,9 @@
 ;; (setq idle-require-idle-delay 5)
 ;; (idle-require-mode 1)
 
+;; Load use-package early enough
+(require 'use-package)
+(setq use-package-verbose t)
 
 
 ;; === Emacs Modular Configuration entry point ===

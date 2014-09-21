@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Ven 2014-09-19 12:17 svarrette>
+# Time-stamp: <Sam 2014-09-20 11:42 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -99,7 +99,7 @@ config.elc: $(CONFIG_SOURCES)
 	$(BATCH_LOAD) -f batch-byte-compile $<
 
 eval_boottime:
-	@echo "==> Evaluate starting time of Emacs"
+	@echo -e "$(COLOR_GREEN)==> Evaluate starting time of Emacs$(NO_COLOR)"
 	$(BATCH_LOAD) --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
 
 # Clean option
