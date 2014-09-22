@@ -6,412 +6,7 @@
 ;; then run within emacs 'M-x emc-merge-config-files'
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/auctex.el
-;; -*- mode: lisp; -*-
-;; === LaTeX ===
-
-
-;; new setup
-(use-package tex-site
-  :load-path "site-lisp/auctex/preview/"
-  :defines (latex-help-cmd-alist latex-help-file)
-  :mode ("\\.tex\\'" . latex-mode)
-  :config
-  (progn
-    (defun latex-help-get-cmd-alist ()  ;corrected version:
-      "Scoop up the commands in the index of the latex info manual.
-   The values are saved in `latex-help-cmd-alist' for speed."
-      ;; mm, does it contain any cached entries
-      (if (not (assoc "\\begin" latex-help-cmd-alist))
-          (save-window-excursion
-            (setq latex-help-cmd-alist nil)
-            (Info-goto-node (concat latex-help-file "Command Index"))
-            (goto-char (point-max))
-            (while (re-search-backward "^\\* \\(.+\\): *\\(.+\\)\\." nil t)
-              (let ((key (buffer-substring (match-beginning 1) (match-end 1)))
-                    (value (buffer-substring (match-beginning 2)
-                                             (match-end 2))))
-                (add-to-list 'latex-help-cmd-alist (cons key value))))))
-      latex-help-cmd-alist)
-
-    (use-package latex-mode
-      :defer t
-      :config
-      (progn
-        (use-package preview)
-        (use-package ac-math)
-
-        (defun ac-latex-mode-setup ()
-          (nconc ac-sources
-                 '(ac-source-math-unicode ac-source-math-latex
-                                          ac-source-latex-commands)))
-
-        (add-to-list 'ac-modes 'latex-mode)
-        (add-hook 'latex-mode-hook 'ac-latex-mode-setup)
-
-        (info-lookup-add-help :mode 'latex-mode
-                              :regexp ".*"
-                              :parse-rule "\\\\?[a-zA-Z]+\\|\\\\[^a-zA-Z]"
-                              :doc-spec '(("(latex2e)Concept Index" )
-                                          ("(latex2e)Command Index")))))))
-
-
-;; OLD setup
-;; ;; Load AucTeX : see http://www.gnu.org/software/auctex/
-;; ;; Debian/ubuntu: apt-get install auctex
-;; ;; Mac OS X: preinstalled on Carbon Emacs
-;; ;;(load "auctex.el" nil t t)
-;; (require 'tex-site)
-
-;; ;; AUC TeX will will assume the file is a master file itself
-;; ;;(setq-default TeX-master t)
-
-;; ;;(setq TeX-auto-save t)
-
-;; (setq TeX-parse-self t) ; enable parse on load (if no style hook is found for the file)
-
-;; (setq TeX-directory ".")
-;; (setq TeX-mode-hook '((lambda () (setq abbrev-mode t))))
-
-;; (setq-default TeX-PDF-mode t)         ; use PDF mode by default (instead of DVI)
-
-;; ;;(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
-;; (add-hook 'LaTeX-mode-hook 'flyspell-mode)
-;; (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-
-;; ;; number of spaces to add to the indentation for each `\begin' not matched by a
-;; ;; `\end'
-;; (setq LaTeX-indent-level 4)
-
-;; ;; number of spaces to add to the indentation for `\item''s in list
-;; ;; environments
-;; (setq LaTeX-item-indent -2)             ; -4
-
-;; ;; number of spaces to add to the indentation for each `{' not matched
-;; ;; by a `}'
-;; (setq TeX-brace-indent-level 2)         ; 4
-
-;; ;; auto-indentation (suggested by the AUCTeX manual -- instead of adding
-;; ;; a local key binding to `RET' in the `LaTeX-mode-hook')
-;; (setq TeX-newline-function 'newline-and-indent)
-
-;; ;; don't show output of TeX compilation in other window
-;;                                         ;(setq TeX-show-compilation nil)
-
-;; ;; Directory containing automatically generated TeX information.
-;; ;; Must end with a slash
-;; ;;(setq TeX-auto-global "~/.emacs.d/auctex-auto-generated-info/")
-;; ;;(setq TeX-auto-local  "~/.emacs.d/auctex-auto-generated-info/")
-
-;; ;; RefTex: manage cross references, bibliographies, indices, document navigation
-;; ;; and a few other things
-;; ;; see http://www.emacswiki.org/emacs/RefTeX
-;; (require 'reftex)
-
-;; ;; make a LaTeX reference (to a label) by pressing `C-c )'
-;; ;; insert a label by pressing `C-c (' (or `C-('
-;; ;; insert a citation by pressing `C-c [' (or `C-['
-
-;; ;; hit `C-c ='; the buffer will split into 2 and in the top half you
-;; ;; will see a TOC, hitting `l' there will show all the labels and cites.
-
-;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex) ; with AUCTeX LaTeX mode
-;; (setq reftex-plug-into-AUCTeX t)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/autopair.el
-;; ==============================================================
-;; Autopair: Automagically pair braces and quotes like TextMate
-;; see http://code.google.com/p/autopair/ or
-;; http://www.emacswiki.org/emacs/AutoPairs
-;; ==============================================================
-;;(require 'autopair)
-
-(use-package autopair
-  :commands (autopair-global-mode)
-  :config
-  (progn
-	(autopair-global-mode) ;; enable autopair in all buffers
-	(setq autopair-autowrap t))
-  :bind ("C-j" . autopair-newline))
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/font-lock.el
-;; -*- mode: lisp; -*-
-;; Time-stamp: <Ven 2014-09-19 11:22 svarrette>
-;;
-;; =================================================================
-;; Font Lock configuration
-;; Note: minor mode, always local to a particular buffer, which
-;; highlights (or “fontifies”) the buffer contents according to the
-;; syntax of the text you are editing.
-;; =================================================================
-;; Enable syntax highlighting for older Emacsen that have it off
-(if (fboundp 'global-font-lock-mode)
-    (global-font-lock-mode     1)    ; GNU Emacs
-  (setq font-lock-auto-fontify t))   ; XEmacs
-
-(setq font-lock-maximum-decoration t)
-
-;; Obsolete in emacs 24
-;; (setq font-lock-maximum-size       nil)
-
-(setq font-lock-support-mode 'jit-lock-mode)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/helm.el
-;; Configure helm mode
-;; see http://emacs-helm.github.io/helm/
-;;(helm-mode 1)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/ido.el
-;; ido
-
-(ido-mode t)
-(setq
- confirm-nonexistent-file-or-buffer nil
- ido-enable-flex-matching t
- ido-use-virtual-buffers t)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/markdown.el
-;; -*- mode: lisp; -*-
-;; === Markdown ===
-;; see http://jblevins.org/projects/markdown-mode/
-;;(require 'markdown-mode)
-
-(defun markdown-preview-file ()
-      "run Marked on the current file and revert the buffer"
-      (interactive)
-      (shell-command
-       (format "open -a /Applications/Marked\ 2.app %s"
-               (shell-quote-argument (buffer-file-name)))))
-
-(use-package markdown-mode
-  :mode (("\\.md\\'"    . markdown-mode)
-		 ("\\.mdown\\'" . markdown-mode))
-  :init
-  (progn
-	(setq markdown-command "pandoc --smart -f markdown -t html")
-	(setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
-  :bind ("C-x M" . markdown-preview-file))
-
-
-;; (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
-;; (add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
-
-;; (add-hook 'markdown-mode-hook
-;;           (lambda ()
-;;             (visual-line-mode t)
-;;             (writegood-mode t)
-;;             (flyspell-mode t)))
-
-;; 
-;; 
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/org.el
-;; Settings for org-mode
-;; See http://www.aaronbedra.com/emacs.d/#org-mode
-
-;; === Settings ===
-;; Enable logging when tasks are complete. This puts a time-stamp on the
-;; completed task. Since I usually am doing quite a few things at once, I added
-;; the INPROGRESS keyword and made the color blue. Finally, enable flyspell-mode
-;; and writegood-mode when org-mode is active.
-
-(setq org-log-done t
-      org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
-      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
-(add-hook 'org-mode-hook
-          (lambda ()
-            (flyspell-mode)))
-(add-hook 'org-mode-hook
-          (lambda ()
-            (writegood-mode)))
-
-;; === org-agenda ===
-
-(setq org-rootdir "~/Dropbox/SyncFolder/org/")
-
-(setq org-agenda-show-log t
-      org-agenda-todo-ignore-scheduled t
-      org-agenda-todo-ignore-deadlines t)
-(setq org-agenda-files (concat org-rootdir "personal.org"))
-;; (setq org-agenda-files (list "~/Dropbox/org/personal.org"
-;;                              "~/Dropbox/org/groupon.org"))
-
-;; === org-habbit ===
-(require 'org)
-(require 'org-install)
-(require 'org-habit)
-(add-to-list 'org-modules "org-habit")
-(setq org-habit-preceding-days 7
-      org-habit-following-days 1
-      org-habit-graph-column 80
-      org-habit-show-habits-only-for-today t
-      org-habit-show-all-today t)
-
-
-;; === org-babel ===
-;; org-babel is a feature inside of org-mode that makes this document possible.
-;; It allows for embedding languages inside of an org-mode document with all the
-;; proper font-locking. It also allows you to extract and execute code. It isn't
-;; aware of Clojure by default, so the following sets that up.
-(require 'ob)
-
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((sh . t)
-   (dot . t)
-   (ruby . t)))
-
-(add-to-list 'org-src-lang-modes (quote ("dot". graphviz-dot)))
-
-(defvar org-babel-default-header-args:clojure
-  '((:results . "silent") (:tangle . "yes")))
-
-(defun org-babel-execute:clojure (body params)
-  (lisp-eval-string body)
-  "Done!")
-
-(provide 'ob-clojure)
-
-(setq org-src-fontify-natively t
-      org-confirm-babel-evaluate nil)
-
-(add-hook 'org-babel-after-execute-hook (lambda ()
-                                          (condition-case nil
-                                              (org-display-inline-images)
-                                            (error nil)))
-          'append)
-
-
-;; ==== org-abbrev ===
-
-(add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
-
-(define-skeleton skel-org-block-elisp
-  "Insert an emacs-lisp block"
-  ""
-  "#+begin_src emacs-lisp\n"
-  _ - \n
-  "#+end_src\n")
-
-(define-abbrev org-mode-abbrev-table "selisp" "" 'skel-org-block-elisp)
-
-(define-skeleton skel-header-block
-  "Creates my default header"
-  ""
-  "#+TITLE: " str "\n"
-  "#+AUTHOR: Aaron Bedra\n"
-  "#+EMAIL: aaron@aaronbedra.com\n"
-  "#+OPTIONS: toc:3 num:nil\n"
-  "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
-
-(define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/ruby.el
-;; -*- mode: lisp; -*-
-
-(setq auto-mode-alist
-      (append
-       '(("\\.rake$"        . ruby-mode)
-         ("\\.gemspec$"     . ruby-mode)
-         ("\\.rb$"          . ruby-mode)
-         ("Rakefile$"       . ruby-mode)
-         ("Gemfile$"        . ruby-mode)
-         ("Capfile$"        . ruby-mode)
-         ("Vagrantfile"     . ruby-mode))
-       auto-mode-alist))
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/smart-tabs.el
-;; === Smart Tabs ===
-;; see http://www.emacswiki.org/emacs/SmartTabs
-
-(smart-tabs-insinuate 'c 'javascript 'ruby 'python)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/web.el
-;; -*- mode: lisp; -*-
-;; ===== Web management =====
-
-(add-to-list 'auto-mode-alist '("\\.hbs$" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.erb$" . web-mode))
-
-
-;; Webgen (static website generation)
-;; see http://webgen.rubyforge.org/
-;; Webgen mode: http://www.emacswiki.org/emacs/WebgenMode
-;; (require 'webgen-mode nil t)
-;; (add-to-list 'auto-mode-alist '("\\.page$" .     (lambda () (markdown-mode) (webgen-mode))))
-;; (add-to-list 'auto-mode-alist '("\\.template$" . (lambda () (html-mode)     (webgen-mode))))
-;;(add-to-list 'auto-mode-alist '("[Mm]etainfo$" . (lambda () (text-mode)     (webgen-mode))))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/yasnippet.el
-;; -*- mode: lisp; -*-
-
-;; === Yasnippet ===
-;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
-;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
-;; Installation notes: see README
-
-;; Classical setup
-;; (require 'yasnippet)
-;; (yas-global-mode 1)
-;; (bind-keys*
-;;  ("C-<return>" . yas-expand)
-;;  ("M-<return>" . yas-expand))
-
-;; Advanced setup with [use-package](https://github.com/jwiegley/use-package)
-(use-package yasnippet
-  :commands (yas-global-mode yas-minor-mode yas-expand)
-  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
-  :init (yas-global-mode 1)
-  :config
-  (progn
-	(setq yas-verbosity 0)
-	;; (setq yas-snippet-dirs (concat emacs-root "snippets"))
-	;; (yas-load-directory yas-snippet-dirs)
-	)
-  :bind (("C-<return>" . yas-expand)
-		 ("M-<return>" . yas-expand)))
-
-
-;;(yas/initialize)
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/bindings/global.el
+;; Config file: ~/.emacs.d/config/3_bindings/global.el
 ;; ----------------------------------------------------------------------
 ;; File: bindings/global.el - setup my gloabl key bindings in emacs
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
@@ -673,7 +268,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/bindings/mac.el
+;; Config file: ~/.emacs.d/config/3_bindings/mac.el
 ;; Special configuration for Mac 
 
 ;; (Aquamacs
@@ -697,7 +292,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/bindings/ruby.el
+;; Config file: ~/.emacs.d/config/3_bindings/ruby.el
 ;; -*- mode: lisp; -*-
 
 (eval-after-load 'ruby-mode
@@ -707,24 +302,412 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/aquamacs.el
+;; Config file: ~/.emacs.d/config/2_modes/auctex.el
 ;; -*- mode: lisp; -*-
-;; =================================================================
-;; Aquamacs specific 
-;; =================================================================
-;; see http://www.emacswiki.org/emacs/AquamacsEmacsCompatibilitySettings
-(Aquamacs
- (aquamacs-autoface-mode -1)  ; no mode-specific faces, everything in Monaco
- ;; do not load persistent scratch buffer
- (setq aquamacs-scratch-file nil)
- ;; do not make initial frame visible
- (setq show-scratch-buffer-on-startup nil)
-)
+;; === LaTeX ===
+
+
+;; new setup
+(use-package tex-site
+  :load-path "site-lisp/auctex/preview/"
+  :defines (latex-help-cmd-alist latex-help-file)
+  :mode ("\\.tex\\'" . latex-mode)
+  :config
+  (progn
+    (defun latex-help-get-cmd-alist ()  ;corrected version:
+      "Scoop up the commands in the index of the latex info manual.
+   The values are saved in `latex-help-cmd-alist' for speed."
+      ;; mm, does it contain any cached entries
+      (if (not (assoc "\\begin" latex-help-cmd-alist))
+          (save-window-excursion
+            (setq latex-help-cmd-alist nil)
+            (Info-goto-node (concat latex-help-file "Command Index"))
+            (goto-char (point-max))
+            (while (re-search-backward "^\\* \\(.+\\): *\\(.+\\)\\." nil t)
+              (let ((key (buffer-substring (match-beginning 1) (match-end 1)))
+                    (value (buffer-substring (match-beginning 2)
+                                             (match-end 2))))
+                (add-to-list 'latex-help-cmd-alist (cons key value))))))
+      latex-help-cmd-alist)
+
+    (use-package latex-mode
+      :defer t
+      :config
+      (progn
+        (use-package preview)
+        (use-package ac-math)
+
+        (defun ac-latex-mode-setup ()
+          (nconc ac-sources
+                 '(ac-source-math-unicode ac-source-math-latex
+                                          ac-source-latex-commands)))
+
+        (add-to-list 'ac-modes 'latex-mode)
+        (add-hook 'latex-mode-hook 'ac-latex-mode-setup)
+
+        (info-lookup-add-help :mode 'latex-mode
+                              :regexp ".*"
+                              :parse-rule "\\\\?[a-zA-Z]+\\|\\\\[^a-zA-Z]"
+                              :doc-spec '(("(latex2e)Concept Index" )
+                                          ("(latex2e)Command Index")))))))
+
+
+;; OLD setup
+;; ;; Load AucTeX : see http://www.gnu.org/software/auctex/
+;; ;; Debian/ubuntu: apt-get install auctex
+;; ;; Mac OS X: preinstalled on Carbon Emacs
+;; ;;(load "auctex.el" nil t t)
+;; (require 'tex-site)
+
+;; ;; AUC TeX will will assume the file is a master file itself
+;; ;;(setq-default TeX-master t)
+
+;; ;;(setq TeX-auto-save t)
+
+;; (setq TeX-parse-self t) ; enable parse on load (if no style hook is found for the file)
+
+;; (setq TeX-directory ".")
+;; (setq TeX-mode-hook '((lambda () (setq abbrev-mode t))))
+
+;; (setq-default TeX-PDF-mode t)         ; use PDF mode by default (instead of DVI)
+
+;; ;;(add-hook 'LaTeX-mode-hook 'auto-fill-mode)
+;; (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+;; (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+
+;; ;; number of spaces to add to the indentation for each `\begin' not matched by a
+;; ;; `\end'
+;; (setq LaTeX-indent-level 4)
+
+;; ;; number of spaces to add to the indentation for `\item''s in list
+;; ;; environments
+;; (setq LaTeX-item-indent -2)             ; -4
+
+;; ;; number of spaces to add to the indentation for each `{' not matched
+;; ;; by a `}'
+;; (setq TeX-brace-indent-level 2)         ; 4
+
+;; ;; auto-indentation (suggested by the AUCTeX manual -- instead of adding
+;; ;; a local key binding to `RET' in the `LaTeX-mode-hook')
+;; (setq TeX-newline-function 'newline-and-indent)
+
+;; ;; don't show output of TeX compilation in other window
+;;                                         ;(setq TeX-show-compilation nil)
+
+;; ;; Directory containing automatically generated TeX information.
+;; ;; Must end with a slash
+;; ;;(setq TeX-auto-global "~/.emacs.d/auctex-auto-generated-info/")
+;; ;;(setq TeX-auto-local  "~/.emacs.d/auctex-auto-generated-info/")
+
+;; ;; RefTex: manage cross references, bibliographies, indices, document navigation
+;; ;; and a few other things
+;; ;; see http://www.emacswiki.org/emacs/RefTeX
+;; (require 'reftex)
+
+;; ;; make a LaTeX reference (to a label) by pressing `C-c )'
+;; ;; insert a label by pressing `C-c (' (or `C-('
+;; ;; insert a citation by pressing `C-c [' (or `C-['
+
+;; ;; hit `C-c ='; the buffer will split into 2 and in the top half you
+;; ;; will see a TOC, hitting `l' there will show all the labels and cites.
+
+;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex) ; with AUCTeX LaTeX mode
+;; (setq reftex-plug-into-AUCTeX t)
 ;; ############################################################################
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/auto-insert.el
+;; Config file: ~/.emacs.d/config/2_modes/autopair.el
+;; ==============================================================
+;; Autopair: Automagically pair braces and quotes like TextMate
+;; see http://code.google.com/p/autopair/ or
+;; http://www.emacswiki.org/emacs/AutoPairs
+;; ==============================================================
+;;(require 'autopair)
+
+(use-package autopair
+  :commands (autopair-global-mode)
+  :config
+  (progn
+	(autopair-global-mode) ;; enable autopair in all buffers
+	(setq autopair-autowrap t))
+  :bind ("C-j" . autopair-newline))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/font-lock.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Ven 2014-09-19 11:22 svarrette>
+;;
+;; =================================================================
+;; Font Lock configuration
+;; Note: minor mode, always local to a particular buffer, which
+;; highlights (or “fontifies”) the buffer contents according to the
+;; syntax of the text you are editing.
+;; =================================================================
+;; Enable syntax highlighting for older Emacsen that have it off
+(if (fboundp 'global-font-lock-mode)
+    (global-font-lock-mode     1)    ; GNU Emacs
+  (setq font-lock-auto-fontify t))   ; XEmacs
+
+(setq font-lock-maximum-decoration t)
+
+;; Obsolete in emacs 24
+;; (setq font-lock-maximum-size       nil)
+
+(setq font-lock-support-mode 'jit-lock-mode)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/helm.el
+;; Configure helm mode
+;; see http://emacs-helm.github.io/helm/
+;;(helm-mode 1)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/ido.el
+;; ido
+
+(ido-mode t)
+(setq
+ confirm-nonexistent-file-or-buffer nil
+ ido-enable-flex-matching t
+ ido-use-virtual-buffers t)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/markdown.el
+;; -*- mode: lisp; -*-
+;; === Markdown ===
+;; see http://jblevins.org/projects/markdown-mode/
+;;(require 'markdown-mode)
+
+(defun markdown-preview-file ()
+      "run Marked on the current file and revert the buffer"
+      (interactive)
+      (shell-command
+       (format "open -a /Applications/Marked\ 2.app %s"
+               (shell-quote-argument (buffer-file-name)))))
+
+(use-package markdown-mode
+  :mode (("\\.md\\'"    . markdown-mode)
+		 ("\\.mdown\\'" . markdown-mode))
+  :init
+  (progn
+	(setq markdown-command "pandoc --smart -f markdown -t html")
+	(setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
+  :bind ("C-x M" . markdown-preview-file))
+
+
+;; (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+;; (add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
+
+;; (add-hook 'markdown-mode-hook
+;;           (lambda ()
+;;             (visual-line-mode t)
+;;             (writegood-mode t)
+;;             (flyspell-mode t)))
+
+;; 
+;; 
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/org.el
+;; Settings for org-mode
+;; See http://www.aaronbedra.com/emacs.d/#org-mode
+
+;; === Settings ===
+;; Enable logging when tasks are complete. This puts a time-stamp on the
+;; completed task. Since I usually am doing quite a few things at once, I added
+;; the INPROGRESS keyword and made the color blue. Finally, enable flyspell-mode
+;; and writegood-mode when org-mode is active.
+
+(setq org-log-done t
+      org-todo-keywords '((sequence "TODO" "INPROGRESS" "DONE"))
+      org-todo-keyword-faces '(("INPROGRESS" . (:foreground "blue" :weight bold))))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (flyspell-mode)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (writegood-mode)))
+
+;; === org-agenda ===
+
+(setq org-rootdir "~/Dropbox/SyncFolder/org/")
+
+(setq org-agenda-show-log t
+      org-agenda-todo-ignore-scheduled t
+      org-agenda-todo-ignore-deadlines t)
+(setq org-agenda-files (concat org-rootdir "personal.org"))
+;; (setq org-agenda-files (list "~/Dropbox/org/personal.org"
+;;                              "~/Dropbox/org/groupon.org"))
+
+;; === org-habbit ===
+(require 'org)
+(require 'org-install)
+(require 'org-habit)
+(add-to-list 'org-modules "org-habit")
+(setq org-habit-preceding-days 7
+      org-habit-following-days 1
+      org-habit-graph-column 80
+      org-habit-show-habits-only-for-today t
+      org-habit-show-all-today t)
+
+
+;; === org-babel ===
+;; org-babel is a feature inside of org-mode that makes this document possible.
+;; It allows for embedding languages inside of an org-mode document with all the
+;; proper font-locking. It also allows you to extract and execute code. It isn't
+;; aware of Clojure by default, so the following sets that up.
+(require 'ob)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((sh . t)
+   (dot . t)
+   (ruby . t)))
+
+(add-to-list 'org-src-lang-modes (quote ("dot". graphviz-dot)))
+
+(defvar org-babel-default-header-args:clojure
+  '((:results . "silent") (:tangle . "yes")))
+
+(defun org-babel-execute:clojure (body params)
+  (lisp-eval-string body)
+  "Done!")
+
+(provide 'ob-clojure)
+
+(setq org-src-fontify-natively t
+      org-confirm-babel-evaluate nil)
+
+(add-hook 'org-babel-after-execute-hook (lambda ()
+                                          (condition-case nil
+                                              (org-display-inline-images)
+                                            (error nil)))
+          'append)
+
+
+;; ==== org-abbrev ===
+
+(add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
+
+(define-skeleton skel-org-block-elisp
+  "Insert an emacs-lisp block"
+  ""
+  "#+begin_src emacs-lisp\n"
+  _ - \n
+  "#+end_src\n")
+
+(define-abbrev org-mode-abbrev-table "selisp" "" 'skel-org-block-elisp)
+
+(define-skeleton skel-header-block
+  "Creates my default header"
+  ""
+  "#+TITLE: " str "\n"
+  "#+AUTHOR: Aaron Bedra\n"
+  "#+EMAIL: aaron@aaronbedra.com\n"
+  "#+OPTIONS: toc:3 num:nil\n"
+  "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
+
+(define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/ruby.el
+;; -*- mode: lisp; -*-
+
+(setq auto-mode-alist
+      (append
+       '(("\\.rake$"        . ruby-mode)
+         ("\\.gemspec$"     . ruby-mode)
+         ("\\.rb$"          . ruby-mode)
+         ("Rakefile$"       . ruby-mode)
+         ("Gemfile$"        . ruby-mode)
+         ("Capfile$"        . ruby-mode)
+         ("Vagrantfile"     . ruby-mode))
+       auto-mode-alist))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/smart-tabs.el
+;; === Smart Tabs ===
+;; see http://www.emacswiki.org/emacs/SmartTabs
+
+(smart-tabs-insinuate 'c 'javascript 'ruby 'python)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/web.el
+;; -*- mode: lisp; -*-
+;; ===== Web management =====
+
+(add-to-list 'auto-mode-alist '("\\.hbs$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.erb$" . web-mode))
+
+
+;; Webgen (static website generation)
+;; see http://webgen.rubyforge.org/
+;; Webgen mode: http://www.emacswiki.org/emacs/WebgenMode
+;; (require 'webgen-mode nil t)
+;; (add-to-list 'auto-mode-alist '("\\.page$" .     (lambda () (markdown-mode) (webgen-mode))))
+;; (add-to-list 'auto-mode-alist '("\\.template$" . (lambda () (html-mode)     (webgen-mode))))
+;;(add-to-list 'auto-mode-alist '("[Mm]etainfo$" . (lambda () (text-mode)     (webgen-mode))))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/2_modes/yasnippet.el
+;; -*- mode: lisp; -*-
+
+;; === Yasnippet ===
+;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
+;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
+;; Installation notes: see README
+
+;; Classical setup
+;; (require 'yasnippet)
+;; (yas-global-mode 1)
+;; (bind-keys*
+;;  ("C-<return>" . yas-expand)
+;;  ("M-<return>" . yas-expand))
+
+;; Advanced setup with [use-package](https://github.com/jwiegley/use-package)
+(use-package yasnippet
+  :commands (yas-global-mode yas-minor-mode yas-expand)
+  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
+  :init (yas-global-mode 1)
+  :config
+  (progn
+	(setq yas-verbosity 0)
+	;; (setq yas-snippet-dirs (concat emacs-root "snippets"))
+	;; (yas-load-directory yas-snippet-dirs)
+	)
+  :bind (("C-<return>" . yas-expand)
+		 ("M-<return>" . yas-expand)))
+
+
+;;(yas/initialize)
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/1_general_settings/auto-insert.el
 ;; ========================================================
 ;; Auto-insert: automatic insertion of text into new files
 ;; ========================================================
@@ -824,7 +807,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/backup.el
+;; Config file: ~/.emacs.d/config/1_general_settings/backup.el
 ;; === Auto-save and backup files ===
 (setq auto-save-list-file-name nil)     ; no .saves files
 (setq auto-save-default        t)       ; auto saving
@@ -859,7 +842,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/completion.el
+;; Config file: ~/.emacs.d/config/1_general_settings/completion.el
 ;; === Code completion ===
 ;; see http://www.emacswiki.org/emacs/TabCompletion
 
@@ -881,7 +864,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/display.el
+;; Config file: ~/.emacs.d/config/1_general_settings/display.el
 ;;
 ;; setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;;
@@ -1014,7 +997,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/easypg.el
+;; Config file: ~/.emacs.d/config/1_general_settings/easypg.el
 ;; -*- mode: lisp; -*-
 ;; =======================================
 ;; === Auto Encryption (with GPG etc.) ===
@@ -1033,7 +1016,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/filladapt.el
+;; Config file: ~/.emacs.d/config/1_general_settings/filladapt.el
 ;; =============================================
 ;; Activate fill adapt
 ;; see http://www.emacswiki.org/emacs/FillAdapt
@@ -1060,7 +1043,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/global.el
+;; Config file: ~/.emacs.d/config/1_general_settings/global.el
 ;; Global configuration
 
 ;; Add menu bar
@@ -1227,7 +1210,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/hotfix-x-popup.el
+;; Config file: ~/.emacs.d/config/1_general_settings/hotfix-x-popup.el
 ;; -*- mode: lisp; -*-
 ;; Time-stamp: <Mer 2014-09-17 21:52 svarrette>
 ;;
@@ -1248,7 +1231,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/indent.el
+;; Config file: ~/.emacs.d/config/1_general_settings/indent.el
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
 (setq-default tab-width 2)
@@ -1278,7 +1261,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/ispell.el
+;; Config file: ~/.emacs.d/config/1_general_settings/ispell.el
 ;; -*- mode: lisp; -*-
 
 ;; LaTeX-sensitive spell checking
@@ -1315,7 +1298,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/parenthesis.el
+;; Config file: ~/.emacs.d/config/1_general_settings/parenthesis.el
 ;; === Show matching parenthesis ===
 (require 'paren)
 (GNUEmacs
@@ -1346,7 +1329,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/recentf.el
+;; Config file: ~/.emacs.d/config/1_general_settings/recentf.el
 ;; === Recentf mode ===
 ;; see http://www.emacswiki.org/emacs/RecentFiles
 ;; A minor mode that builds a list of recently opened files
@@ -1369,7 +1352,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/saveplace.el
+;; Config file: ~/.emacs.d/config/1_general_settings/saveplace.el
 ;; -*- mode: lisp; -*-
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 ;; (require 'saveplace)
@@ -1382,7 +1365,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/time-stamp.el
+;; Config file: ~/.emacs.d/config/1_general_settings/time-stamp.el
 ;; -*- mode:lisp; -*-
 ;; === Maintain last change time stamps (via Time-stamp: <Dim 2014-09-21 09:21 svarrette>) ===
 ;;(require 'time-stamp)
@@ -1401,11 +1384,358 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/_init/user.el
+;; Config file: ~/.emacs.d/config/1_general_settings/user.el
 ;; User configuration / Identity
 (setq user-full-name    "Sebastien Varrette")
 (setq user-mail-address "<Sebastien.Varrette@uni.lu>")
 (setq user-www          "http://varrette.gforge.uni.lu")
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/buffer-indent.el
+;; === Indentation and buffer cleanup ===
+;; This re-indents, untabifies, and cleans up whitespace. It is stolen directly
+;; from the emacs-starter-kit. 
+
+(defun untabify-buffer ()
+  (interactive)
+  (untabify (point-min) (point-max)))
+
+(defun indent-buffer ()
+  (interactive)
+  (indent-region (point-min) (point-max)))
+
+(defun cleanup-buffer ()
+  "Perform a bunch of operations on the whitespace content of a buffer."
+  (interactive)
+  (indent-buffer)
+  (untabify-buffer)
+  (delete-trailing-whitespace))
+
+(defun cleanup-region (beg end)
+  "Remove tmux artifacts from region."
+  (interactive "r")
+  (dolist (re '("\\\\│\·*\n" "\W*│\·*"))
+    (replace-regexp re "" nil beg end)))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/complete-or-indent.el
+;; complement or indent on TAB=C-i
+(defun th-complete-or-indent (arg)
+  "If preceding character is a word character and the following character is a whitespace or non-word character, then
+  `dabbrev-expand', else indent according to mode."
+  (interactive "*P")
+  (cond ((and
+          (= (char-syntax (preceding-char)) ?w)
+          (looking-at (rx (or word-end (any ".,;:#=?()[]{}")))))
+         (require 'sort)
+         (let ((case-fold-search t))
+           (dabbrev-expand arg)))
+        (t
+         (indent-according-to-mode))))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/ecb-toggle.el
+;; to activate or not ECB 
+(defun ecb-toggle ()
+  "Activate (or desactivate) Emacs Code Browser (ECB)"
+  (interactive)
+  (if ecb-minor-mode
+      (ecb-deactivate)
+    (ecb-activate)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/framegeometry.el
+;; framegeometry.el
+;; use to restore the frame size of last session
+;; Courtesy from http://ck.kennt-wayne.de/2011/jul/emacs-restore-last-frame-size-on-startup
+
+(defun save-framegeometry ()
+  "Gets the current frame's geometry and saves to ~/.emacs.d/.framegeometry."
+  (let (
+        (framegeometry-left (frame-parameter (selected-frame) 'left))
+        (framegeometry-top (frame-parameter (selected-frame) 'top))
+        (framegeometry-width (frame-parameter (selected-frame) 'width))
+        (framegeometry-height (frame-parameter (selected-frame) 'height))
+        (framegeometry-file (expand-file-name "~/.emacs.d/.framegeometry"))
+        )
+
+    (with-temp-buffer
+      (insert
+       ";;; This is the previous emacs frame's geometry.\n"
+       ";;; Last generated " (current-time-string) ".\n"
+       "(setq initial-frame-alist\n"
+       "      '(\n"
+       (format "        (top . %d)\n" (max framegeometry-top 0))
+       (format "        (left . %d)\n" (max framegeometry-left 0))
+       (format "        (width . %d)\n" (max framegeometry-width 0))
+       (format "        (height . %d)))\n" (max framegeometry-height 0)))
+      (when (file-writable-p framegeometry-file)
+        (write-file framegeometry-file))))
+  )
+
+(defun load-framegeometry ()
+  "Loads ~/.emacs.d/.framegeometry which should load the previous frame's geometry."
+  (let ((framegeometry-file (expand-file-name "~/.emacs.d/.framegeometry")))
+    (when (file-readable-p framegeometry-file)
+      (load-file framegeometry-file)))
+  )
+
+;; Special work to do ONLY when there is a window system being used
+(if window-system
+    (progn
+      (add-hook 'after-init-hook 'load-framegeometry)
+      (add-hook 'kill-emacs-hook 'save-framegeometry))
+  )
+
+;; eof
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/ido-imenu.el
+;; === Buffer-related ===
+
+(defun ido-imenu ()
+  "Update the imenu index and then use ido to select a symbol to navigate to.
+Symbols matching the text at point are put first in the completion list."
+  (interactive)
+  (imenu--make-index-alist)
+  (let ((name-and-pos '())
+        (symbol-names '()))
+    (cl-flet ((addsymbols (symbol-list)
+                       (when (listp symbol-list)
+                         (dolist (symbol symbol-list)
+                           (let ((name nil) (position nil))
+                             (cond
+                              ((and (listp symbol) (imenu--subalist-p symbol))
+                               (addsymbols symbol))
+
+                              ((listp symbol)
+                               (setq name (car symbol))
+                               (setq position (cdr symbol)))
+
+                              ((stringp symbol)
+                               (setq name symbol)
+                               (setq position (get-text-property 1 'org-imenu-marker symbol))))
+
+                             (unless (or (null position) (null name))
+                               (add-to-list 'symbol-names name)
+                               (add-to-list 'name-and-pos (cons name position))))))))
+      (addsymbols imenu--index-alist))
+    ;; If there are matching symbols at point, put them at the beginning of `symbol-names'.
+    (let ((symbol-at-point (thing-at-point 'symbol)))
+      (when symbol-at-point
+        (let* ((regexp (concat (regexp-quote symbol-at-point) "$"))
+               (matching-symbols (delq nil (mapcar (lambda (symbol)
+                                                     (if (string-match regexp symbol) symbol))
+                                                   symbol-names))))
+          (when matching-symbols
+            (sort matching-symbols (lambda (a b) (> (length a) (length b))))
+            (mapc (lambda (symbol) (setq symbol-names (cons symbol (delete symbol symbol-names))))
+                  matching-symbols)))))
+    (let* ((selected-symbol (ido-completing-read "Symbol? " symbol-names))
+           (position (cdr (assoc selected-symbol name-and-pos))))
+      (goto-char position))))
+
+(defun recentf-ido-find-file ()
+  "Find a recent file using ido."
+  (interactive)
+  (let ((file (ido-completing-read "Choose recent file: " recentf-list nil t)))
+    (when file
+      (find-file file))))
+
+(defun sudo-edit (&optional arg)
+  "Edit a file as root using sudo"
+  (interactive "p")
+  (if (or arg (not buffer-file-name))
+      (find-file (concat "/sudo:root@localhost:" (ido-read-file-name "File: ")))
+    (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/indent.el
+;; === Indentation of the full buffer ===
+;; Courtesy from http://emacsblog.org/2007/01/17/indent-whole-buffer/
+(defun indent-buffer ()
+  "indent whole buffer"
+  (interactive)
+  (save-excursion
+    (delete-trailing-whitespace)
+    (indent-region (point-min) (point-max) nil)
+    (untabify (point-min) (point-max))))
+
+;; === Yank (copy) and indent the copied region
+;; see http://www.emacswiki.org/emacs/AutoIndentation
+(defun yank-and-indent ()
+  "Yank and then indent the newly formed region according to mode."
+  (interactive)
+  (yank)
+  (call-interactively 'indent-region))
+
+;; === unindent ===
+(defun unindent-region ()
+  (interactive)
+  (save-excursion
+	(if (< (point) (mark)) (exchange-point-and-mark))
+	(let ((save-mark (mark)))
+	  (if (= (point) (line-beginning-position)) (previous-line 1))
+	  (goto-char (line-beginning-position))
+	  (while (>= (point) save-mark)
+		(goto-char (line-beginning-position))
+		(if (= (string-to-char "\t") (char-after (point))) (delete-char 1))
+		(previous-line 1)))))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/load-file-if-exists.el
+(defun load-file-if-exists (file)
+  "Load the lisp file FILE only if the file exists"
+  (if (file-exists-p file) (load-file file)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/neotree.el
+;; ----------------------------------------------------------------------
+;; File: neotree.el - 
+;; Time-stamp: <Mer 2014-09-17 21:59 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;;
+;; ----------------------------------------------------------------------
+
+;; see http://www.emacswiki.org/emacs/NeoTree
+
+
+(defun neotree-project-dir ()
+    "Open NeoTree using the git root."
+    (interactive)
+    (let ((project-dir (ffip-project-root))
+          (file-name   (buffer-file-name)))
+      (if project-dir
+          (progn
+            (neotree-dir project-dir)
+            (neotree-find file-name))
+        (message "Could not find git project root."))))
+
+
+
+;; ----------------------------------------------------------------------
+;; eof
+;;
+;; Local Variables:
+;; mode: lisp
+;; End:
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/ruby.el
+;; -*- mode: lisp; -*-
+;; https://github.com/magnars/.emacs.d/blob/master/setup-ruby-mode.el
+
+(defun ruby--jump-to-test ()
+  (find-file
+   (replace-regexp-in-string
+    "/lib/" "/test/"
+    (replace-regexp-in-string
+     "/\\([^/]+\\).rb$" "/test_\\1.rb"
+     (buffer-file-name)))))
+
+(defun ruby--jump-to-lib ()
+  (find-file
+   (replace-regexp-in-string
+    "/test/" "/lib/"
+    (replace-regexp-in-string
+     "/test_\\([^/]+\\).rb$" "/\\1.rb"
+     (buffer-file-name)))))
+
+(defun ruby-jump-to-other ()
+  (interactive)
+  (if (string-match-p "/test/" (buffer-file-name))
+      (ruby--jump-to-lib)
+    (ruby--jump-to-test)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/try-require.el
+;; === attempt to load a feature/library, failing silently ===
+(defun try-require (feature)
+  "Attempt to load a library or module. Return true if the
+library given as argument is successfully loaded. If not, instead
+of an error, just add the package to a list of missing packages."
+  (condition-case err
+      ;; protected form
+      (progn
+        (message "Checking for library `%s'..." feature)
+        (if (stringp feature)
+            (load-library feature)
+          (require feature))
+        (message "Checking for library `%s'... Found" feature))
+    ;; error handler
+    (file-error  ; condition
+     (progn
+       (message "Checking for library `%s'... Missing" feature)
+       (add-to-list 'missing-packages-list feature))
+     nil)))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/0_defuns/word-count.el
+;; === Word count ===
+                                        ;(defun word-count nil 
+                                        ;  "Count words in buffer" 
+                                        ;  (interactive)
+                                        ;  (shell-command-on-region (point-min) (point-max) "wc -w"))
+
+;; Courtesy of Evan Sultanik (http://www.sultanik.com/Word_count_in_Emacs)
+;; quote: "I wrote a relatively simple (and equally lazy) Emacs Lisp function to
+;;         calculate word length. It even strips LaTeX files of their commands!"
+(defun word-count (&optional filename)
+  "Returns the word count of the current buffer.  If `filename' is not nil, returns the word count of that file."
+  (interactive)
+  (save-some-buffers) ;; Make sure the current buffer is saved
+  (let ((tempfile nil))
+    (if (null filename)
+        (progn
+          (let ((buffer-file (buffer-file-name))
+                (lcase-file (downcase (buffer-file-name))))
+            (if (and (>= (length lcase-file) 4) (string= (substring lcase-file -4 nil) ".tex"))
+                ;; This is a LaTeX document, so DeTeX it!
+                (progn
+                  (setq filename (make-temp-file "wordcount"))
+                  (shell-command-to-string (concat "detex < " buffer-file " > " filename))
+                  (setq tempfile t))
+              (setq filename buffer-file)))))
+    (let ((result (car (split-string (shell-command-to-string (concat "wc -w " filename)) " "))))
+      (if tempfile
+          (delete-file filename))
+      (message (concat "Word Count: " result))
+      )))
+
+;; === find a word definition === 
+(defun word-definition-lookup ()
+  "Look up the word under cursor in a browser."
+  (interactive)
+  (browse-url
+   (concat "http://www.answers.com/main/ntquery?s="
+           (thing-at-point 'word))))
+
 ;; ############################################################################
 
 
