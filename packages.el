@@ -34,7 +34,7 @@
 ;;
 (defvar falkor/packages '(alert
                           apache-mode
-						  auctex
+                          auctex
                           auto-complete
                           autopair
                           better-defaults
@@ -115,6 +115,8 @@
 (setq el-get-dir (concat packages-dir "el-get/"))
 (setq el-get-status-file   (concat el-get-dir ".status.el"))
 (setq el-get-autoload-file (concat el-get-dir ".loaddefs.el"))
+
+
 
 (require 'el-get)
 

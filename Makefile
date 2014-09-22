@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Dim 2014-09-21 09:28 svarrette>
+# Time-stamp: <Lun 2014-09-22 17:35 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -60,13 +60,14 @@ NO_COLOR     =\033[0m
 
 ### Emacs stuff
 EMACS	         = emacs
-DIRS	         = site-lisp defuns
-SPECIAL_SOURCES  = config.el init.el
+DIRS	         = site-lisp
+SPECIAL_SOURCES  = config.el init.el 
 CONFIG_SOURCES   = $(shell find config   -name '*.el')
 SNIPPETS_SOURCES = $(shell find snippets -name '*.el')
 SNIPPETS_TARGET  = $(patsubst %.el,%.elc, $(SNIPPETS_SOURCES))
 LIB_SOURCES      = $(foreach dir,$(DIRS),$(wildcard $(dir)/*.el)) $(SNIPPETS_SOURCES)
-INIT_SOURCES     = config.el $(wildcard *.el) $(LIB_SOURCES) 
+LIB_TARGET       = $(patsubst %.el,%.elc, $(LIB_SOURCES))
+INIT_SOURCES     = $(filter-out $(SPECIAL_SOURCES) custom.el,$(wildcard *.el)) $(LIB_SOURCES) 
 TARGET	         = $(patsubst %.el,%.elc, $(INIT_SOURCES)) 
 
 EMACS_BATCH  = $(EMACS) -Q -batch
@@ -80,28 +81,29 @@ BATCH_LOAD   = $(EMACS_BATCH) $(MY_LOADPATH)
 # Required rule : what's to be done each time
 all: $(TARGET)
 
-dirs:
-	@for dir in $(DIRS); do \
-		echo -e "$(COLOR_GREEN)==> Byte compiling the directory '$$dir/'$(NO_COLOR)"; \
-	    $(EMACS_BATCH) -f batch-byte-compile $$dir/*.el; \
-	done
+dirs: $(LIB_TARGET)
+
+# @for dir in $(DIRS); do \
+# 	echo -e "$(COLOR_GREEN)==> Byte compiling the directory '$$dir/'$(NO_COLOR)"; \
+#     $(EMACS_BATCH) -f batch-byte-compile $$dir/*.el; \
+# done
 
 snippets: $(SNIPPETS_TARGET)
 
 init.elc: $(INIT_SOURCE)
+	$(BATCH_LOAD) -f batch-byte-compile init.el
 
-
-config.elc: $(CONFIG_SOURCES)
+cfg config config.elc: $(CONFIG_SOURCES)
 	@echo -e "$(COLOR_GREEN)==> Generating centralised config.el[c] file from config/ directory$(NO_COLOR)"
 	$(BATCH_LOAD) --eval "(emc-merge-config-files)"
 	git commit -s -m "Update centralized config" config.el
 
 %.elc: %.el
 	@echo -e "$(COLOR_GREEN)==> Byte compiling '$<' to generate $@$(NO_COLOR)"
-	$(EMACS_BATCH)  -l ~/.emacs -f batch-byte-compile $<
+	$(BATCH_LOAD) -f batch-byte-compile $<
 
 eval_boottime:
-	@echo -e "$(COLOR_GREEN)==> Evaluate Minimal starting time of raw Emacs$(NO_COLOR)$(COLOR_RED) ... i.e. WITHOUT loading .emacs)$(NO_COLOR)"
+	@echo -e "$(COLOR_GREEN)==> Minimal starting time of raw Emacs$(NO_COLOR)$(COLOR_RED) ... i.e. WITHOUT loading .emacs)$(NO_COLOR)"
 	$(EMACS_BATCH) --quick --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
 	@echo -e "$(COLOR_GREEN)==> Evaluate starting time of Emacs$(NO_COLOR)"
 	$(BATCH_LOAD) --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
@@ -109,11 +111,10 @@ eval_boottime:
 # Clean option
  clean:
 	rm -f *.elc
+	rm -rf backups auto-save-list 
 
 clobber: clean
 	rm -f $(TARGET)
-
-
 
 # Test values of variables - for debug purposes 
 test:

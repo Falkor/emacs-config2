@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Lun 2014-09-22 15:16 svarrette>
+;; Time-stamp: <Lun 2014-09-22 17:37 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -69,14 +69,6 @@
 
 ;; ============================ Let's go! ============================
 ;; Turn off mouse interface early in startup to avoid momentary display
-;;(if (fboundp 'menu-bar-mode) 
-;;    ((message "Turn on menu bar")
-;;     (menu-bar-mode    1)))
-;;(if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
-;;(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
-(setq menu-bar-mode    t)
-(setq scroll-bar-mode -1)
-(setq tool-bar-mode   -1)
 
 
 
@@ -94,7 +86,6 @@
 (setq config-dir     (get-conf-path "config/"))
 ;;(setq defuns-dir     (get-conf-path "defuns"))
 (setq packages-dir   (get-conf-path "packages/"))
-(setq custom-file    (get-conf-path "custom.el"))
 (setq custom-dir     (get-conf-path "rc.custom/"))
 
 ;; Helper function to access custom files
@@ -111,78 +102,33 @@
 ;; Now load environement 
 (load (get-conf-path "env"))
 
+
 ;; Now load/setup packages
 (load (get-conf-path "packages"))
 
 
-(require 'load-dir)
+;;(require 'load-dir)
 ;; Load Lisp defined functions
 ;;(load-dir-one defuns-dir)
 
 
-;; === Special Mac OS X configuration (Carbon emacs and aquamacs)
-;; Enhanced Carbon EMacs (ECE) plugin
-;; see http://www.inf.unibz.it/~franconi/mac-emacs/
-;; (CarbonEmacs
-;;  (unless   (or (boundp 'enhanced-carbon-emacs) (boundp 'aquamacs-version))
-;;    (defun load-local-site-start (site-lisp-directory)
-;;      "Load site-start.el from a given site-lisp directory"
-;;      (let ((current-default-directory default-directory))
-;;        (setq default-directory site-lisp-directory)
-;;        (normal-top-level-add-subdirs-to-load-path)
-;;        (setq default-directory current-default-directory)
-;;        (setq load-path (cons site-lisp-directory load-path))
-;;        (load (concat site-lisp-directory "/site-start.el"))
-;;        ))
-;;    (load-local-site-start "/Library/Application Support/emacs/ec-emacs/site-lisp")))
 
 
 
-
-;; ;; ======= Enhance initialization speed =======
-;; ;; Some features are not loaded by default to minimize initialization time, so
-;; ;; they have to be required (or loaded, if you will). require-calls tends to
-;; ;; lead to the largest bottleneck's in a configuration. idle-require delays the
-;; ;; require-calls to a time where Emacs is in idle. So this is great for stuff
-;; ;; you eventually want to load, but is not a high priority.
-
-;; (require 'idle-require)             ; Need in order to use idle-require
-;; (dolist (feature
-;;          '(alert
-;;            apache-mode
-;;            auto-compile             ; auto-compile .el files
-;;            deft
-;;            erlang
-;;            gist
-;;            go-mode
-;;            gnuplot
-;;            haml-mode
-;;            jabber
-;;            recentf                  ; recently opened files
-;;            restclient
-;;            smex                     ; M-x interface Ido-style.
-;;            tex-mode
-;;            webgen-mode))               ; TeX, LaTeX, and SliTeX mode commands
-;;   (idle-require feature))
-
-;; (setq idle-require-idle-delay 5)
-;; (idle-require-mode 1)
 
 ;; Load use-package early enough
-(require 'use-package)
+;;(require 'use-package)
 ;;(require 'cl-lib)
-(setq use-package-verbose nil)
+;;(setq use-package-verbose nil)
 
 
 ;; === Emacs Modular Configuration entry point ===
 ;; See https://github.com/targzeta/emacs-modular-configuration
 (require 'emacs-modular-configuration)
 
-
-
-;;(load (concat emacs-root "config"))
+(load (concat emacs-root "config"))
 
 ;; ===== Custom settings ====
 ;; Overwrite with the custom settings
-(load-dir-one custom-dir)
-(load custom-file 'noerror)
+;;(load-dir-one custom-dir)
+(load (get-conf-path "custom.el") 'noerror)
