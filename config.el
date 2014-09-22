@@ -6,709 +6,6 @@
 ;; then run within emacs 'M-x emc-merge-config-files'
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/aquamacs.el
-;; -*- mode: lisp; -*-
-;; =================================================================
-;; Aquamacs specific 
-;; =================================================================
-;; see http://www.emacswiki.org/emacs/AquamacsEmacsCompatibilitySettings
-(Aquamacs
- (aquamacs-autoface-mode -1)  ; no mode-specific faces, everything in Monaco
- ;; do not load persistent scratch buffer
- (setq aquamacs-scratch-file nil)
- ;; do not make initial frame visible
- (setq show-scratch-buffer-on-startup nil)
-)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/auto-insert.el
-;; ========================================================
-;; Auto-insert: automatic insertion of text into new files
-;; ========================================================
-
-;;(require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
-;; (autoload 'auto-insert-tkld
-;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
-(use-package auto-insert-tkld
-  :init
-  (progn
-	(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
-	(setq auto-insert-automatically t)
-	)
-  )
-;; doc:  ~/.emacs.d/site-lisp/auto-insert-tkld.pdf
-
-;; trick to abstract the personal web page
-;;(setq auto-insert-organisation  user-www)
-
-;; associate file extention to a template name
-(setq auto-insert-alist
-      '(
-        ("\\.tex$"         . "LaTeX")            ; TeX or LaTeX
-        ("\\.bib$"         . "BibTeX")           ; BibTeX
-        ("\\.sty$"         . "LaTeX Style")      ; LaTeX Style
-        ("\\.el$"          . "Emacs Lisp")       ; Emacs Lisp
-        ("\\.java$"        . "Java")             ; Java
-        ("\\App.java$"     . "JavaSwing")        ; Java Swing app
-        ("[Tt]ools.h"      . "Tools C++")        ; Useful functions in C/C++
-        ("\\Logs.cpp"      . "Logs C++")         ; Macros for logs/debugging
-        ("\\Logs.h[+p]*"   . "Logs C++ Include") ; " header file
-        ("\\.c$"           . "C")                ; C
-        ("\\.h$"           . "C Include")        ; C header file
-        ("\\.cxx$"         . "C++")              ; C++
-        ("\\.c\\+\\+$"     . "C++")              ;
-        ("\\.cpp$"         . "C++")              ;
-        ("\\.cc$"          . "C++")              ;
-        ("\\.C$"           . "C++")              ;
-        ("[Mm]akefile$"    . "Makefile")         ; Makefile
-        ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
-        ("\\.md$"          . "Text")             ; Text
-        ("\\.txt$"         . "Text")             ; Text
-        ("\\.gpg$"         . "GPG")              ; GPG 
-        ("[Rr]eadme$"      . "Readme")           ; Readme
-        ("README$"         . "Readme")           ;
-        ("\\.sh$"          . "Shell")            ; Shell
-        ("\\.csh$"         . "Shell")            ;
-        ("\\.tcsh$"        . "Shell")            ;
-        ("\\.html"         . "Html")             ; HTML
-        ("\\.wml"          . "WML")              ; WML (Website Meta Language)
-        ("\\.php"          . "PHP")              ; PHP
-        ("\\.gnuplot"      . "Gnuplot")          ; Gnuplot
-        ("\\.pl$"          . "Perl")             ; Perl
-        ("\\.pm$"          . "Perl Module")      ; PerlModule
-        ("\\.t$"           . "Perl Test")        ; Perl Test script
-        ("\\.pp$"          . "Puppet")           ; Puppet manifest
-        ("\\.rb$"          . "Ruby")             ; Ruby
-        ("\\.R$"           . "R")                ; R
-        ("\\.admission_rule[s]?$" . "OAR")              ; OAR admission rule
-        (""                . "Shell") ; Shell (by default: assume a shell template)
-        ))
-;; now associate a template name to a template file
-(setq auto-insert-type-alist
-      '(
-        ("LaTeX"       . "insert.tex")
-        ("BibTeX"      . "insert.bib")
-        ("LaTeX Style" . "insert.sty")
-        ("Emacs Lisp"  . "insert.el")
-        ("Java"        . "insert.java")
-        ("JavaSwing"   . "insertApp.java")
-        ("C"           . "insert.c")
-        ("C Include"   . "insert.h")
-        ("C++"         . "insert.cpp")
-        ("Tools C++"   . "insert.tools_cpp.h")
-        ("Logs C++"    . "insert.logs.cpp")
-        ("Logs C++ Include" . "insert.logs.h")
-        ("Makefile"    . "insert.makefile")
-        ("Makefile.am" . "insert.makefile.am")
-        ("Text"        . "insert.md")
-        ("GPG"         . "insert.gpg")
-        ("Readme"      . "insert.readme")
-        ("Shell"       . "insert.shell")
-        ("Html"        . "insert.html")
-        ("WML"         . "insert.wml")
-        ("PHP"         . "insert.php")
-        ("Gnuplot"     . "insert.gnuplot")
-        ("Perl"        . "insert.pl")
-        ("Perl Module" . "insert.pm")
-        ("Perl Test"   . "insert.t")
-        ("Puppet"      . "insert.pp")
-        ("Ruby"        . "insert.rb")
-        ("R"           . "insert.R")
-        ("OAR"         . "insert.oar")
-        ))
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/backup.el
-;; === Auto-save and backup files ===
-(setq auto-save-list-file-name nil)     ; no .saves files
-(setq auto-save-default        t)       ; auto saving
-(setq make-backup-files        t)       ; make  backup files
-;; see http://www.emacswiki.org/emacs/BackupDirectory
-
-(setq  backup-directory (concat emacs-root ".backup/"))
-;; Set backup directory
-;; store all backup and autosave files there
-(setq backup-directory-alist
-      `((".*" . ,backup-directory)))
-(setq auto-save-file-name-transforms
-      `((".*" , backup-directory t)))
-
-;; ;; Set backup directory in /tmp
-;; ;; store all backup and autosave files in the /tmp dir
-;; (setq backup-directory-alist
-;;       `((".*" . ,temporary-file-directory)))
-;; (setq auto-save-file-name-transforms
-;;       `((".*" ,temporary-file-directory t)))
-
-(setq
- backup-by-copying t                    ; don't clobber symlinks
- ;; backup-directory-alist
- ;; '(("." . "~/.saves"))                  ; don't litter my fs tree
- delete-old-versions t                  ; delete excess backup versions
-                                        ; silently
- kept-new-versions 6
- kept-old-versions 2
- version-control t)                     ; make numeric backup versions
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/completion.el
-;; === Code completion ===
-;; see http://www.emacswiki.org/emacs/TabCompletion
-
-
-;;(require 'smart-tab)
-(use-package smart-tab
-  :init
-  (progn
-	(global-smart-tab-mode t)))
-
-
-;; Disable indent "smart" alignement to insert real tabs
-(defun indent-with-real-tab-hook ()
-  (setq indent-line-function 'insert-tab)
-  )
-;;(add-hook 'text-mode-hook   'indent-with-real-tab-hook)
-(add-hook 'conf-mode-hook   'indent-with-real-tab-hook)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/display.el
-;;
-;; setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
-;;
-
-
-;; === defaults ===
-(setq truncate-partial-width-windows nil)
-(setq line-number-mode    t)
-(setq column-number-mode  t)
-
-;; === F... the beep ===
-(setq visible-bell        t)
-
-;; === Default size of the frame ===
-(set-frame-width (selected-frame) 145)
-(set-frame-height (selected-frame) 60)
-
-;; === remove the few annoyance of default emacs ===
-;; Use "y or n" answers instead of full words "yes or no"
-(fset 'yes-or-no-p 'y-or-n-p)
-
-;; kill and move region directly
-(delete-selection-mode t)
-;; (pc-selection-mode)
-
-;; === display current time in the status bar ===
-;; (setq display-time-day-and-date t
-;;       display-time-24hr-format t)
-(setq display-time-string-forms
-      '(24-hours ":" minutes " " seconds))
-(display-time-mode 1)
-
-;;
-;; === Specify the frame title ===
-;; see http://www.emacswiki.org/emacs/FrameTitle
-;; recognize the same special characters as mode-line-format variable, mainly:
-;;    %b -- print buffer name.      %f -- print visited file name.
-;;    %F -- print frame name.
-;;    %* -- print %, * or hyphen.   %+ -- print *, % or hyphen.
-;;          %& is like %*, but ignore read-only-ness.
-;;          % means buffer is read-only and * means it is modified.
-;;          For a modified read-only buffer, %* gives % and %+ gives *.
-;;    %m -- print the mode name.
-;;    %z -- print mnemonics of buffer, terminal, and keyboard coding systems.
-;;    %Z -- like %z, but including the end-of-line format.
-;;    %[ -- print one [ for each recursive editing level.  %] similar.
-;;    %% -- print %.   %- -- print infinitely many dashes.
-;;  Decimal digits after the % specify field width to which to pad.
-(setq frame-title-format '(buffer-file-name "emacs: %b (%f)" "emacs: %b"))
-
-;; =================================================================
-;; Font selection (to use a mono-spaced (non-proportional) font)
-;; =================================================================
-;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
-(add-to-list 'default-frame-alist '(font . "Monaco-12"))
-
-;; =================================================================
-;; Powerline Status Bar
-;; =================================================================
-;; See https://github.com/milkypostman/powerline
-;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
-(use-package powerline)
-(powerline-center-theme)
-;; shape...
-;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
-;; (setq powerline-color1 "DarkGrey")
-;; (setq powerline-color2 "honeydew1")
-;; (custom-set-faces
-;;  '(powerline-active1 '((t (:background "DarkGrey"  :inherit mode-line))))
-;;  '(powerline-active2 '((t (:background "honeydew1" :inherit mode-line)))))
-
-;; (custom-theme-set-faces
-;;  'color-theme-vim-insert-mode
-;;  `(powerline-active1 ((t (:background "DarkGrey"    :inherit mode-line))))
-;;  `(powerline-active2 ((t (:background "honeydew1"   :inherit mode-line))))
-;;  `(powerline-inactive1 ((t (:background "gray71"    :inherit mode-line-inactive))))
-;;  `(powerline-inactive2 ((t (:background "honeydew3" :inherit mode-line-inactive)))))
-
-;; (setq powerline-color1 "grey22")
-;; (setq powerline-color2 "grey40")
-;; (custom-set-faces
-;;  '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
-;;  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
-
-;; (when (and (buffer-file-name (current-buffer)) vc-mode)
-;;     (if (vc-workfile-unchanged-p (buffer-file-name (current-buffer)))
-;;       (powerline-vc 'powerline-insert-face 'r)
-;;       (powerline-vc 'powerline-normal-face 'r)))
-
-
-
-;; =================================================================
-;; Emacs Color Theme
-;; see http://www.emacswiki.org/emacs/ColorTheme
-;; see http://code.google.com/p/gnuemacscolorthemetest/ For direct
-;; screenshots
-;; =================================================================
-;; WITH color theme
-(use-package color-theme
-  :init
-  (progn
-	(color-theme-initialize)
-	(setq color-theme-is-global t)
-	(color-theme-vim-colors)))
-
-
-
-;; To better see the cursor
-(setq default-frame-alist
-      '((cursor-color . "green")
-        (cursor-type . box)))
-(set-default 'cursor-type 'box)
-
-;; === See the end of the file ===
-(setq-default indicate-empty-lines t)
-(when (not indicate-empty-lines)
-  (toggle-indicate-empty-lines))
-
-;; See also trailing whitespace
-(setq-default show-trailing-whitespace t)
-
-;; === Auto fit the size of the frame to the buffer content ===
-;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
-;; run 'M-x fit-frame' for that
-;;(require 'fit-frame)
-;;(add-hook 'after-make-frame-functions 'fit-frame)
-
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/easypg.el
-;; -*- mode: lisp; -*-
-;; =======================================
-;; === Auto Encryption (with GPG etc.) ===
-;; =======================================
-;; See http://www.emacswiki.org/emacs/EasyPG
-;;(if (equal emacs-major-version 23)
-;;  (require 'epa-setup))
-
-;;(require 'epa-file)
-(use-package epa-file
-  :init
-  (progn
-	(epa-file-enable)))
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/filladapt.el
-;; =============================================
-;; Activate fill adapt
-;; see http://www.emacswiki.org/emacs/FillAdapt
-;; =============================================
-
-;;(require 'filladapt)
-(use-package filladapt
-  :init
-  (progn
-    (setq-default filladapt-mode nil)
-    (cond ((equal mode-name "Change Log")
-           t)
-          (t
-           (turn-on-filladapt-mode)))))
-
-
-;; turn on filladapt mode everywhere but in ChangeLog files
-
-;; (add-hook 'c-mode-common-hook
-;;    (lambda ()
-;;      (when (featurep 'filladapt)
-;;        (c-setup-filladapt))))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/global.el
-;; Global configuration
-
-;; Add menu bar
-(menu-bar-mode   t)
-
-(setq search-highlight         t)       ; highlight search object
-(setq query-replace-highlight  t)       ; highlight query object
-(setq byte-compile-verbose     t)
-(setq initial-major-mode 'text-mode)    ; to avoid autoloads for lisp mode
-(setq require-final-newline t)          ; ensure a file ends in a newline when it
-
-;; Increase the lisp interpretor depth 
-;;(setq max-lisp-eval-depth 10000)
-
-
-;; Correct copy-paste to clipboard
-(setq x-select-enable-clipboard t)
-;; after mouse selection in X11, you can paste by `yank' in emacs
-;;(Setq x-select-enable-primary t)
-(setq mouse-drag-copy-region  t)
-
-;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
-;;(require 'better-defaults)
-(use-package better-defaults)
-
-;; Finding Files (and URLs) At Point (FFAP)
-;; see http://www.gnu.org/software/emacs/manual/html_node/emacs/FFAP.html
-;;(require 'ffap)
-(use-package ffap)
-
-
-;; Unique buffer names dependent on file name
-;;(require 'uniquify)
-(use-package uniquify)
-
-;; style used for uniquifying buffer names with parts of directory name
-(setq uniquify-buffer-name-style 'forward)
-
-;;(require 'ansi-color)
-(use-package ansi-color)
-
-;; === Sane defaults configurations ===
-
-;; Allow pasting selection outside of Emacs
-(setq x-select-enable-clipboard t)
-
-;; Auto refresh buffers
-(global-auto-revert-mode 1)
-
-;; Also auto refresh dired, but be quiet about it
-(setq global-auto-revert-non-file-buffers t)
-(setq auto-revert-verbose nil)
-
-;; Show keystrokes in progress
-(setq echo-keystrokes 0.1)
-
-;; Move files to trash when deleting
-(setq delete-by-moving-to-trash t)
-
-;; Transparently open compressed files
-(auto-compression-mode t)
-
-
-;; Answering just 'y' or 'n' will do
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; UTF-8 please
-(setq locale-coding-system 'utf-8) ; pretty
-(set-terminal-coding-system 'utf-8) ; pretty
-(set-keyboard-coding-system 'utf-8) ; pretty
-(set-selection-coding-system 'utf-8) ; please
-(prefer-coding-system 'utf-8) ; with sugar on top
-
-;; Show active region
-(transient-mark-mode 1)
-(make-variable-buffer-local 'transient-mark-mode)
-(put 'transient-mark-mode 'permanent-local t)
-(setq-default transient-mark-mode t)
-
-;; Remove text in active region if inserting text
-(delete-selection-mode 1)
-
-;; Don't highlight matches with jump-char - it's distracting
-(setq jump-char-lazy-highlight-face nil)
-
-;; === Auto-fill configuration ===
-;; automatic wrapping of lines and insertion of newlines when the cursor
-;; goes over the column limit.
-(setq-default fill-column 80)
-(setq auto-fill-mode t)                 ; activate by default
-
-;; Save minibuffer history
-(savehist-mode 1)
-(setq history-length 1000)
-
-;; Undo/redo window configuration with C-c <left>/<right>
-(winner-mode 1)
-
-;; Never insert tabs
-(set-default 'indent-tabs-mode nil)
-
-;; Show me empty lines after buffer end
-(set-default 'indicate-empty-lines t)
-
-;; Easily navigate sillycased words
-(global-subword-mode 1)
-
-;; Don't break lines for me, please
-(setq-default truncate-lines t)
-
-;; Keep cursor away from edges when scrolling up/down
-;;(require 'smooth-scrolling)
-
-;; Allow recursive minibuffers
-(setq enable-recursive-minibuffers t)
-
-;; Don't be so stingy on the memory, we have lots now. It's the distant future.
-(setq gc-cons-threshold 20000000)
-
-;; org-mode: Don't ruin S-arrow to switch windows please (use M-+ and M-- instead to toggle)
-(setq org-replace-disputed-keys t)
-
-;; Fontify org-mode code blocks
-(setq org-src-fontify-natively t)
-
-;; Represent undo-history as an actual tree (visualize with C-x u)
-;; (setq undo-tree-mode-lighter "")
-;; (require 'undo-tree)
-;; (global-undo-tree-mode)
-
-;; Sentences do not need double spaces to end. Period.
-(set-default 'sentence-end-double-space nil)
-
-;; A saner ediff
-(setq ediff-diff-options "-w")
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
-;; Nic says eval-expression-print-level needs to be set to nil (turned off) so
-;; that you can always see what's happening.
-(setq eval-expression-print-level nil)
-
-;; When popping the mark, continue popping until the cursor actually moves
-;; Also, if the last command was a copy - skip past all the expand-region cruft.
-(defadvice pop-to-mark-command (around ensure-new-position activate)
-  (let ((p (point)))
-    (when (eq last-command 'save-region-or-current-line)
-      ad-do-it
-      ad-do-it
-      ad-do-it)
-    (dotimes (i 10)
-      (when (= p (point)) ad-do-it))))
-
-;; Turn on auto completion
-;; See http://www.emacswiki.org/emacs/AutoComplete
-;;(require 'auto-complete-config)
-(use-package auto-complete-config
-  :init
-  (progn
-	(ac-config-default)))
-
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/hotfix-x-popup.el
-;; -*- mode: lisp; -*-
-;; Time-stamp: <Mer 2014-09-17 21:52 svarrette>
-;;
-;; hotfix-x-popup.el - Hotfix on emacs popup dialogs on Mac OS X that freeze
-;; see http://superuser.com/questions/125569/how-to-fix-emacs-popup-dialogs-on-mac-os-x
-;; ----------------------------------------------------------------------
-
-(when is-mac
-  (defadvice yes-or-no-p (around prevent-dialog activate)
-    "Prevent yes-or-no-p from activating a dialog"
-    (let ((use-dialog-box nil))
-      ad-do-it))
-  (defadvice y-or-n-p (around prevent-dialog-yorn activate)
-    "Prevent y-or-n-p from activating a dialog"
-    (let ((use-dialog-box nil))
-      ad-do-it)))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/indent.el
-;; === Indenting configuration ===
-;; see http://www.emacswiki.org/emacs/IndentationBasics
-(setq-default tab-width 2)
-
-(defvaralias 'c-basic-offset 	 'tab-width)
-(defvaralias 'cperl-indent-level 'tab-width)
-
-;; === Show whitespaces/tabs etc. ===
-(setq x-stretch-cursor t)
-
-;; === Get ride of tabs most of the time ===
-(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
-
-(setq-default c-basic-offset 4
-              tab-width 4
-              indent-tabs-mode t)
-
-
-;; (setq c-brace-offset -2)
-;;(setq c-auto-newline t)
-;; (add-hook 'c-mode-common-hook (lambda () (setq c-basic-offset 4)))
-;; (add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
-;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
-;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
-;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/ispell.el
-;; -*- mode: lisp; -*-
-
-;; LaTeX-sensitive spell checking
-(setq ispell-enable-tex-parser t)
-
-;; defautl dictionnary
-(setq ispell-local-dictionary "en")
-
-;; save the personal dictionary without confirmation
-(setq ispell-silently-savep t)
-
-;; enable the likeness criteria
-;;(setq flyspell-sort-corrections nil)
-
-;; dash character (`-') is considered as a word delimiter
-;;(setq flyspell-consider-dash-as-word-delimiter-flag t)
-
-;; Add flyspell to the following major modes
-(dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
-  (add-hook hook (lambda ()
-                   (turn-on-auto-fill)
-                   (flyspell-mode t))))
-
-;; disable flyspell in change log and log-edit mode that derives from text-mode
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode nil))))
-
-;; flyspell comments and strings in programming modes
-;; (preventing it from finding mistakes in the code)
-(dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
-                                   sh-mode-hook))
-  (add-hook hook 'flyspell-prog-mode))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/parenthesis.el
-;; === Show matching parenthesis ===
-(require 'paren)
-(GNUEmacs
- (show-paren-mode t)
- (setq show-paren-ring-bell-on-mismatch t))
-(XEmacs
- (paren-set-mode 'paren))
-
-(setq show-paren-style 'expression)
-(set-face-background 'show-paren-match-face "turquoise")
-;; (set-face-attribute 'show-paren-match-face nil 
-;;                     :weight 'bold :underline nil :overline nil :slant 'normal)
-(set-face-foreground 'show-paren-mismatch-face "red") 
-(set-face-attribute 'show-paren-mismatch-face nil 
-                    :weight 'bold :underline t :overline nil :slant 'normal)
-
-
-;; show matching parenthesis, even if found outside the present screen.
-;; see http://www.emacswiki.org/emacs/MicParen
-;; (require 'mic-paren)                    ; loading
-;; (paren-activate)                        ; activating
-(use-package mic-paren
-  :init
-  (progn
-	(paren-activate)))
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/recentf.el
-;; === Recentf mode ===
-;; see http://www.emacswiki.org/emacs/RecentFiles
-;; A minor mode that builds a list of recently opened files
-;;(require 'recentf)
-(use-package recentf
-  :init
-  (progn
-    ;;  file to save the recent list into
-    (setq recentf-save-file "~/.emacs.d/.recentf")
-
-    ;; maximum number of items in the recentf menu
-    (setq recentf-max-menu-items 30)
-
-    ;; save file names relative to my current home directory
-    (setq recentf-filename-handlers '(abbreviate-file-name))
-
-    (recentf-mode t)                        ; activate it
-    ))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/saveplace.el
-;; -*- mode: lisp; -*-
-;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
-;; (require 'saveplace)
-;; (setq-default save-place t)
-(use-package saveplace
-  :init
-  (progn
-	(setq-default save-place t)))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/time-stamp.el
-;; -*- mode:lisp; -*-
-;; === Maintain last change time stamps (via Time-stamp: <Dim 2014-09-21 09:21 svarrette>) ===
-;;(require 'time-stamp)
-(use-package time-stamp
-  :init
-  (progn
-	;; format of the string inserted by `M-x time-stamp'
-	(setq time-stamp-format "%3a %:y-%02m-%02d %02H:%02M %u")
-                                        ; `Weekday YYYY-MM-DD HH:MM USER'
-
-	;; update time stamps every time you save a buffer
-	(add-hook 'write-file-hooks 'time-stamp)))
-
-
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/user.el
-;; User configuration / Identity
-(setq user-full-name    "Sebastien Varrette")
-(setq user-mail-address "<Sebastien.Varrette@uni.lu>")
-(setq user-www          "http://varrette.gforge.uni.lu")
-;; ############################################################################
-
-
-;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/auctex.el
 ;; -*- mode: lisp; -*-
 ;; === LaTeX ===
@@ -828,13 +125,19 @@
 ;; Config file: ~/.emacs.d/config/modes/autopair.el
 ;; ==============================================================
 ;; Autopair: Automagically pair braces and quotes like TextMate
-;; see http://code.google.com/p/autopair/ or 
+;; see http://code.google.com/p/autopair/ or
 ;; http://www.emacswiki.org/emacs/AutoPairs
 ;; ==============================================================
-(require 'autopair)
+;;(require 'autopair)
 
-(autopair-global-mode) ;; enable autopair in all buffers 
-(setq autopair-autowrap t) 
+(use-package autopair
+  :command autopair-global-mode
+  :config
+  (progn
+	(autopair-global-mode) ;; enable autopair in all buffers
+	(setq autopair-autowrap t))
+  :bind ("C-j" . autopair-newline))
+
 ;; ############################################################################
 
 
@@ -888,21 +191,35 @@
 ;; -*- mode: lisp; -*-
 ;; === Markdown ===
 ;; see http://jblevins.org/projects/markdown-mode/
+;;(require 'markdown-mode)
+
+(defun markdown-preview-file ()
+      "run Marked on the current file and revert the buffer"
+      (interactive)
+      (shell-command
+       (format "open -a /Applications/Marked\ 2.app %s"
+               (shell-quote-argument (buffer-file-name)))))
+
+(use-package markdown-mode
+  :mode (("\\.md\\'"    . markdown-mode)
+		 ("\\.mdown\\'" . markdown-mode))
+  :config
+  (progn ((setq markdown-command "pandoc --smart -f markdown -t html")
+		  (setq markdown-css-path (expand-file-name "markdown.css" emacs-root))))
+  :bind ("C-x M" . markdown-preview-file))
 
 
-(require 'markdown-mode)
+;; (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
+;; (add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
 
-(add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
+;; (add-hook 'markdown-mode-hook
+;;           (lambda ()
+;;             (visual-line-mode t)
+;;             (writegood-mode t)
+;;             (flyspell-mode t)))
 
-(add-hook 'markdown-mode-hook
-          (lambda ()
-            (visual-line-mode t)
-            (writegood-mode t)
-            (flyspell-mode t)))
-
-(setq markdown-command "pandoc --smart -f markdown -t html")
-(setq markdown-css-path (expand-file-name "markdown.css" emacs-root))
+;; 
+;; 
 ;; ############################################################################
 
 
@@ -1385,6 +702,709 @@
 (eval-after-load 'ruby-mode
   '(progn
 	 (define-key ruby-mode-map (kbd "C-c t") 'ruby-jump-to-other)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/aquamacs.el
+;; -*- mode: lisp; -*-
+;; =================================================================
+;; Aquamacs specific 
+;; =================================================================
+;; see http://www.emacswiki.org/emacs/AquamacsEmacsCompatibilitySettings
+(Aquamacs
+ (aquamacs-autoface-mode -1)  ; no mode-specific faces, everything in Monaco
+ ;; do not load persistent scratch buffer
+ (setq aquamacs-scratch-file nil)
+ ;; do not make initial frame visible
+ (setq show-scratch-buffer-on-startup nil)
+)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/auto-insert.el
+;; ========================================================
+;; Auto-insert: automatic insertion of text into new files
+;; ========================================================
+
+;;(require 'auto-insert-tkld)    ; see ~/.emacs.d/site-lisp/auto-insert-tkld.el
+;; (autoload 'auto-insert-tkld
+;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
+(use-package auto-insert-tkld
+  :init
+  (progn
+	(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
+	(setq auto-insert-automatically t)
+	)
+  )
+;; doc:  ~/.emacs.d/site-lisp/auto-insert-tkld.pdf
+
+;; trick to abstract the personal web page
+;;(setq auto-insert-organisation  user-www)
+
+;; associate file extention to a template name
+(setq auto-insert-alist
+      '(
+        ("\\.tex$"         . "LaTeX")            ; TeX or LaTeX
+        ("\\.bib$"         . "BibTeX")           ; BibTeX
+        ("\\.sty$"         . "LaTeX Style")      ; LaTeX Style
+        ("\\.el$"          . "Emacs Lisp")       ; Emacs Lisp
+        ("\\.java$"        . "Java")             ; Java
+        ("\\App.java$"     . "JavaSwing")        ; Java Swing app
+        ("[Tt]ools.h"      . "Tools C++")        ; Useful functions in C/C++
+        ("\\Logs.cpp"      . "Logs C++")         ; Macros for logs/debugging
+        ("\\Logs.h[+p]*"   . "Logs C++ Include") ; " header file
+        ("\\.c$"           . "C")                ; C
+        ("\\.h$"           . "C Include")        ; C header file
+        ("\\.cxx$"         . "C++")              ; C++
+        ("\\.c\\+\\+$"     . "C++")              ;
+        ("\\.cpp$"         . "C++")              ;
+        ("\\.cc$"          . "C++")              ;
+        ("\\.C$"           . "C++")              ;
+        ("[Mm]akefile$"    . "Makefile")         ; Makefile
+        ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
+        ("\\.md$"          . "Text")             ; Text
+        ("\\.txt$"         . "Text")             ; Text
+        ("\\.gpg$"         . "GPG")              ; GPG 
+        ("[Rr]eadme$"      . "Readme")           ; Readme
+        ("README$"         . "Readme")           ;
+        ("\\.sh$"          . "Shell")            ; Shell
+        ("\\.csh$"         . "Shell")            ;
+        ("\\.tcsh$"        . "Shell")            ;
+        ("\\.html"         . "Html")             ; HTML
+        ("\\.wml"          . "WML")              ; WML (Website Meta Language)
+        ("\\.php"          . "PHP")              ; PHP
+        ("\\.gnuplot"      . "Gnuplot")          ; Gnuplot
+        ("\\.pl$"          . "Perl")             ; Perl
+        ("\\.pm$"          . "Perl Module")      ; PerlModule
+        ("\\.t$"           . "Perl Test")        ; Perl Test script
+        ("\\.pp$"          . "Puppet")           ; Puppet manifest
+        ("\\.rb$"          . "Ruby")             ; Ruby
+        ("\\.R$"           . "R")                ; R
+        ("\\.admission_rule[s]?$" . "OAR")              ; OAR admission rule
+        (""                . "Shell") ; Shell (by default: assume a shell template)
+        ))
+;; now associate a template name to a template file
+(setq auto-insert-type-alist
+      '(
+        ("LaTeX"       . "insert.tex")
+        ("BibTeX"      . "insert.bib")
+        ("LaTeX Style" . "insert.sty")
+        ("Emacs Lisp"  . "insert.el")
+        ("Java"        . "insert.java")
+        ("JavaSwing"   . "insertApp.java")
+        ("C"           . "insert.c")
+        ("C Include"   . "insert.h")
+        ("C++"         . "insert.cpp")
+        ("Tools C++"   . "insert.tools_cpp.h")
+        ("Logs C++"    . "insert.logs.cpp")
+        ("Logs C++ Include" . "insert.logs.h")
+        ("Makefile"    . "insert.makefile")
+        ("Makefile.am" . "insert.makefile.am")
+        ("Text"        . "insert.md")
+        ("GPG"         . "insert.gpg")
+        ("Readme"      . "insert.readme")
+        ("Shell"       . "insert.shell")
+        ("Html"        . "insert.html")
+        ("WML"         . "insert.wml")
+        ("PHP"         . "insert.php")
+        ("Gnuplot"     . "insert.gnuplot")
+        ("Perl"        . "insert.pl")
+        ("Perl Module" . "insert.pm")
+        ("Perl Test"   . "insert.t")
+        ("Puppet"      . "insert.pp")
+        ("Ruby"        . "insert.rb")
+        ("R"           . "insert.R")
+        ("OAR"         . "insert.oar")
+        ))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/backup.el
+;; === Auto-save and backup files ===
+(setq auto-save-list-file-name nil)     ; no .saves files
+(setq auto-save-default        t)       ; auto saving
+(setq make-backup-files        t)       ; make  backup files
+;; see http://www.emacswiki.org/emacs/BackupDirectory
+
+(setq  backup-directory (concat emacs-root ".backup/"))
+;; Set backup directory
+;; store all backup and autosave files there
+(setq backup-directory-alist
+      `((".*" . ,backup-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" , backup-directory t)))
+
+;; ;; Set backup directory in /tmp
+;; ;; store all backup and autosave files in the /tmp dir
+;; (setq backup-directory-alist
+;;       `((".*" . ,temporary-file-directory)))
+;; (setq auto-save-file-name-transforms
+;;       `((".*" ,temporary-file-directory t)))
+
+(setq
+ backup-by-copying t                    ; don't clobber symlinks
+ ;; backup-directory-alist
+ ;; '(("." . "~/.saves"))                  ; don't litter my fs tree
+ delete-old-versions t                  ; delete excess backup versions
+                                        ; silently
+ kept-new-versions 6
+ kept-old-versions 2
+ version-control t)                     ; make numeric backup versions
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/completion.el
+;; === Code completion ===
+;; see http://www.emacswiki.org/emacs/TabCompletion
+
+
+;;(require 'smart-tab)
+(use-package smart-tab
+  :init
+  (progn
+	(global-smart-tab-mode t)))
+
+
+;; Disable indent "smart" alignement to insert real tabs
+(defun indent-with-real-tab-hook ()
+  (setq indent-line-function 'insert-tab)
+  )
+;;(add-hook 'text-mode-hook   'indent-with-real-tab-hook)
+(add-hook 'conf-mode-hook   'indent-with-real-tab-hook)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/display.el
+;;
+;; setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
+;;
+
+
+;; === defaults ===
+(setq truncate-partial-width-windows nil)
+(setq line-number-mode    t)
+(setq column-number-mode  t)
+
+;; === F... the beep ===
+(setq visible-bell        t)
+
+;; === Default size of the frame ===
+(set-frame-width (selected-frame) 145)
+(set-frame-height (selected-frame) 60)
+
+;; === remove the few annoyance of default emacs ===
+;; Use "y or n" answers instead of full words "yes or no"
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; kill and move region directly
+(delete-selection-mode t)
+;; (pc-selection-mode)
+
+;; === display current time in the status bar ===
+;; (setq display-time-day-and-date t
+;;       display-time-24hr-format t)
+(setq display-time-string-forms
+      '(24-hours ":" minutes " " seconds))
+(display-time-mode 1)
+
+;;
+;; === Specify the frame title ===
+;; see http://www.emacswiki.org/emacs/FrameTitle
+;; recognize the same special characters as mode-line-format variable, mainly:
+;;    %b -- print buffer name.      %f -- print visited file name.
+;;    %F -- print frame name.
+;;    %* -- print %, * or hyphen.   %+ -- print *, % or hyphen.
+;;          %& is like %*, but ignore read-only-ness.
+;;          % means buffer is read-only and * means it is modified.
+;;          For a modified read-only buffer, %* gives % and %+ gives *.
+;;    %m -- print the mode name.
+;;    %z -- print mnemonics of buffer, terminal, and keyboard coding systems.
+;;    %Z -- like %z, but including the end-of-line format.
+;;    %[ -- print one [ for each recursive editing level.  %] similar.
+;;    %% -- print %.   %- -- print infinitely many dashes.
+;;  Decimal digits after the % specify field width to which to pad.
+(setq frame-title-format '(buffer-file-name "emacs: %b (%f)" "emacs: %b"))
+
+;; =================================================================
+;; Font selection (to use a mono-spaced (non-proportional) font)
+;; =================================================================
+;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
+(add-to-list 'default-frame-alist '(font . "Monaco-12"))
+
+;; =================================================================
+;; Powerline Status Bar
+;; =================================================================
+;; See https://github.com/milkypostman/powerline
+;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
+(use-package powerline)
+(powerline-center-theme)
+;; shape...
+;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
+;; (setq powerline-color1 "DarkGrey")
+;; (setq powerline-color2 "honeydew1")
+;; (custom-set-faces
+;;  '(powerline-active1 '((t (:background "DarkGrey"  :inherit mode-line))))
+;;  '(powerline-active2 '((t (:background "honeydew1" :inherit mode-line)))))
+
+;; (custom-theme-set-faces
+;;  'color-theme-vim-insert-mode
+;;  `(powerline-active1 ((t (:background "DarkGrey"    :inherit mode-line))))
+;;  `(powerline-active2 ((t (:background "honeydew1"   :inherit mode-line))))
+;;  `(powerline-inactive1 ((t (:background "gray71"    :inherit mode-line-inactive))))
+;;  `(powerline-inactive2 ((t (:background "honeydew3" :inherit mode-line-inactive)))))
+
+;; (setq powerline-color1 "grey22")
+;; (setq powerline-color2 "grey40")
+;; (custom-set-faces
+;;  '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
+;;  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
+
+;; (when (and (buffer-file-name (current-buffer)) vc-mode)
+;;     (if (vc-workfile-unchanged-p (buffer-file-name (current-buffer)))
+;;       (powerline-vc 'powerline-insert-face 'r)
+;;       (powerline-vc 'powerline-normal-face 'r)))
+
+
+
+;; =================================================================
+;; Emacs Color Theme
+;; see http://www.emacswiki.org/emacs/ColorTheme
+;; see http://code.google.com/p/gnuemacscolorthemetest/ For direct
+;; screenshots
+;; =================================================================
+;; WITH color theme
+(use-package color-theme
+  :init
+  (progn
+	(color-theme-initialize)
+	(setq color-theme-is-global t)
+	(color-theme-vim-colors)))
+
+
+
+;; To better see the cursor
+(setq default-frame-alist
+      '((cursor-color . "green")
+        (cursor-type . box)))
+(set-default 'cursor-type 'box)
+
+;; === See the end of the file ===
+(setq-default indicate-empty-lines t)
+(when (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
+
+;; See also trailing whitespace
+(setq-default show-trailing-whitespace t)
+
+;; === Auto fit the size of the frame to the buffer content ===
+;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
+;; run 'M-x fit-frame' for that
+;;(require 'fit-frame)
+;;(add-hook 'after-make-frame-functions 'fit-frame)
+
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/easypg.el
+;; -*- mode: lisp; -*-
+;; =======================================
+;; === Auto Encryption (with GPG etc.) ===
+;; =======================================
+;; See http://www.emacswiki.org/emacs/EasyPG
+;;(if (equal emacs-major-version 23)
+;;  (require 'epa-setup))
+
+;;(require 'epa-file)
+(use-package epa-file
+  :init
+  (progn
+	(epa-file-enable)))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/filladapt.el
+;; =============================================
+;; Activate fill adapt
+;; see http://www.emacswiki.org/emacs/FillAdapt
+;; =============================================
+
+;;(require 'filladapt)
+(use-package filladapt
+  :init
+  (progn
+    (setq-default filladapt-mode nil)
+    (cond ((equal mode-name "Change Log")
+           t)
+          (t
+           (turn-on-filladapt-mode)))))
+
+
+;; turn on filladapt mode everywhere but in ChangeLog files
+
+;; (add-hook 'c-mode-common-hook
+;;    (lambda ()
+;;      (when (featurep 'filladapt)
+;;        (c-setup-filladapt))))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/global.el
+;; Global configuration
+
+;; Add menu bar
+(menu-bar-mode   t)
+
+(setq search-highlight         t)       ; highlight search object
+(setq query-replace-highlight  t)       ; highlight query object
+(setq byte-compile-verbose     t)
+(setq initial-major-mode 'text-mode)    ; to avoid autoloads for lisp mode
+(setq require-final-newline t)          ; ensure a file ends in a newline when it
+
+;; Increase the lisp interpretor depth 
+;;(setq max-lisp-eval-depth 10000)
+
+
+;; Correct copy-paste to clipboard
+(setq x-select-enable-clipboard t)
+;; after mouse selection in X11, you can paste by `yank' in emacs
+;;(Setq x-select-enable-primary t)
+(setq mouse-drag-copy-region  t)
+
+;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
+;;(require 'better-defaults)
+(use-package better-defaults)
+
+;; Finding Files (and URLs) At Point (FFAP)
+;; see http://www.gnu.org/software/emacs/manual/html_node/emacs/FFAP.html
+;;(require 'ffap)
+(use-package ffap)
+
+
+;; Unique buffer names dependent on file name
+;;(require 'uniquify)
+(use-package uniquify)
+
+;; style used for uniquifying buffer names with parts of directory name
+(setq uniquify-buffer-name-style 'forward)
+
+;;(require 'ansi-color)
+(use-package ansi-color)
+
+;; === Sane defaults configurations ===
+
+;; Allow pasting selection outside of Emacs
+(setq x-select-enable-clipboard t)
+
+;; Auto refresh buffers
+(global-auto-revert-mode 1)
+
+;; Also auto refresh dired, but be quiet about it
+(setq global-auto-revert-non-file-buffers t)
+(setq auto-revert-verbose nil)
+
+;; Show keystrokes in progress
+(setq echo-keystrokes 0.1)
+
+;; Move files to trash when deleting
+(setq delete-by-moving-to-trash t)
+
+;; Transparently open compressed files
+(auto-compression-mode t)
+
+
+;; Answering just 'y' or 'n' will do
+(defalias 'yes-or-no-p 'y-or-n-p)
+
+;; UTF-8 please
+(setq locale-coding-system 'utf-8) ; pretty
+(set-terminal-coding-system 'utf-8) ; pretty
+(set-keyboard-coding-system 'utf-8) ; pretty
+(set-selection-coding-system 'utf-8) ; please
+(prefer-coding-system 'utf-8) ; with sugar on top
+
+;; Show active region
+(transient-mark-mode 1)
+(make-variable-buffer-local 'transient-mark-mode)
+(put 'transient-mark-mode 'permanent-local t)
+(setq-default transient-mark-mode t)
+
+;; Remove text in active region if inserting text
+(delete-selection-mode 1)
+
+;; Don't highlight matches with jump-char - it's distracting
+(setq jump-char-lazy-highlight-face nil)
+
+;; === Auto-fill configuration ===
+;; automatic wrapping of lines and insertion of newlines when the cursor
+;; goes over the column limit.
+(setq-default fill-column 80)
+(setq auto-fill-mode t)                 ; activate by default
+
+;; Save minibuffer history
+(savehist-mode 1)
+(setq history-length 1000)
+
+;; Undo/redo window configuration with C-c <left>/<right>
+(winner-mode 1)
+
+;; Never insert tabs
+(set-default 'indent-tabs-mode nil)
+
+;; Show me empty lines after buffer end
+(set-default 'indicate-empty-lines t)
+
+;; Easily navigate sillycased words
+(global-subword-mode 1)
+
+;; Don't break lines for me, please
+(setq-default truncate-lines t)
+
+;; Keep cursor away from edges when scrolling up/down
+;;(require 'smooth-scrolling)
+
+;; Allow recursive minibuffers
+(setq enable-recursive-minibuffers t)
+
+;; Don't be so stingy on the memory, we have lots now. It's the distant future.
+(setq gc-cons-threshold 20000000)
+
+;; org-mode: Don't ruin S-arrow to switch windows please (use M-+ and M-- instead to toggle)
+(setq org-replace-disputed-keys t)
+
+;; Fontify org-mode code blocks
+(setq org-src-fontify-natively t)
+
+;; Represent undo-history as an actual tree (visualize with C-x u)
+;; (setq undo-tree-mode-lighter "")
+;; (require 'undo-tree)
+;; (global-undo-tree-mode)
+
+;; Sentences do not need double spaces to end. Period.
+(set-default 'sentence-end-double-space nil)
+
+;; A saner ediff
+(setq ediff-diff-options "-w")
+(setq ediff-split-window-function 'split-window-horizontally)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+;; Nic says eval-expression-print-level needs to be set to nil (turned off) so
+;; that you can always see what's happening.
+(setq eval-expression-print-level nil)
+
+;; When popping the mark, continue popping until the cursor actually moves
+;; Also, if the last command was a copy - skip past all the expand-region cruft.
+(defadvice pop-to-mark-command (around ensure-new-position activate)
+  (let ((p (point)))
+    (when (eq last-command 'save-region-or-current-line)
+      ad-do-it
+      ad-do-it
+      ad-do-it)
+    (dotimes (i 10)
+      (when (= p (point)) ad-do-it))))
+
+;; Turn on auto completion
+;; See http://www.emacswiki.org/emacs/AutoComplete
+;;(require 'auto-complete-config)
+(use-package auto-complete-config
+  :init
+  (progn
+	(ac-config-default)))
+
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/hotfix-x-popup.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Mer 2014-09-17 21:52 svarrette>
+;;
+;; hotfix-x-popup.el - Hotfix on emacs popup dialogs on Mac OS X that freeze
+;; see http://superuser.com/questions/125569/how-to-fix-emacs-popup-dialogs-on-mac-os-x
+;; ----------------------------------------------------------------------
+
+(when is-mac
+  (defadvice yes-or-no-p (around prevent-dialog activate)
+    "Prevent yes-or-no-p from activating a dialog"
+    (let ((use-dialog-box nil))
+      ad-do-it))
+  (defadvice y-or-n-p (around prevent-dialog-yorn activate)
+    "Prevent y-or-n-p from activating a dialog"
+    (let ((use-dialog-box nil))
+      ad-do-it)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/indent.el
+;; === Indenting configuration ===
+;; see http://www.emacswiki.org/emacs/IndentationBasics
+(setq-default tab-width 2)
+
+(defvaralias 'c-basic-offset 	 'tab-width)
+(defvaralias 'cperl-indent-level 'tab-width)
+
+;; === Show whitespaces/tabs etc. ===
+(setq x-stretch-cursor t)
+
+;; === Get ride of tabs most of the time ===
+(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
+
+(setq-default c-basic-offset 4
+              tab-width 4
+              indent-tabs-mode t)
+
+
+;; (setq c-brace-offset -2)
+;;(setq c-auto-newline t)
+;; (add-hook 'c-mode-common-hook (lambda () (setq c-basic-offset 4)))
+;; (add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
+;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
+;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
+;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/ispell.el
+;; -*- mode: lisp; -*-
+
+;; LaTeX-sensitive spell checking
+(setq ispell-enable-tex-parser t)
+
+;; defautl dictionnary
+(setq ispell-local-dictionary "en")
+
+;; save the personal dictionary without confirmation
+(setq ispell-silently-savep t)
+
+;; enable the likeness criteria
+;;(setq flyspell-sort-corrections nil)
+
+;; dash character (`-') is considered as a word delimiter
+;;(setq flyspell-consider-dash-as-word-delimiter-flag t)
+
+;; Add flyspell to the following major modes
+(dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
+  (add-hook hook (lambda ()
+                   (turn-on-auto-fill)
+                   (flyspell-mode t))))
+
+;; disable flyspell in change log and log-edit mode that derives from text-mode
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode nil))))
+
+;; flyspell comments and strings in programming modes
+;; (preventing it from finding mistakes in the code)
+(dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
+                                   sh-mode-hook))
+  (add-hook hook 'flyspell-prog-mode))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/parenthesis.el
+;; === Show matching parenthesis ===
+(require 'paren)
+(GNUEmacs
+ (show-paren-mode t)
+ (setq show-paren-ring-bell-on-mismatch t))
+(XEmacs
+ (paren-set-mode 'paren))
+
+(setq show-paren-style 'expression)
+(set-face-background 'show-paren-match-face "turquoise")
+;; (set-face-attribute 'show-paren-match-face nil 
+;;                     :weight 'bold :underline nil :overline nil :slant 'normal)
+(set-face-foreground 'show-paren-mismatch-face "red") 
+(set-face-attribute 'show-paren-mismatch-face nil 
+                    :weight 'bold :underline t :overline nil :slant 'normal)
+
+
+;; show matching parenthesis, even if found outside the present screen.
+;; see http://www.emacswiki.org/emacs/MicParen
+;; (require 'mic-paren)                    ; loading
+;; (paren-activate)                        ; activating
+(use-package mic-paren
+  :init
+  (progn
+	(paren-activate)))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/recentf.el
+;; === Recentf mode ===
+;; see http://www.emacswiki.org/emacs/RecentFiles
+;; A minor mode that builds a list of recently opened files
+;;(require 'recentf)
+(use-package recentf
+  :init
+  (progn
+    ;;  file to save the recent list into
+    (setq recentf-save-file "~/.emacs.d/.recentf")
+
+    ;; maximum number of items in the recentf menu
+    (setq recentf-max-menu-items 30)
+
+    ;; save file names relative to my current home directory
+    (setq recentf-filename-handlers '(abbreviate-file-name))
+
+    (recentf-mode t)                        ; activate it
+    ))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/saveplace.el
+;; -*- mode: lisp; -*-
+;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
+;; (require 'saveplace)
+;; (setq-default save-place t)
+(use-package saveplace
+  :init
+  (progn
+	(setq-default save-place t)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/time-stamp.el
+;; -*- mode:lisp; -*-
+;; === Maintain last change time stamps (via Time-stamp: <Dim 2014-09-21 09:21 svarrette>) ===
+;;(require 'time-stamp)
+(use-package time-stamp
+  :init
+  (progn
+	;; format of the string inserted by `M-x time-stamp'
+	(setq time-stamp-format "%3a %:y-%02m-%02d %02H:%02M %u")
+                                        ; `Weekday YYYY-MM-DD HH:MM USER'
+
+	;; update time stamps every time you save a buffer
+	(add-hook 'write-file-hooks 'time-stamp)))
+
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/_init/user.el
+;; User configuration / Identity
+(setq user-full-name    "Sebastien Varrette")
+(setq user-mail-address "<Sebastien.Varrette@uni.lu>")
+(setq user-www          "http://varrette.gforge.uni.lu")
 ;; ############################################################################
 
 
