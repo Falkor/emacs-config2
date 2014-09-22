@@ -131,7 +131,7 @@
 ;;(require 'autopair)
 
 (use-package autopair
-  :command autopair-global-mode
+  :commands (autopair-global-mode)
   :config
   (progn
 	(autopair-global-mode) ;; enable autopair in all buffers
@@ -203,9 +203,10 @@
 (use-package markdown-mode
   :mode (("\\.md\\'"    . markdown-mode)
 		 ("\\.mdown\\'" . markdown-mode))
-  :config
-  (progn ((setq markdown-command "pandoc --smart -f markdown -t html")
-		  (setq markdown-css-path (expand-file-name "markdown.css" emacs-root))))
+  :init
+  (progn
+	(setq markdown-command "pandoc --smart -f markdown -t html")
+	(setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
   :bind ("C-x M" . markdown-preview-file))
 
 
