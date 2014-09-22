@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Dim 2014-09-21 16:43 svarrette>
+;; Time-stamp: <Lun 2014-09-22 15:16 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -69,9 +69,16 @@
 
 ;; ============================ Let's go! ============================
 ;; Turn off mouse interface early in startup to avoid momentary display
-;;(if (fboundp 'menu-bar-mode)   (menu-bar-mode   t))
-(if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
-(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+;;(if (fboundp 'menu-bar-mode) 
+;;    ((message "Turn on menu bar")
+;;     (menu-bar-mode    1)))
+;;(if (fboundp 'tool-bar-mode)   (tool-bar-mode   -1))
+;;(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+(setq menu-bar-mode    t)
+(setq scroll-bar-mode -1)
+(setq tool-bar-mode   -1)
+
+
 
 ;; No splash screen please ...
 (setq inhibit-startup-message t)
@@ -85,7 +92,7 @@
   )
 ;;(add-path "site-lisp/use-package")
 (setq config-dir     (get-conf-path "config/"))
-(setq defuns-dir     (get-conf-path "defuns"))
+;;(setq defuns-dir     (get-conf-path "defuns"))
 (setq packages-dir   (get-conf-path "packages/"))
 (setq custom-file    (get-conf-path "custom.el"))
 (setq custom-dir     (get-conf-path "rc.custom/"))
@@ -101,13 +108,16 @@
 ;; (if (file-readable-p custom-package-file)
 ;; 	(load-file custom-package-file))
 
+;; Now load environement 
+(load (get-conf-path "env"))
+
 ;; Now load/setup packages
-(load-file (get-conf-path "packages.el"))
+(load (get-conf-path "packages"))
 
 
 (require 'load-dir)
 ;; Load Lisp defined functions
-(load-dir-one defuns-dir)
+;;(load-dir-one defuns-dir)
 
 
 ;; === Special Mac OS X configuration (Carbon emacs and aquamacs)
@@ -170,7 +180,7 @@
 
 
 
-(load (concat emacs-root "config"))
+;;(load (concat emacs-root "config"))
 
 ;; ===== Custom settings ====
 ;; Overwrite with the custom settings

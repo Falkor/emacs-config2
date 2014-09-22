@@ -61,15 +61,16 @@ NO_COLOR     =\033[0m
 ### Emacs stuff
 EMACS	         = emacs
 DIRS	         = site-lisp defuns
+SPECIAL_SOURCES  = config.el init.el
 CONFIG_SOURCES   = $(shell find config   -name '*.el')
 SNIPPETS_SOURCES = $(shell find snippets -name '*.el')
 SNIPPETS_TARGET  = $(patsubst %.el,%.elc, $(SNIPPETS_SOURCES))
-LIB_SOURCES    = $(foreach dir,$(DIRS),$(wildcard $(dir)/*.el)) $(SNIPPETS_SOURCES)
-INIT_SOURCES   = $(CONFIG_SOURCES) $(SNIPPETS_SOURCES) $(LIB_SOURCES) 
-TARGET	       = config.elc $(patsubst %.el,%.elc, $(LIB_SOURCES)) init.elc
+LIB_SOURCES      = $(foreach dir,$(DIRS),$(wildcard $(dir)/*.el)) $(SNIPPETS_SOURCES)
+INIT_SOURCES     = config.el $(wildcard *.el) $(LIB_SOURCES) 
+TARGET	         = $(patsubst %.el,%.elc, $(INIT_SOURCES)) 
 
-EMACS_BATCH  = $(EMACS) -Q -batch -l ~/.emacs
-MY_LOADPATH  = -L . $(patsubst %,-L %,$(DIRS))
+EMACS_BATCH  = $(EMACS) -Q -batch
+MY_LOADPATH  =  -l ~/.emacs -L . $(patsubst %,-L %,$(DIRS))
 BATCH_LOAD   = $(EMACS_BATCH) $(MY_LOADPATH)
 
 ### Main variables
@@ -82,10 +83,13 @@ all: $(TARGET)
 dirs:
 	@for dir in $(DIRS); do \
 		echo -e "$(COLOR_GREEN)==> Byte compiling the directory '$$dir/'$(NO_COLOR)"; \
-	    $(BATCH_LOAD) -f batch-byte-compile $$dir/*.el; \
+	    $(EMACS_BATCH) -f batch-byte-compile $$dir/*.el; \
 	done
 
 snippets: $(SNIPPETS_TARGET)
+
+init.elc: $(INIT_SOURCE)
+
 
 config.elc: $(CONFIG_SOURCES)
 	@echo -e "$(COLOR_GREEN)==> Generating centralised config.el[c] file from config/ directory$(NO_COLOR)"
@@ -94,14 +98,16 @@ config.elc: $(CONFIG_SOURCES)
 
 %.elc: %.el
 	@echo -e "$(COLOR_GREEN)==> Byte compiling '$<' to generate $@$(NO_COLOR)"
-	$(BATCH_LOAD) -f batch-byte-compile $<
+	$(EMACS_BATCH)  -l ~/.emacs -f batch-byte-compile $<
 
 eval_boottime:
+	@echo -e "$(COLOR_GREEN)==> Evaluate Minimal starting time of raw Emacs$(NO_COLOR)$(COLOR_RED) ... i.e. WITHOUT loading .emacs)$(NO_COLOR)"
+	$(EMACS_BATCH) --quick --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
 	@echo -e "$(COLOR_GREEN)==> Evaluate starting time of Emacs$(NO_COLOR)"
 	$(BATCH_LOAD) --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
 
 # Clean option
-clean:
+ clean:
 	rm -f *.elc
 
 clobber: clean
