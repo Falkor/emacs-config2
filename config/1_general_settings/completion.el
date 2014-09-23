@@ -6,8 +6,10 @@
 (use-package smart-tab
   :init
   (progn
+	(add-to-list 'hippie-expand-try-functions-list 
+				 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+	(setq smart-tab-using-hippie-expand t)
 	(global-smart-tab-mode t)))
-
 
 ;; Disable indent "smart" alignement to insert real tabs
 (defun indent-with-real-tab-hook ()

@@ -7,7 +7,43 @@
 
 ;; Classical setup
 (require 'yasnippet)
-(yas-global-mode 1)
+;;(yas-global-mode 1)
+
+;; Hotfix for conflicts between yasnippet and smart-tab
+;; see https://github.com/haxney/smart-tab/issues/1
+;; (add-to-list 'hippie-expand-try-functions-list 
+;; 			 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+;; actually moved to 1_general_settings/completion.el
+
+(hook-into-modes #'(lambda () (yas-minor-mode 1))
+                   '(prog-mode-hook
+                     org-mode-hook
+                     ruby-mode-hook
+                     message-mode-hook
+                     gud-mode-hook
+                     erc-mode-hook))
+
+;; (bind-keys :map yas-minor-mode-map
+;;   ("C-<return>" . yas-expand)
+;;   ("M-<return>" . yas-expand))
+
+;;(global-set-key (kbd "C-<return>") #'yas-expand yas-minor-mode-map)
+
+;;  'yas-expand )
+
+
+;; No need to be so verbose
+;; (setq yas-verbosity 1)
+
+;; ;; Wrap around region
+;; (setq yas-wrap-around-region t)
+
+(define-key yas-minor-mode-map (kbd "C-<return>") 'yas-expand)
+(define-key yas-minor-mode-map (kbd "M-<return>") 'yas-expand)
+
+
+;;(yas-global-mode 1)
+
 ;; (bind-key "C-<return>" #'yas-expand yas-minor-mode-map)
 ;; (bind-key "M-<return>" #'yas-expand yas-minor-mode-map)
 
@@ -50,8 +86,8 @@
 ;;   # --
 ;;   $0"))))
 
-;;     (bind-key "C-<return>" 'yas-expand)
-;;     (bind-key "M-<return>" 'yas-expand)
+;; (bind-key "C-<return>" 'yas-expand)
+;; (bind-key "M-<return>" 'yas-expand)
 ;;     (bind-key "C-c y n" 'yas-new-snippet)
 ;;     (bind-key "C-c y f" 'yas-find-snippets)
 ;;     (bind-key "C-c y r" 'yas-reload-all)

@@ -10,3 +10,4 @@
  ;; do not make initial frame visible
  (setq show-scratch-buffer-on-startup nil)
 )
+

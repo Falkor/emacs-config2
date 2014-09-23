@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mar 2014-09-23 10:44 svarrette>
+;; Time-stamp: <Mar 2014-09-23 16:33 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -71,7 +71,7 @@
 
 ;; === PACKAGES ===
 
-;; ;; Define the custom packages 
+;; ;; Define the custom packages
 ;; load falkor/custom/packages is existing
 ;; (setq custom-package-file (get-custom-path "packages.el"))
 ;; (if (file-readable-p custom-package-file)
