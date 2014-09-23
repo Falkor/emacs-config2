@@ -8,6 +8,7 @@
 
 (require 'cl)
 
+;; =================================
 ;; === ELPA, the package manager ===
 ;; see http://tromey.com/elpa/
 ;; The code below is no longer required on Emacs 24
@@ -28,13 +29,13 @@
 (setq package-user-dir  (concat packages-dir "elpa/"))
 (package-initialize)
 
-
 ;;
 ;; Define packages to install
 ;;
 (defvar falkor/packages '(alert
                           apache-mode
                           auctex
+						  auto-compile
                           auto-complete
                           autopair
                           better-defaults

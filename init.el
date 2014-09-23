@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Lun 2014-09-22 17:37 svarrette>
+;; Time-stamp: <Mar 2014-09-23 10:19 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -14,6 +14,11 @@
 ;; .             http://varrette.gforge.uni.lu
 ;;
 ;; -------------------------------------------------------------------------
+
+;; Initialization - save start time
+(defconst emacs-start-time (current-time))
+(unless noninteractive
+  (message "Loading %s..." load-file-name))
 
 ;; ;; Definitions
 ;; (defgroup falkor nil
@@ -36,42 +41,13 @@
 (defvar emacs-root "~/.emacs.d/"
   "the root of  personal emacs load-path.")
 
-;; Are we on a mac?
-(setq is-mac (equal system-type 'darwin))
-
-;; === Environement settings ===
-
 ;; Helper function for root path
 (defun get-conf-path(path)
   "Appends argument at the end of emacs-root using expand-file-name"
   (expand-file-name path emacs-root))
 
-;; init PATH & exec-path from current shell
-(defun set-exec-path-from-shell-PATH ()
-  (let ((path-from-shell (shell-command-to-string "$SHELL -c 'echo $PATH'")))
-    (setenv "PATH" path-from-shell)
-    (setq exec-path (split-string path-from-shell path-separator))))
-(when window-system (set-exec-path-from-shell-PATH))
-
-;; ;; easy way to load recursively all .el files
-;; (defun load-directory (directory)
-;;   "Load recursively all `.el' files in DIRECTORY."
-;;   (dolist (element (directory-files-and-attributes directory nil nil nil))
-;;     (let* ((path (car element))
-;;            (fullpath (concat directory "/" path))
-;;            (isdir (car (cdr element)))
-;;            (ignore-dir (or (string= path ".") (string= path ".."))))
-;;       (cond
-;;        ((and (eq isdir t) (not ignore-dir))
-;;         (load-directory fullpath))
-;;        ((and (eq isdir nil) (string= (substring path -3) ".el"))
-;;         (load (file-name-sans-extension fullpath)))))))
-
 ;; ============================ Let's go! ============================
 ;; Turn off mouse interface early in startup to avoid momentary display
-
-
-
 ;; No splash screen please ...
 (setq inhibit-startup-message t)
 
@@ -82,48 +58,45 @@
                                    (concat emacs-root p))))
   (add-path "site-lisp")
   )
-;;(add-path "site-lisp/use-package")
-(setq config-dir     (get-conf-path "config/"))
+
+;; === Special Directory components ====
+
+(defvar config-dir     (get-conf-path "config/"))
 ;;(setq defuns-dir     (get-conf-path "defuns"))
-(setq packages-dir   (get-conf-path "packages/"))
-(setq custom-dir     (get-conf-path "rc.custom/"))
+(defvar packages-dir   (get-conf-path "packages/"))
+(defvar custom-dir     (get-conf-path "rc.custom/"))
 
-;; Helper function to access custom files
-(defun get-custom-path(path)
-  "Appends argument at the end of custom-dir using expand-file-name"
-  (expand-file-name path custom-dir))
+;; === ENVIRONMENT ===
+(load (get-conf-path "env"))
 
-;; === setup and evantually install [missing] packages ===
+;; === PACKAGES ===
+
+;; ;; Define the custom packages 
 ;; load falkor/custom/packages is existing
 ;; (setq custom-package-file (get-custom-path "packages.el"))
 ;; (if (file-readable-p custom-package-file)
-;; 	(load-file custom-package-file))
-
-;; Now load environement 
-(load (get-conf-path "env"))
-
+;;  (load-file custom-package-file))
 
 ;; Now load/setup packages
 (load (get-conf-path "packages"))
 
+;; === KEY LIBRARIES ===
+;; Below are the key libraries you wish to see loaded asap
+(require 'use-package)
+(setq use-package-verbose nil)
+(use-package load-dir)
 
-;;(require 'load-dir)
+
 ;; Load Lisp defined functions
 ;;(load-dir-one defuns-dir)
 
 
-
-
-
-
-;; Load use-package early enough
-;;(require 'use-package)
-;;(require 'cl-lib)
-;;(setq use-package-verbose nil)
-
-
 ;; === Emacs Modular Configuration entry point ===
 ;; See https://github.com/targzeta/emacs-modular-configuration
+;; ----
+;; All sub configuration is delegated to the config/ directory
+;; and you can then merge into a single config.el[c] by calling
+;; `M-x emc-merge-config-files` or `make cfg`
 (require 'emacs-modular-configuration)
 
 (load (concat emacs-root "config"))
@@ -132,3 +105,18 @@
 ;; Overwrite with the custom settings
 ;;(load-dir-one custom-dir)
 (load (get-conf-path "custom.el") 'noerror)
+
+;;; Post initialization
+
+(when window-system
+  (let ((elapsed (float-time (time-subtract (current-time)
+                                            emacs-start-time))))
+    (message "Loading %s...done (%.3fs)" load-file-name elapsed))
+
+  (add-hook 'after-init-hook
+            `(lambda ()
+               (let ((elapsed (float-time (time-subtract (current-time)
+                                                         emacs-start-time))))
+                 (message "Loading %s...done (%.3fs) [after-init]"
+                          ,load-file-name elapsed)))
+            t))
