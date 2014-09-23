@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Lun 2014-09-22 17:35 svarrette>
+# Time-stamp: <Mar 2014-09-23 11:09 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -33,7 +33,8 @@ GIT_REMOTES    = $(shell git remote | xargs echo )
 GIT_DIRTY      = $(shell git diff --shortstat 2> /dev/null | tail -n1 )
 # Git subtrees repositories
 # Format: '<url>[|<branch>]' - don't forget the quotes. if branch is ignored, 'master' is used
-GIT_SUBTREE_REPOS = 'snippets|https://github.com/Falkor/yasnippet-snippets.git'
+GIT_SUBTREE_REPOS =
+# 'snippets|https://github.com/Falkor/yasnippet-snippets.git'
 # 'https://github.com/ULHPC/easybuild-framework.git|develop'  \
 # 					 'https://github.com/hpcugent/easybuild-wiki.git'
 
@@ -60,7 +61,7 @@ NO_COLOR     =\033[0m
 
 ### Emacs stuff
 EMACS	         = emacs
-DIRS	         = site-lisp
+DIRS	         = site-lisp defuns
 SPECIAL_SOURCES  = config.el init.el 
 CONFIG_SOURCES   = $(shell find config   -name '*.el')
 SNIPPETS_SOURCES = $(shell find snippets -name '*.el')

@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mar 2014-09-23 10:19 svarrette>
+;; Time-stamp: <Mar 2014-09-23 10:44 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -62,7 +62,7 @@
 ;; === Special Directory components ====
 
 (defvar config-dir     (get-conf-path "config/"))
-;;(setq defuns-dir     (get-conf-path "defuns"))
+(defvar defuns-dir     (get-conf-path "defuns/"))
 (defvar packages-dir   (get-conf-path "packages/"))
 (defvar custom-dir     (get-conf-path "rc.custom/"))
 
@@ -86,9 +86,8 @@
 (setq use-package-verbose nil)
 (use-package load-dir)
 
-
 ;; Load Lisp defined functions
-;;(load-dir-one defuns-dir)
+(load-dir-one defuns-dir)
 
 
 ;; === Emacs Modular Configuration entry point ===
