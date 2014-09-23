@@ -40,21 +40,13 @@
                           autopair
                           better-defaults
                           color-theme
-                          deft
                           el-get
-                          erc-terminal-notifier
-                          erlang
                           feature-mode
                           fit-frame
                           find-file-in-project
                           flycheck
-                          gist
-                          go-mode
-                          graphviz-dot-mode
                           helm
                           htmlize
-                          idle-require
-                          idle-highlight
                           jabber
                           js2-mode
                           load-dir
