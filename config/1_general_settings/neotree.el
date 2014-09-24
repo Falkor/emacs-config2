@@ -1,13 +1,10 @@
 ;; ----------------------------------------------------------------------
-;; File: neotree.el - 
-;; Time-stamp: <Mer 2014-09-17 21:59 svarrette>
-;;
-;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
-;;
+;; File: neotree.el - NerdTree like 
+;; Time-stamp: <Mer 2014-09-24 10:15 svarrette>
 ;; ----------------------------------------------------------------------
-
 ;; see http://www.emacswiki.org/emacs/NeoTree
 
+(require 'find-file-in-project)
 
 (defun neotree-project-dir ()
     "Open NeoTree using the git root."
@@ -20,11 +17,6 @@
             (neotree-find file-name))
         (message "Could not find git project root."))))
 
+(use-package neotree
+  :bind ("<f1>" . neotree-project-dir))
 
-
-;; ----------------------------------------------------------------------
-;; eof
-;;
-;; Local Variables:
-;; mode: lisp
-;; End:

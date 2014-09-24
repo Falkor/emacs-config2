@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-09-21 16:20 svarrette>
+;; Time-stamp: <Mer 2014-09-24 10:16 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -106,12 +106,17 @@
 (global-set-key (kbd "M-n") 'goto-line)          ; goto line number
 
 ;; === ECB / NerdTree like ===
+;; see general_settings/neotree.el
+;; Normally:
+;; F1: open neotree at the git root dir
+;; F2: toggle ECB
+
 ;; (use-package  neotree
 ;; 			  :bind "f1" 'neotree-toggle)
-(require 'neotree)
-(require 'find-file-in-project)
-(global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
-(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
+;; (require 'neotree)
+;; (require 'find-file-in-project)
+;; (global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
+(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB 
 
 ;; === Shell pop ===
 (global-set-key [(f3)]     'shell-pop)

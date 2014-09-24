@@ -12,7 +12,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-09-21 16:20 svarrette>
+;; Time-stamp: <Mer 2014-09-24 10:16 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -115,12 +115,17 @@
 (global-set-key (kbd "M-n") 'goto-line)          ; goto line number
 
 ;; === ECB / NerdTree like ===
+;; see general_settings/neotree.el
+;; Normally:
+;; F1: open neotree at the git root dir
+;; F2: toggle ECB
+
 ;; (use-package  neotree
 ;; 			  :bind "f1" 'neotree-toggle)
-(require 'neotree)
-(require 'find-file-in-project)
-(global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
-(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
+;; (require 'neotree)
+;; (require 'find-file-in-project)
+;; (global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
+(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB 
 
 ;; === Shell pop ===
 (global-set-key [(f3)]     'shell-pop)
@@ -442,6 +447,7 @@
  ;; do not make initial frame visible
  (setq show-scratch-buffer-on-startup nil)
 )
+
 ;; ############################################################################
 
 
@@ -784,6 +790,54 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/1_general_settings/framegeometry.el
+;; framegeometry.el
+;; use to restore the frame size of last session
+;; Courtesy from http://ck.kennt-wayne.de/2011/jul/emacs-restore-last-frame-size-on-startup
+
+(defun save-framegeometry ()
+  "Gets the current frame's geometry and saves to ~/.emacs.d/.framegeometry."
+  (let (
+        (framegeometry-left (frame-parameter (selected-frame) 'left))
+        (framegeometry-top (frame-parameter (selected-frame) 'top))
+        (framegeometry-width (frame-parameter (selected-frame) 'width))
+        (framegeometry-height (frame-parameter (selected-frame) 'height))
+        (framegeometry-file (expand-file-name "~/.emacs.d/.framegeometry"))
+        )
+
+    (with-temp-buffer
+      (insert
+       ";;; This is the previous emacs frame's geometry.\n"
+       ";;; Last generated " (current-time-string) ".\n"
+       "(setq initial-frame-alist\n"
+       "      '(\n"
+       (format "        (top . %d)\n" (max framegeometry-top 0))
+       (format "        (left . %d)\n" (max framegeometry-left 0))
+       (format "        (width . %d)\n" (max framegeometry-width 0))
+       (format "        (height . %d)))\n" (max framegeometry-height 0)))
+      (when (file-writable-p framegeometry-file)
+        (write-file framegeometry-file))))
+  )
+
+(defun load-framegeometry ()
+  "Loads ~/.emacs.d/.framegeometry which should load the previous frame's geometry."
+  (let ((framegeometry-file (expand-file-name "~/.emacs.d/.framegeometry")))
+    (when (file-readable-p framegeometry-file)
+      (load-file framegeometry-file)))
+  )
+
+;; Special work to do ONLY when there is a window system being used
+(if window-system
+    (progn
+      (add-hook 'after-init-hook 'load-framegeometry)
+      (add-hook 'kill-emacs-hook 'save-framegeometry))
+  )
+
+;; eof
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/1_general_settings/global.el
 ;; Global configuration
 
@@ -973,6 +1027,45 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/1_general_settings/indent.el
+;; -*- mode: lisp; -*-
+
+;;
+;; Helper functions 
+;;
+;; === Indentation of the full buffer ===
+;; Courtesy from http://emacsblog.org/2007/01/17/indent-whole-buffer/
+(defun indent-buffer ()
+  "indent whole buffer"
+  (interactive)
+  (save-excursion
+    (delete-trailing-whitespace)
+    (indent-region (point-min) (point-max) nil)
+    (untabify (point-min) (point-max))))
+
+;; === Yank (copy) and indent the copied region
+;; see http://www.emacswiki.org/emacs/AutoIndentation
+(defun yank-and-indent ()
+  "Yank and then indent the newly formed region according to mode."
+  (interactive)
+  (yank)
+  (call-interactively 'indent-region))
+
+;; === unindent ===
+(defun unindent-region ()
+  (interactive)
+  (save-excursion
+	(if (< (point) (mark)) (exchange-point-and-mark))
+	(let ((save-mark (mark)))
+	  (if (= (point) (line-beginning-position)) (previous-line 1))
+	  (goto-char (line-beginning-position))
+	  (while (>= (point) save-mark)
+		(goto-char (line-beginning-position))
+		(if (= (string-to-char "\t") (char-after (point))) (delete-char 1))
+		(previous-line 1)))))
+
+
+;; ==================== Let's go ====================
+
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
 (setq-default tab-width 2)
@@ -993,8 +1086,9 @@
 
 ;; (setq c-brace-offset -2)
 ;;(setq c-auto-newline t)
+
 ;; (add-hook 'c-mode-common-hook (lambda () (setq c-basic-offset 4)))
-;; (add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
+(add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
 ;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
 ;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
 ;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
@@ -1035,6 +1129,33 @@
 (dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
                                    sh-mode-hook))
   (add-hook hook 'flyspell-prog-mode))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/1_general_settings/neotree.el
+;; ----------------------------------------------------------------------
+;; File: neotree.el - NerdTree like 
+;; Time-stamp: <Mer 2014-09-24 10:15 svarrette>
+;; ----------------------------------------------------------------------
+;; see http://www.emacswiki.org/emacs/NeoTree
+
+(require 'find-file-in-project)
+
+(defun neotree-project-dir ()
+    "Open NeoTree using the git root."
+    (interactive)
+    (let ((project-dir (ffip-project-root))
+          (file-name   (buffer-file-name)))
+      (if project-dir
+          (progn
+            (neotree-dir project-dir)
+            (neotree-find file-name))
+        (message "Could not find git project root."))))
+
+(use-package neotree
+  :bind ("<f1>" . neotree-project-dir))
+
 ;; ############################################################################
 
 
