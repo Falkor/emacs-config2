@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mar 2014-09-23 11:09 svarrette>
+# Time-stamp: <Mer 2014-09-24 15:56 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -90,6 +90,10 @@ dirs: $(LIB_TARGET)
 # done
 
 snippets: $(SNIPPETS_TARGET)
+
+snippets/%.elc: snippets/%.el
+	@echo -e "$(COLOR_GREEN)==> Byte compiling '$<' to generate $@$(NO_COLOR)"
+	$(EMACS_BATCH) -f batch-byte-compile $<
 
 init.elc: $(INIT_SOURCE)
 	$(BATCH_LOAD) -f batch-byte-compile init.el

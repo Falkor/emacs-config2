@@ -65,10 +65,10 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; UTF-8 please
-(setq locale-coding-system 'utf-8) ; pretty
-(set-terminal-coding-system 'utf-8) ; pretty
-(set-keyboard-coding-system 'utf-8) ; pretty
-(set-selection-coding-system 'utf-8) ; please
+(setq locale-coding-system    'utf-8) ; pretty
+(set-terminal-coding-system   'utf-8) ; pretty
+(set-keyboard-coding-system   'utf-8) ; pretty
+(set-selection-coding-system  'utf-8) ; please
 (prefer-coding-system 'utf-8) ; with sugar on top
 
 ;; Show active region
@@ -105,8 +105,8 @@
 ;; Easily navigate sillycased words
 (global-subword-mode 1)
 
-;; Don't break lines for me, please
-(setq-default truncate-lines t)
+;; break lines for me, please
+(setq-default truncate-lines nil)
 
 ;; Keep cursor away from edges when scrolling up/down
 ;;(require 'smooth-scrolling)
@@ -151,12 +151,5 @@
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
 
-;; Turn on auto completion
-;; See http://www.emacswiki.org/emacs/AutoComplete
-;;(require 'auto-complete-config)
-(use-package auto-complete-config
-  :init
-  (progn
-	(ac-config-default)))
 
 

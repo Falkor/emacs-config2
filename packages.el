@@ -41,11 +41,14 @@
                           better-defaults
                           color-theme
                           el-get
+                          expand-region
                           feature-mode
                           fit-frame
                           find-file-in-project
                           flycheck
                           helm
+						  helm-c-yasnippet
+                          help-package
                           htmlize
                           jabber
                           js2-mode

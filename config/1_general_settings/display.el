@@ -1,5 +1,5 @@
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Mer 2014-09-24 13:19 svarrette>
+;; Time-stamp: <Mer 2014-09-24 13:30 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================

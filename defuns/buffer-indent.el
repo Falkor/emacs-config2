@@ -1,3 +1,5 @@
+;; 
+;; Time-stamp: <Mer 2014-09-24 15:31 svarrette>
 ;; === Indentation and buffer cleanup ===
 ;; This re-indents, untabifies, and cleans up whitespace. It is stolen directly
 ;; from the emacs-starter-kit. 

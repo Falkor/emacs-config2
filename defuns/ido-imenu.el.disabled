@@ -1,3 +1,5 @@
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Mer 2014-09-24 13:35 svarrette>
 ;; === Buffer-related ===
 
 (defun ido-imenu ()

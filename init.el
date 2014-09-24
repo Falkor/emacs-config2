@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-09-24 13:20 svarrette>
+;; Time-stamp: <Mer 2014-09-24 13:33 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -65,6 +65,7 @@
 (defvar defuns-dir     (get-conf-path "defuns/"))
 (defvar packages-dir   (get-conf-path "packages/"))
 (defvar custom-dir     (get-conf-path ".customs/"))
+(setq   custom-file    (get-conf-path "custom.el"))
 
 ;; === ENVIRONMENT ===
 (load (get-conf-path "env"))
@@ -89,6 +90,10 @@
 ;; Load Lisp defined functions
 (load-dir-one defuns-dir)
 
+;; ===== Custom settings ====
+;; Overwrite with the custom settings
+;;(load-dir-one custom-dir)
+(load custom-file 'noerror)
 
 ;; === Emacs Modular Configuration entry point ===
 ;; See https://github.com/targzeta/emacs-modular-configuration
@@ -100,10 +105,7 @@
 
 (load (concat emacs-root "config"))
 
-;; ===== Custom settings ====
-;; Overwrite with the custom settings
-;;(load-dir-one custom-dir)
-(load (get-conf-path "custom.el") 'noerror)
+
 
 ;;; Post initialization
 
@@ -119,20 +121,3 @@
                  (message "Loading %s...done (%.3fs) [after-init]"
                           ,load-file-name elapsed)))
             t))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(color-theme-libraries (quote ("/Users/svarrette/.emacs.d/packages/elpa/color-theme-20080305.34/themes/color-theme-library.elc")))
- '(menu-bar-mode t)
- '(powerline-default-separator (quote arrow)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(powerline-active1 ((t (:inherit mode-line :background "SkyBlue4" :foreground "White"))))
- '(powerline-active2 ((t (:inherit mode-line :background "grey40" :foreground "White"))))
- '(powerline-inactive1 ((t (:inherit mode-line-inactive :background "gray30" :foreground "gray100"))))
- '(powerline-inactive2 ((t (:inherit mode-line-inactive :background "gray50" :foreground "gray100")))))
