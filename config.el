@@ -307,144 +307,6 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/2_modes/yasnippet.el
-;; -*- mode: lisp; -*-
-
-;; === Yasnippet ===
-;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
-;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
-;; Installation notes: see README
-
-;; ;; Classical setup
-;; (require 'yasnippet)
-;; ;;(yas-global-mode 1)
-
-;; ;; Hotfix for conflicts between yasnippet and smart-tab
-;; ;; see https://github.com/haxney/smart-tab/issues/1
-;; ;; (add-to-list 'hippie-expand-try-functions-list 
-;; ;; 			 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-;; ;; actually moved to 1_general_settings/completion.el
-
-;; (hook-into-modes #'(lambda () (yas-minor-mode 1))
-;;                    '(prog-mode-hook
-;;                      org-mode-hook
-;;                      ruby-mode-hook
-;;                      message-mode-hook
-;;                      gud-mode-hook
-;;                      erc-mode-hook))
-
-;; ;; (bind-keys :map yas-minor-mode-map
-;; ;;   ("C-<return>" . yas-expand)
-;; ;;   ("M-<return>" . yas-expand))
-
-;; ;;(global-set-key (kbd "C-<return>") #'yas-expand yas-minor-mode-map)
-
-;; ;;  'yas-expand )
-
-
-;; ;; No need to be so verbose
-;; ;; (setq yas-verbosity 1)
-
-;; ;; ;; Wrap around region
-;; ;; (setq yas-wrap-around-region t)
-
-;; (define-key yas-minor-mode-map (kbd "C-<return>") 'yas-expand)
-;; (define-key yas-minor-mode-map (kbd "M-<return>") 'yas-expand)
-
-
-;;(yas-global-mode 1)
-
-;; (bind-key "C-<return>" #'yas-expand yas-minor-mode-map)
-;; (bind-key "M-<return>" #'yas-expand yas-minor-mode-map)
-
-(use-package yasnippet
-  :if (not noninteractive)
-  :diminish yas-minor-mode
-  :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all)
-  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
-  :init
-  (hook-into-modes #'(lambda () (yas-minor-mode 1))
-                   '(prog-mode-hook
-					 text-mode-hook
-                     org-mode-hook
-                     ruby-mode-hook
-                     message-mode-hook))
-  :config
-  (progn
- 	(setq yas-verbosity 0)
-	(bind-keys :map yas-minor-mode-map
-			   ("C-<return>" . yas-expand)
-			   ("M-<return>" . yas-expand)
-			   ("C-c y n"    . yas-new-snippet)
-			   ("C-c y f"    . yas-find-snippets)
-			   ("C-c y r"    . yas-reload-all)
-			   ))
-  :idle
-  (progn
-	(yas-reload-all)))
-
-
-;;     (yas-load-directory (expand-file-name "snippets/" emacs-root))
-
-;;     (bind-key "C-i" 'yas-next-field-or-maybe-expand yas-keymap)
-
-;;     (defun yas-new-snippet (&optional choose-instead-of-guess)
-;;       (interactive "P")
-;;       (let ((guessed-directories (yas-guess-snippet-directories)))
-;;         (switch-to-buffer "*new snippet*")
-;;         (erase-buffer)
-;;         (kill-all-local-variables)
-;;         (snippet-mode)
-;;         (set (make-local-variable 'yas-guessed-modes)
-;;              (mapcar #'(lambda (d)
-;;                          (intern (yas-table-name (car d))))
-;;                      guessed-directories))
-;;         (unless (and choose-instead-of-guess
-;;                      (not (y-or-n-p "Insert a snippet with useful headers? ")))
-;;           (yas-expand-snippet "\
-;;   # -*- mode: snippet -*-
-;;   # name: $1
-;;   # --
-;;   $0"))))
-
-;; (bind-key "C-<return>" 'yas-expand)
-;; (bind-key "M-<return>" 'yas-expand)
-;;     (bind-key "C-c y n" 'yas-new-snippet)
-;;     (bind-key "C-c y f" 'yas-find-snippets)
-;;     (bind-key "C-c y r" 'yas-reload-all)
-;;     (bind-key "C-c y v" 'yas-visit-snippet-file)))
-
-
-;; (bind-keys*
-;;  ("C-<return>" . yas-expand)
-;;  ("M-<return>" . yas-expand))
-
-;; Advanced setup with [use-package](https://github.com/jwiegley/use-package)
-;; (use-package yasnippet
-;;   :commands (yas-global-mode yas-minor-mode yas-expand)
-;;   :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
-;;   :init (yas-global-mode 1)
-;;   :config
-;;   (progn
-;; 	(setq yas-verbosity 0)
-;; 	;; (setq yas-snippet-dirs (concat emacs-root "snippets"))
-;; 	;; (yas-load-directory yas-snippet-dirs)
-;; 	(bind-keys :map yas-minor-mode-map
-;; 			   ("C-<return>" . yas-expand)
-;; 			   ("M-<return>" . yas-expand))
-;; 	))
-;;   ;; :bind (("C-<return>" . yas-expand)
-;;   ;; 		 ("M-<return>" . yas-expand)))
-
-
-
-
-;;(yas/initialize)
-
-;; ############################################################################
-
-
-;; ############################################################################
 ;; Config file: ~/.emacs.d/config/1_general_settings/aquamacs.el
 ;; -*- mode: lisp; -*-
 ;; =================================================================
@@ -567,23 +429,27 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/1_general_settings/backup.el
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Mer 2014-09-24 12:20 svarrette>
+;; Time-stamp: <Mer 2014-09-24 18:32 svarrette>
 ;; ===============================================
 ;;      Auto-save and backup files Management 
 ;; ===============================================
 
-(setq auto-save-list-file-name nil)     ; no .saves files
-(setq auto-save-default        t)       ; auto saving
-(setq make-backup-files        t)       ; make  backup files
 ;; see http://www.emacswiki.org/emacs/BackupDirectory
 
-(setq  backup-directory (concat emacs-root ".backup/"))
+(setq  backup-directory (get-conf-path ".backup/"))
+(setq  auto-save-list-file-prefix (get-conf-path ".auto-save-list/.saves-"))
+
 ;; Set backup directory
 ;; store all backup and autosave files there
 (setq backup-directory-alist
       `((".*" . ,backup-directory)))
 (setq auto-save-file-name-transforms
       `((".*" , backup-directory t)))
+
+(setq auto-save-list-file-name nil)     ; no .saves files
+(setq auto-save-default        t)       ; auto saving
+(setq make-backup-files        t)       ; make  backup files
+
 
 ;; ;; Set backup directory in /tmp
 ;; ;; store all backup and autosave files in the /tmp dir
@@ -595,9 +461,8 @@
 (setq
  backup-by-copying t                    ; don't clobber symlinks
  ;; backup-directory-alist
- ;; '(("." . "~/.saves"))                  ; don't litter my fs tree
- delete-old-versions t                  ; delete excess backup versions
-                                        ; silently
+ ;; '(("." . backup-directory ))           ; don't litter my fs tree
+ delete-old-versions t                  ; delete excess backup versions silently
  kept-new-versions 6
  kept-old-versions 2
  version-control t)                     ; make numeric backup versions
@@ -607,28 +472,83 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/1_general_settings/completion.el
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Mer 2014-09-24 12:21 svarrette>
-;; ===============================================
-;;  Code/Tab completion
-;; ===============================================
+;; Time-stamp: <Mer 2014-09-24 18:10 svarrette>
+;; ;; ===============================================
+;; ;;  Code/Tab completion
+;; ;; ===============================================
+
+;; ;; see http://www.emacswiki.org/emacs/TabCompletion
+;; ;;(require 'smart-tab)
+;; (use-package smart-tab
+;;   :init
+;;   (progn
+;; 	(add-to-list 'hippie-expand-try-functions-list 
+;; 				 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+;; 	(setq smart-tab-using-hippie-expand t)
+;; 	(global-smart-tab-mode t)))
+
+;; ;; Disable indent "smart" alignement to insert real tabs
+;; (defun indent-with-real-tab-hook ()
+;;   (setq indent-line-function 'insert-tab)
+;;   )
+;; ;;(add-hook 'text-mode-hook   'indent-with-real-tab-hook)
+;; (add-hook 'conf-mode-hook   'indent-with-real-tab-hook)
 
 
-;; see http://www.emacswiki.org/emacs/TabCompletion
-;;(require 'smart-tab)
-(use-package smart-tab
+
+;; === Yasnippet ===
+;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
+;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
+;; Installation notes: see README
+
+(use-package yasnippet
+  :if (not noninteractive)
+  :diminish yas-minor-mode
+  :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
+  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
+  :init
+  (hook-into-modes #'(lambda () (yas-minor-mode 1))
+                   '(prog-mode-hook
+					 text-mode-hook
+                     org-mode-hook
+                     ruby-mode-hook
+                     message-mode-hook))
+  :config
+  (progn
+ 	(setq yas-verbosity 0)
+	(bind-keys :map yas-minor-mode-map
+			   ("C-<return>" . yas-expand)
+			   ("M-<return>" . yas-expand)
+			   ("C-c y n"    . yas-new-snippet)
+			   ("C-c y f"    . yas-find-snippets)
+			   ("C-c y r"    . yas-reload-all)
+			   ("C-c y v"    . yas-visit-snippet-file)
+			   )
+	;; Hotfix for conflicts between yasnippet and smart-tab
+	;; see https://github.com/haxney/smart-tab/issues/1
+	(add-to-list 'hippie-expand-try-functions-list
+				 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+	)
+  :idle
+  (progn
+	(yas-reload-all)))
+
+;; (define-key yas-minor-mode-map (kbd "C-<return>") 'yas-expand)
+;; (define-key yas-minor-mode-map (kbd "M-<return>") 'yas-expand)
+
+
+;; Turn on auto completion
+;; See http://www.emacswiki.org/emacs/AutoComplete
+;;(require 'auto-complete-config)
+(use-package auto-complete-config
   :init
   (progn
-	(add-to-list 'hippie-expand-try-functions-list 
-				 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-	(setq smart-tab-using-hippie-expand t)
-	(global-smart-tab-mode t)))
-
-;; Disable indent "smart" alignement to insert real tabs
-(defun indent-with-real-tab-hook ()
-  (setq indent-line-function 'insert-tab)
-  )
-;;(add-hook 'text-mode-hook   'indent-with-real-tab-hook)
-(add-hook 'conf-mode-hook   'indent-with-real-tab-hook)
+	(setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
+	(ac-config-default))
+  :config
+  (progn
+	(ac-set-trigger-key "TAB")
+	(ac-set-trigger-key "<tab>")))
 ;; ############################################################################
 
 
@@ -758,6 +678,15 @@
 ;; 	(epa-file-enable)))
 
 (epa-file-enable)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/1_general_settings/expand-region.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Mer 2014-09-24 16:26 svarrette>
+;; ===============================================
+;; Expand region increases the selected region by semantic units. 
 ;; ############################################################################
 
 
@@ -905,10 +834,10 @@
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; UTF-8 please
-(setq locale-coding-system 'utf-8) ; pretty
-(set-terminal-coding-system 'utf-8) ; pretty
-(set-keyboard-coding-system 'utf-8) ; pretty
-(set-selection-coding-system 'utf-8) ; please
+(setq locale-coding-system    'utf-8) ; pretty
+(set-terminal-coding-system   'utf-8) ; pretty
+(set-keyboard-coding-system   'utf-8) ; pretty
+(set-selection-coding-system  'utf-8) ; please
 (prefer-coding-system 'utf-8) ; with sugar on top
 
 ;; Show active region
@@ -945,8 +874,8 @@
 ;; Easily navigate sillycased words
 (global-subword-mode 1)
 
-;; Don't break lines for me, please
-(setq-default truncate-lines t)
+;; break lines for me, please
+(setq-default truncate-lines nil)
 
 ;; Keep cursor away from edges when scrolling up/down
 ;;(require 'smooth-scrolling)
@@ -991,13 +920,6 @@
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
 
-;; Turn on auto completion
-;; See http://www.emacswiki.org/emacs/AutoComplete
-;;(require 'auto-complete-config)
-(use-package auto-complete-config
-  :init
-  (progn
-	(ac-config-default)))
 
 
 ;; ############################################################################
@@ -1049,18 +971,18 @@
   (yank)
   (call-interactively 'indent-region))
 
-;; === unindent ===
-(defun unindent-region ()
-  (interactive)
-  (save-excursion
-	(if (< (point) (mark)) (exchange-point-and-mark))
-	(let ((save-mark (mark)))
-	  (if (= (point) (line-beginning-position)) (previous-line 1))
-	  (goto-char (line-beginning-position))
-	  (while (>= (point) save-mark)
-		(goto-char (line-beginning-position))
-		(if (= (string-to-char "\t") (char-after (point))) (delete-char 1))
-		(previous-line 1)))))
+;; ;; === unindent ===
+;; (defun unindent-region ()
+;;   (interactive)
+;;   (save-excursion
+;; 	(if (< (point) (mark)) (exchange-point-and-mark))
+;; 	(let ((save-mark (mark)))
+;; 	  (if (= (point) (line-beginning-position)) (previous-line 1))
+;; 	  (goto-char (line-beginning-position))
+;; 	  (while (>= (point) save-mark)
+;; 		(goto-char (line-beginning-position))
+;; 		(if (= (string-to-char "\t") (char-after (point))) (delete-char 1))
+;; 		(previous-line 1)))))
 
 
 ;; ==================== Let's go ====================

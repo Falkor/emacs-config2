@@ -47,8 +47,8 @@
                           find-file-in-project
                           flycheck
                           helm
-						  helm-c-yasnippet
-                          help-package
+                          helm-c-yasnippet
+                          helm-package
                           htmlize
                           jabber
                           js2-mode

@@ -1,21 +1,25 @@
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Mer 2014-09-24 12:20 svarrette>
+;; Time-stamp: <Mer 2014-09-24 18:32 svarrette>
 ;; ===============================================
 ;;      Auto-save and backup files Management 
 ;; ===============================================
 
-(setq auto-save-list-file-name nil)     ; no .saves files
-(setq auto-save-default        t)       ; auto saving
-(setq make-backup-files        t)       ; make  backup files
 ;; see http://www.emacswiki.org/emacs/BackupDirectory
 
-(setq  backup-directory (concat emacs-root ".backup/"))
+(setq  backup-directory (get-conf-path ".backup/"))
+(setq  auto-save-list-file-prefix (get-conf-path ".auto-save-list/.saves-"))
+
 ;; Set backup directory
 ;; store all backup and autosave files there
 (setq backup-directory-alist
       `((".*" . ,backup-directory)))
 (setq auto-save-file-name-transforms
       `((".*" , backup-directory t)))
+
+(setq auto-save-list-file-name nil)     ; no .saves files
+(setq auto-save-default        t)       ; auto saving
+(setq make-backup-files        t)       ; make  backup files
+
 
 ;; ;; Set backup directory in /tmp
 ;; ;; store all backup and autosave files in the /tmp dir
@@ -27,9 +31,8 @@
 (setq
  backup-by-copying t                    ; don't clobber symlinks
  ;; backup-directory-alist
- ;; '(("." . "~/.saves"))                  ; don't litter my fs tree
- delete-old-versions t                  ; delete excess backup versions
-                                        ; silently
+ ;; '(("." . backup-directory ))           ; don't litter my fs tree
+ delete-old-versions t                  ; delete excess backup versions silently
  kept-new-versions 6
  kept-old-versions 2
  version-control t)                     ; make numeric backup versions

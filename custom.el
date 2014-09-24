@@ -6,7 +6,8 @@
  '(color-theme-libraries (quote ("/Users/svarrette/.emacs.d/packages/elpa/color-theme-20080305.34/themes/color-theme-library.elc")))
  '(menu-bar-mode t)
  '(powerline-default-separator (quote arrow))
- '(safe-local-variable-values (quote ((require-final-newline)))))
+ '(safe-local-variable-values (quote ((require-final-newline))))
+ '(truncate-lines nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

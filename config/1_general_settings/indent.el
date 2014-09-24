@@ -21,18 +21,18 @@
   (yank)
   (call-interactively 'indent-region))
 
-;; === unindent ===
-(defun unindent-region ()
-  (interactive)
-  (save-excursion
-	(if (< (point) (mark)) (exchange-point-and-mark))
-	(let ((save-mark (mark)))
-	  (if (= (point) (line-beginning-position)) (previous-line 1))
-	  (goto-char (line-beginning-position))
-	  (while (>= (point) save-mark)
-		(goto-char (line-beginning-position))
-		(if (= (string-to-char "\t") (char-after (point))) (delete-char 1))
-		(previous-line 1)))))
+;; ;; === unindent ===
+;; (defun unindent-region ()
+;;   (interactive)
+;;   (save-excursion
+;; 	(if (< (point) (mark)) (exchange-point-and-mark))
+;; 	(let ((save-mark (mark)))
+;; 	  (if (= (point) (line-beginning-position)) (previous-line 1))
+;; 	  (goto-char (line-beginning-position))
+;; 	  (while (>= (point) save-mark)
+;; 		(goto-char (line-beginning-position))
+;; 		(if (= (string-to-char "\t") (char-after (point))) (delete-char 1))
+;; 		(previous-line 1)))))
 
 
 ;; ==================== Let's go ====================

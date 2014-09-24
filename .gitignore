@@ -5,5 +5,6 @@ auto-save-list
 history
 places
 ac-comphist.dat
+.ac-comphist.dat
 .framegeometry
 .yas-compiled-snippets.el

@@ -1,25 +1,25 @@
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Mer 2014-09-24 17:07 svarrette>
-;; ===============================================
-;;  Code/Tab completion
-;; ===============================================
+;; Time-stamp: <Mer 2014-09-24 18:10 svarrette>
+;; ;; ===============================================
+;; ;;  Code/Tab completion
+;; ;; ===============================================
 
-;; see http://www.emacswiki.org/emacs/TabCompletion
-;;(require 'smart-tab)
-(use-package smart-tab
-  :init
-  (progn
-	(add-to-list 'hippie-expand-try-functions-list 
-				 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-	(setq smart-tab-using-hippie-expand t)
-	(global-smart-tab-mode t)))
+;; ;; see http://www.emacswiki.org/emacs/TabCompletion
+;; ;;(require 'smart-tab)
+;; (use-package smart-tab
+;;   :init
+;;   (progn
+;; 	(add-to-list 'hippie-expand-try-functions-list 
+;; 				 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+;; 	(setq smart-tab-using-hippie-expand t)
+;; 	(global-smart-tab-mode t)))
 
-;; Disable indent "smart" alignement to insert real tabs
-(defun indent-with-real-tab-hook ()
-  (setq indent-line-function 'insert-tab)
-  )
-;;(add-hook 'text-mode-hook   'indent-with-real-tab-hook)
-(add-hook 'conf-mode-hook   'indent-with-real-tab-hook)
+;; ;; Disable indent "smart" alignement to insert real tabs
+;; (defun indent-with-real-tab-hook ()
+;;   (setq indent-line-function 'insert-tab)
+;;   )
+;; ;;(add-hook 'text-mode-hook   'indent-with-real-tab-hook)
+;; (add-hook 'conf-mode-hook   'indent-with-real-tab-hook)
 
 
 
@@ -64,11 +64,15 @@
 ;; (define-key yas-minor-mode-map (kbd "M-<return>") 'yas-expand)
 
 
-
 ;; Turn on auto completion
 ;; See http://www.emacswiki.org/emacs/AutoComplete
 ;;(require 'auto-complete-config)
 (use-package auto-complete-config
   :init
   (progn
-	(ac-config-default)))
+	(setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
+	(ac-config-default))
+  :config
+  (progn
+	(ac-set-trigger-key "TAB")
+	(ac-set-trigger-key "<tab>")))

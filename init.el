@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-09-24 13:33 svarrette>
+;; Time-stamp: <Mer 2014-09-24 18:35 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -17,6 +17,7 @@
 
 ;; Initialization - save start time
 (defconst emacs-start-time (current-time))
+
 (unless noninteractive
   (message "Loading %s..." load-file-name))
 
@@ -81,6 +82,7 @@
 ;; Now load/setup packages
 (load (get-conf-path "packages"))
 
+
 ;; === KEY LIBRARIES ===
 ;; Below are the key libraries you wish to see loaded asap
 (require 'use-package)
@@ -112,7 +114,7 @@
 (when window-system
   (let ((elapsed (float-time (time-subtract (current-time)
                                             emacs-start-time))))
-    (message "Loading %s...done (%.3fs)" load-file-name elapsed))
+    (message "Loading done (%.3fs)"  elapsed))
 
   (add-hook 'after-init-hook
             `(lambda ()
