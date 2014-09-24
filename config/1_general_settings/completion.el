@@ -1,7 +1,11 @@
-;; === Code completion ===
+;; -*- mode: lisp -*-
+;; Time-stamp: <Mer 2014-09-24 12:21 svarrette>
+;; ===============================================
+;;  Code/Tab completion
+;; ===============================================
+
+
 ;; see http://www.emacswiki.org/emacs/TabCompletion
-
-
 ;;(require 'smart-tab)
 (use-package smart-tab
   :init

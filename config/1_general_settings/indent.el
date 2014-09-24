@@ -59,7 +59,7 @@
 ;;(setq c-auto-newline t)
 
 ;; (add-hook 'c-mode-common-hook (lambda () (setq c-basic-offset 4)))
-(add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
+;; (add-hook 'c-mode-common-hook (lambda () (setq c-recognize-knr-p nil)))
 ;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
 ;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
 ;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))

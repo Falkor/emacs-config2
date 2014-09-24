@@ -1,3 +1,5 @@
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Mer 2014-09-24 12:18 svarrette>
 ;; ========================================================
 ;; Auto-insert: automatic insertion of text into new files
 ;; ========================================================

@@ -1,4 +1,9 @@
-;; === Auto-save and backup files ===
+;; -*- mode: lisp -*-
+;; Time-stamp: <Mer 2014-09-24 12:20 svarrette>
+;; ===============================================
+;;      Auto-save and backup files Management 
+;; ===============================================
+
 (setq auto-save-list-file-name nil)     ; no .saves files
 (setq auto-save-default        t)       ; auto saving
 (setq make-backup-files        t)       ; make  backup files

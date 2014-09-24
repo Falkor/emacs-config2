@@ -1,7 +1,9 @@
+;; -*- mode:lisp -*-
+;; Time-stamp: <Mer 2014-09-24 13:19 svarrette>
+;; ========================================================================
+;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
+;; ========================================================================
 ;;
-;; setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
-;;
-
 
 ;; === defaults ===
 (setq truncate-partial-width-windows nil)
@@ -61,32 +63,6 @@
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
 (use-package powerline)
 (powerline-center-theme)
-;; shape...
-;; (setq powerline-arrow-shape 'arrow) ;; mirrored arrows,
-;; (setq powerline-color1 "DarkGrey")
-;; (setq powerline-color2 "honeydew1")
-;; (custom-set-faces
-;;  '(powerline-active1 '((t (:background "DarkGrey"  :inherit mode-line))))
-;;  '(powerline-active2 '((t (:background "honeydew1" :inherit mode-line)))))
-
-;; (custom-theme-set-faces
-;;  'color-theme-vim-insert-mode
-;;  `(powerline-active1 ((t (:background "DarkGrey"    :inherit mode-line))))
-;;  `(powerline-active2 ((t (:background "honeydew1"   :inherit mode-line))))
-;;  `(powerline-inactive1 ((t (:background "gray71"    :inherit mode-line-inactive))))
-;;  `(powerline-inactive2 ((t (:background "honeydew3" :inherit mode-line-inactive)))))
-
-;; (setq powerline-color1 "grey22")
-;; (setq powerline-color2 "grey40")
-;; (custom-set-faces
-;;  '(mode-line ((t (:foreground "#030303" :background "#bdbdbd" :box nil))))
-;;  '(mode-line-inactive ((t (:foreground "#f9f9f9" :background "#666666" :box nil)))))
-
-;; (when (and (buffer-file-name (current-buffer)) vc-mode)
-;;     (if (vc-workfile-unchanged-p (buffer-file-name (current-buffer)))
-;;       (powerline-vc 'powerline-insert-face 'r)
-;;       (powerline-vc 'powerline-normal-face 'r)))
-
 
 
 ;; =================================================================
@@ -104,8 +80,7 @@
 	(color-theme-vim-colors)))
 
 
-
-;; To better see the cursor
+;; === To better see the cursor ===
 (setq default-frame-alist
       '((cursor-color . "green")
         (cursor-type . box)))
