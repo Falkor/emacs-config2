@@ -1,5 +1,5 @@
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Mer 2014-09-24 18:10 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 00:10 svarrette>
 ;; ;; ===============================================
 ;; ;;  Code/Tab completion
 ;; ;; ===============================================
@@ -67,7 +67,9 @@
 ;; Turn on auto completion
 ;; See http://www.emacswiki.org/emacs/AutoComplete
 ;;(require 'auto-complete-config)
+
 (use-package auto-complete-config
+  :diminish auto-complete-mode
   :init
   (progn
 	(setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
@@ -76,3 +78,23 @@
   (progn
 	(ac-set-trigger-key "TAB")
 	(ac-set-trigger-key "<tab>")))
+
+
+(add-hook 'c-mode-common-hook
+		  (lambda ()
+			(add-to-list 'ac-sources 'ac-source-c-headers)
+			(add-to-list 'ac-sources 'ac-source-c-header-symbols t)))
+
+
+;; (defun my:ac-c-headers-init ()
+;;   (require 'auto-complete-c-headers)
+;;   (add-to-list 'ac-sources 'ac-source-c-headers))
+
+;; (add-hook 'c++-mode-hook 'my:ac-c-headers-init)
+;; (add-hook 'c-mode-hook 'my:ac-c-headers-init)
+
+;; (use-package ac-c-headers
+;;   :config
+;;   (progn
+;; 	(add-to-list 'ac-sources 'ac-source-c-headers)
+;; 	(add-hook 'c-mode-common-hook 'ac-setup)))

@@ -6,13 +6,37 @@
 ;; then run within emacs 'M-x emc-merge-config-files'
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/3_bindings/global.el
+;; Config file: ~/.emacs.d/config/modes/ace-jump.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Mer 2014-09-24 23:42 svarrette>
+;; ----------------------------------------------------------------------
+;; Ace-jump-mode --  a quick cursor location minor mode for emacs
+;; see http://www.emacswiki.org/AceJump
+;; see also https://github.com/winterTTr/ace-jump-mode
+;; ----------------------------------------------------------------------
+
+(use-package ace-jump-mode
+  :commands (ace-jump-mode)
+  :bind ("C-c C-j" . ace-jump-mode))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/helm.el
+;; Configure helm mode
+;; see http://emacs-helm.github.io/helm/
+;;(helm-mode 1)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/keybindings/global.el
 ;; ----------------------------------------------------------------------
 ;; File: bindings/global.el - setup my gloabl key bindings in emacs
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-24 10:16 svarrette>
+;; Time-stamp: <Mer 2014-09-24 23:18 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -47,9 +71,15 @@
 
 ;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
 
-
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+
+;; === Selection ===
+;; Using [expand-region](https://github.com/magnars/expand-region.el)
+;; see general_settings/expand-region.el
+;;  "C-@"  'er/expand-region
+;;	"C-="  'er/contract-region
+
 
 ;; === Git stuff ===
 (global-set-key (kbd "C-x g") 'magit-status)
@@ -273,7 +303,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/3_bindings/mac.el
+;; Config file: ~/.emacs.d/config/keybindings/mac.el
 ;; Special configuration for Mac 
 
 ;; (Aquamacs
@@ -297,7 +327,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/3_bindings/ruby.el
+;; Config file: ~/.emacs.d/config/keybindings/ruby.el
 ;; -*- mode: lisp; -*-
 
 (eval-after-load 'ruby-mode
@@ -307,7 +337,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/aquamacs.el
+;; Config file: ~/.emacs.d/config/general_settings/aquamacs.el
 ;; -*- mode: lisp; -*-
 ;; =================================================================
 ;; Aquamacs specific 
@@ -325,7 +355,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/auto-insert.el
+;; Config file: ~/.emacs.d/config/general_settings/auto-insert.el
 ;; -*- mode: lisp; -*-
 ;; Time-stamp: <Mer 2014-09-24 12:18 svarrette>
 ;; ========================================================
@@ -427,7 +457,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/backup.el
+;; Config file: ~/.emacs.d/config/general_settings/backup.el
 ;; -*- mode: lisp -*-
 ;; Time-stamp: <Mer 2014-09-24 18:32 svarrette>
 ;; ===============================================
@@ -470,9 +500,9 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/completion.el
+;; Config file: ~/.emacs.d/config/general_settings/completion.el
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Mer 2014-09-24 18:10 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 00:07 svarrette>
 ;; ;; ===============================================
 ;; ;;  Code/Tab completion
 ;; ;; ===============================================
@@ -540,7 +570,9 @@
 ;; Turn on auto completion
 ;; See http://www.emacswiki.org/emacs/AutoComplete
 ;;(require 'auto-complete-config)
+
 (use-package auto-complete-config
+  :diminish auto-complete-mode
   :init
   (progn
 	(setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
@@ -549,11 +581,18 @@
   (progn
 	(ac-set-trigger-key "TAB")
 	(ac-set-trigger-key "<tab>")))
+
+
+(use-package ac-c-headers
+  :config
+  (progn
+	(add-to-list 'ac-sources 'ac-source-c-headers)
+	(add-hook 'c-mode-common-hook 'ac-setup)))
 ;; ############################################################################
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/display.el
+;; Config file: ~/.emacs.d/config/general_settings/display.el
 ;; -*- mode:lisp -*-
 ;; Time-stamp: <Mer 2014-09-24 13:30 svarrette>
 ;; ========================================================================
@@ -661,7 +700,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/easypg.el
+;; Config file: ~/.emacs.d/config/general_settings/easypg.el
 ;; -*- mode: lisp; -*-
 ;; 
 ;; =======================================
@@ -682,16 +721,20 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/expand-region.el
+;; Config file: ~/.emacs.d/config/general_settings/expand-region.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Mer 2014-09-24 16:26 svarrette>
+;; Time-stamp: <Mer 2014-09-24 23:12 svarrette>
 ;; ===============================================
-;; Expand region increases the selected region by semantic units. 
+;; Expand region increases the selected region by semantic units.
+
+(use-package expand-region
+  :bind (("C-@" . er/expand-region)
+		 ("C-=" . er/contract-region)))
 ;; ############################################################################
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/filladapt.el
+;; Config file: ~/.emacs.d/config/general_settings/filladapt.el
 ;; =============================================
 ;; Activate fill adapt
 ;; see http://www.emacswiki.org/emacs/FillAdapt
@@ -718,7 +761,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/framegeometry.el
+;; Config file: ~/.emacs.d/config/general_settings/framegeometry.el
 ;; framegeometry.el
 ;; use to restore the frame size of last session
 ;; Courtesy from http://ck.kennt-wayne.de/2011/jul/emacs-restore-last-frame-size-on-startup
@@ -766,7 +809,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/global.el
+;; Config file: ~/.emacs.d/config/general_settings/global.el
 ;; Global configuration
 
 ;; Add menu bar
@@ -926,7 +969,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/hotfix-x-popup.el
+;; Config file: ~/.emacs.d/config/general_settings/hotfix-x-popup.el
 ;; -*- mode: lisp; -*-
 ;; Time-stamp: <Mer 2014-09-17 21:52 svarrette>
 ;;
@@ -947,7 +990,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/indent.el
+;; Config file: ~/.emacs.d/config/general_settings/indent.el
 ;; -*- mode: lisp; -*-
 
 ;;
@@ -1017,7 +1060,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/ispell.el
+;; Config file: ~/.emacs.d/config/general_settings/ispell.el
 ;; -*- mode: lisp; -*-
 
 ;; LaTeX-sensitive spell checking
@@ -1054,7 +1097,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/neotree.el
+;; Config file: ~/.emacs.d/config/general_settings/neotree.el
 ;; ----------------------------------------------------------------------
 ;; File: neotree.el - NerdTree like 
 ;; Time-stamp: <Mer 2014-09-24 12:12 svarrette>
@@ -1082,7 +1125,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/parenthesis.el
+;; Config file: ~/.emacs.d/config/general_settings/parenthesis.el
 ;; === Show matching parenthesis ===
 (require 'paren)
 (GNUEmacs
@@ -1113,7 +1156,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/recentf.el
+;; Config file: ~/.emacs.d/config/general_settings/recentf.el
 ;; === Recentf mode ===
 ;; see http://www.emacswiki.org/emacs/RecentFiles
 ;; A minor mode that builds a list of recently opened files
@@ -1136,7 +1179,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/saveplace.el
+;; Config file: ~/.emacs.d/config/general_settings/saveplace.el
 ;; -*- mode: lisp; -*-
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
 ;; (require 'saveplace)
@@ -1149,7 +1192,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/time-stamp.el
+;; Config file: ~/.emacs.d/config/general_settings/time-stamp.el
 ;; -*- mode:lisp; -*-
 ;; === Maintain last change time stamps (via Time-stamp: <Dim 2014-09-21 09:21 svarrette>) ===
 ;;(require 'time-stamp)
@@ -1168,7 +1211,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/1_general_settings/user.el
+;; Config file: ~/.emacs.d/config/general_settings/user.el
 ;; User configuration / Identity
 (setq user-full-name    "Sebastien Varrette")
 (setq user-mail-address "<Sebastien.Varrette@uni.lu>")

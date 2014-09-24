@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-24 10:16 svarrette>
+;; Time-stamp: <Mer 2014-09-24 23:18 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -38,9 +38,15 @@
 
 ;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
 
-
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
+
+;; === Selection ===
+;; Using [expand-region](https://github.com/magnars/expand-region.el)
+;; see general_settings/expand-region.el
+;;  "C-@"  'er/expand-region
+;;	"C-="  'er/contract-region
+
 
 ;; === Git stuff ===
 (global-set-key (kbd "C-x g") 'magit-status)
