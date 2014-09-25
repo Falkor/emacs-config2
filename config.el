@@ -1193,7 +1193,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Ven 2014-09-26 00:13 svarrette>
+;; Time-stamp: <Ven 2014-09-26 00:27 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
@@ -1213,7 +1213,7 @@
 	;; commit management
 	(setq magit-commit-signoff                 t)
 	(setq magit-commit-ask-to-stage            nil) ; do not ask to stage all
-	;;(setq magit-commit-all-when-nothing-staged t)
+	(setq magit-commit-all-when-nothing-staged t)
 	)
   :bind ("C-x g" . magit-status))
 
