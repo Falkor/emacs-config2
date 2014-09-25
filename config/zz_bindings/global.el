@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-24 23:18 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 15:44 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -30,7 +30,9 @@
 
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-j") 'comment-indent-new-line) ;to reverse the normal binding
 
+;; === Open files ===
 ;; Use helm to open files / recentf to open recent files
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x C-r") 'helm-recentf)
@@ -79,6 +81,12 @@
 ;; I may prefer C-+ and C-- for window enlarge/schrink
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
+
+;; === Fullscreen (starting Mac OS X Lion) ===
+(when is-mac
+  (global-set-key (kbd "C-M-f") 'ns-toggle-fullscreen))
+;;(define-key global-map "\C-\M-f" 'ns-toggle-fullscreen)
+
 
 ;; === Multi speed mouse scrolling ===
 ;; scroll:         normal speed

@@ -1,3 +1,4 @@
+;; -*- mode: lisp; auto-fill-mode;  -*-
 ;; =============================================
 ;; Activate fill adapt
 ;; see http://www.emacswiki.org/emacs/FillAdapt

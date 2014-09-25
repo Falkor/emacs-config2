@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Jeu 2014-09-25 00:13 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 15:52 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;

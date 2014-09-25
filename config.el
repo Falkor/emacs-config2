@@ -12,7 +12,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-09-24 23:18 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 15:44 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -39,7 +39,9 @@
 
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-j") 'comment-indent-new-line) ;to reverse the normal binding
 
+;; === Open files ===
 ;; Use helm to open files / recentf to open recent files
 ;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x C-r") 'helm-recentf)
@@ -88,6 +90,12 @@
 ;; I may prefer C-+ and C-- for window enlarge/schrink
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
+
+;; === Fullscreen (starting Mac OS X Lion) ===
+(when is-mac
+  (global-set-key (kbd "C-M-f") 'ns-toggle-fullscreen))
+;;(define-key global-map "\C-\M-f" 'ns-toggle-fullscreen)
+
 
 ;; === Multi speed mouse scrolling ===
 ;; scroll:         normal speed
@@ -604,11 +612,13 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/display.el
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Mer 2014-09-24 13:30 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 16:32 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
 ;;
+(require 'cl)
+
 
 ;; === defaults ===
 (setq truncate-partial-width-windows nil)
@@ -680,6 +690,13 @@
 (use-package color-theme
   :init
   (progn
+	;; clean color-theme-libraries
+	;;
+	;; (message
+	;; 	  (remove-if-not #'(lambda(line) (string-match "\\.el" line))
+	;; 					 '(list color-theme-libraries)))
+	;; Personnal Hotfix - srry
+	(message (concat "****elpa package : "  (package--dir "elpa" "20080305\.34")))
 	(color-theme-initialize)
 	(setq color-theme-is-global t)
 	(color-theme-vim-colors)))
@@ -733,7 +750,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/ecb.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Jeu 2014-09-25 11:44 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 15:19 svarrette>
 ;; ----------------------------------------------------------------------
 
 ;; --------------------------------
@@ -766,7 +783,7 @@
 
 ;; --- ECB layout ----
 (setq ecb-create-layout-file (get-conf-path ".ecb-falkor-layout.el")) ; where my layout are saved
-(setq ecb-windows-width 40)
+(setq ecb-windows-width 37)
 (setq ecb-layout-name "falkor")
 
 ;; The "falkor" layout is as follows:
@@ -808,6 +825,7 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/filladapt.el
+;; -*- mode: lisp; auto-fill-mode;  -*-
 ;; =============================================
 ;; Activate fill adapt
 ;; see http://www.emacswiki.org/emacs/FillAdapt
@@ -897,6 +915,9 @@
 ;; Increase the lisp interpretor depth 
 ;;(setq max-lisp-eval-depth 10000)
 
+
+;; Automatically fill comment
+(setq comment-auto-fill-only-comments t)
 
 ;; Correct copy-paste to clipboard
 (setq x-select-enable-clipboard t)
@@ -1166,6 +1187,23 @@
 (dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
                                    sh-mode-hook))
   (add-hook hook 'flyspell-prog-mode))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/general_settings/magit.el
+;; -*- mode: lisp; -*-
+;; ----------------------------------------------------------------------
+;; File: magit.el -            
+;; Time-stamp: <Jeu 2014-09-25 15:50 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; .             
+;; ----------------------------------------------------------------------
+
+
+
+(provide 'magit)
 ;; ############################################################################
 
 

@@ -13,6 +13,9 @@
 ;;(setq max-lisp-eval-depth 10000)
 
 
+;; Automatically fill comment
+(setq comment-auto-fill-only-comments t)
+
 ;; Correct copy-paste to clipboard
 (setq x-select-enable-clipboard t)
 ;; after mouse selection in X11, you can paste by `yank' in emacs
