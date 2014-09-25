@@ -1,5 +1,5 @@
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Jeu 2014-09-25 23:50 svarrette>
+;; Time-stamp: <Ven 2014-09-26 00:13 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
@@ -12,10 +12,15 @@
 	(set-face-foreground 'diff-added "#00cc33")
 	(set-face-foreground 'diff-removed "#ff0000")
 	;;
-	(set-default 'magit-stage-all-confirm nil)
-	(set-default 'magit-unstage-all-confirm nil)
+	(setq magit-stage-all-confirm   nil)
+	(setq magit-unstage-all-confirm nil)
 	;;
-	(setq magit-commit-signoff t))
+	(setq magit-restore-window-configuration t)
+	;; commit management
+	(setq magit-commit-signoff                 t)
+	(setq magit-commit-ask-to-stage            nil) ; do not ask to stage all
+	;;(setq magit-commit-all-when-nothing-staged t)
+	)
   :bind ("C-x g" . magit-status))
 
 
