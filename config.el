@@ -6,31 +6,7 @@
 ;; then run within emacs 'M-x emc-merge-config-files'
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/ace-jump.el
-;; -*- mode: lisp; -*-
-;; Time-stamp: <Mer 2014-09-24 23:42 svarrette>
-;; ----------------------------------------------------------------------
-;; Ace-jump-mode --  a quick cursor location minor mode for emacs
-;; see http://www.emacswiki.org/AceJump
-;; see also https://github.com/winterTTr/ace-jump-mode
-;; ----------------------------------------------------------------------
-
-(use-package ace-jump-mode
-  :commands (ace-jump-mode)
-  :bind ("C-c C-j" . ace-jump-mode))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/modes/helm.el
-;; Configure helm mode
-;; see http://emacs-helm.github.io/helm/
-;;(helm-mode 1)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/keybindings/global.el
+;; Config file: ~/.emacs.d/config/zz_bindings/global.el
 ;; ----------------------------------------------------------------------
 ;; File: bindings/global.el - setup my gloabl key bindings in emacs
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
@@ -303,7 +279,7 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/keybindings/mac.el
+;; Config file: ~/.emacs.d/config/zz_bindings/mac.el
 ;; Special configuration for Mac 
 
 ;; (Aquamacs
@@ -327,12 +303,36 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/keybindings/ruby.el
+;; Config file: ~/.emacs.d/config/zz_bindings/ruby.el
 ;; -*- mode: lisp; -*-
 
 (eval-after-load 'ruby-mode
   '(progn
 	 (define-key ruby-mode-map (kbd "C-c t") 'ruby-jump-to-other)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/ace-jump.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Mer 2014-09-24 23:42 svarrette>
+;; ----------------------------------------------------------------------
+;; Ace-jump-mode --  a quick cursor location minor mode for emacs
+;; see http://www.emacswiki.org/AceJump
+;; see also https://github.com/winterTTr/ace-jump-mode
+;; ----------------------------------------------------------------------
+
+(use-package ace-jump-mode
+  :commands (ace-jump-mode)
+  :bind ("C-c C-j" . ace-jump-mode))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/helm.el
+;; Configure helm mode
+;; see http://emacs-helm.github.io/helm/
+;;(helm-mode 1)
 ;; ############################################################################
 
 
@@ -502,7 +502,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/completion.el
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Jeu 2014-09-25 00:07 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 11:47 svarrette>
 ;; ;; ===============================================
 ;; ;;  Code/Tab completion
 ;; ;; ===============================================
@@ -512,10 +512,10 @@
 ;; (use-package smart-tab
 ;;   :init
 ;;   (progn
-;; 	(add-to-list 'hippie-expand-try-functions-list 
-;; 				 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-;; 	(setq smart-tab-using-hippie-expand t)
-;; 	(global-smart-tab-mode t)))
+;;  (add-to-list 'hippie-expand-try-functions-list
+;;               'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+;;  (setq smart-tab-using-hippie-expand t)
+;;  (global-smart-tab-mode t)))
 
 ;; ;; Disable indent "smart" alignement to insert real tabs
 ;; (defun indent-with-real-tab-hook ()
@@ -539,55 +539,65 @@
   :init
   (hook-into-modes #'(lambda () (yas-minor-mode 1))
                    '(prog-mode-hook
-					 text-mode-hook
+                     text-mode-hook
                      org-mode-hook
                      ruby-mode-hook
                      message-mode-hook))
   :config
   (progn
- 	(setq yas-verbosity 0)
-	(bind-keys :map yas-minor-mode-map
-			   ("C-<return>" . yas-expand)
-			   ("M-<return>" . yas-expand)
-			   ("C-c y n"    . yas-new-snippet)
-			   ("C-c y f"    . yas-find-snippets)
-			   ("C-c y r"    . yas-reload-all)
-			   ("C-c y v"    . yas-visit-snippet-file)
-			   )
-	;; Hotfix for conflicts between yasnippet and smart-tab
-	;; see https://github.com/haxney/smart-tab/issues/1
-	(add-to-list 'hippie-expand-try-functions-list
-				 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-	)
+    (setq yas-verbosity 0)
+    (bind-keys :map yas-minor-mode-map
+               ("C-<return>" . yas-expand)
+               ("M-<return>" . yas-expand)
+               ("C-c y n"    . yas-new-snippet)
+               ("C-c y f"    . yas-find-snippets)
+               ("C-c y r"    . yas-reload-all)
+               ("C-c y v"    . yas-visit-snippet-file)
+               )
+    ;; Hotfix for conflicts between yasnippet and smart-tab
+    ;; see https://github.com/haxney/smart-tab/issues/1
+    (add-to-list 'hippie-expand-try-functions-list
+                 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+    )
   :idle
   (progn
-	(yas-reload-all)))
+    (yas-reload-all)))
 
 ;; (define-key yas-minor-mode-map (kbd "C-<return>") 'yas-expand)
 ;; (define-key yas-minor-mode-map (kbd "M-<return>") 'yas-expand)
 
+;; add C/C++ headers directly in auto-complete
+;; see https://github.com/mooz/auto-complete-c-headers
+(defun my:ac-c-header-init ()
+  (auto-complete-mode 1)
+  (require 'auto-complete-c-headers)
+  (add-to-list 'ac-sources 'ac-source-c-headers)
+  ;; below list from the output of `gcc -xc -E -v -` or `gcc -xc++ -E -v -` as
+  ;; advided in the variable achead:include-directories
+  (when is-mac
+    (add-to-list 'achead:include-directories '"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"))
+  )
 
 ;; Turn on auto completion
 ;; See http://www.emacswiki.org/emacs/AutoComplete
 ;;(require 'auto-complete-config)
-
-(use-package auto-complete-config
-  :diminish auto-complete-mode
-  :init
-  (progn
-	(setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
-	(ac-config-default))
-  :config
-  (progn
-	(ac-set-trigger-key "TAB")
-	(ac-set-trigger-key "<tab>")))
-
-
-(use-package ac-c-headers
-  :config
-  (progn
-	(add-to-list 'ac-sources 'ac-source-c-headers)
-	(add-hook 'c-mode-common-hook 'ac-setup)))
+(use-package auto-complete
+  :config (use-package auto-complete-config
+            :diminish auto-complete-mode
+            :init
+            (progn
+              (setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
+              (ac-config-default)
+              (hook-into-modes #'my:ac-c-header-init
+                               '(c-mode-common-hook
+                                 c-mode-hook
+                                 c++-mode-hook))
+              )
+            :config
+            (progn
+              (ac-set-trigger-key "TAB")
+              (ac-set-trigger-key "<tab>")
+              )))
 ;; ############################################################################
 
 
@@ -717,6 +727,69 @@
 ;; 	(epa-file-enable)))
 
 (epa-file-enable)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/general_settings/ecb.el
+;; -*- mode: lisp; -*-
+;; Time-stamp: <Jeu 2014-09-25 11:44 svarrette>
+;; ----------------------------------------------------------------------
+
+;; --------------------------------
+;; === ECB (Emacs Code Browser) ===
+;; see http://ecb.sourceforge.net/
+;; or  http://www.emacswiki.org/emacs/EmacsCodeBrowser
+;; or  http://www.emacswiki.org/emacs/PracticalECB
+(require 'ecb)
+;;(require 'ecb-autoloads)
+
+;; ;; /!\ Caution on ECB variable configuration
+;; ;; see http://ecb.sourceforge.net/docs/setq-or-customize.html#setq-or-customize 
+;; ;; for the options that shouldn't be configured via setq ;(
+
+;; --- Annoyances
+;; use the primary button to navigate in the source tree -- middle button otherwise (!?!)
+(setq ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2))
+(setq ecb-show-sources-in-directories-buffer 'always)
+(setq ecb-tip-of-the-day nil)           ; disable tips of the day
+(setq ecb-version-check nil)			; to prevent ecb failing to start up
+
+(setq ecb-history-sort-method nil)	 ; No sorting, means the most recently used
+										; buffers are on the top of the history
+                                        ; and the seldom used buffers at the bottom
+;; (setq ecb-vc-enable-support t)          ; show versionning status of the files
+;;                                         ; in the sources/hstory (SVN etc.)
+;; ;; autostart ECB on emacs startup (put to nil to desactivate)
+;; ;;(setq ecb-auto-activate t)
+
+
+;; --- ECB layout ----
+(setq ecb-create-layout-file (get-conf-path ".ecb-falkor-layout.el")) ; where my layout are saved
+(setq ecb-windows-width 40)
+(setq ecb-layout-name "falkor")
+
+;; The "falkor" layout is as follows:
+;; +------+-------+--------------------------------------+
+;; |              |                                      |
+;; |              |                                      |
+;; | Directories  |                                      |
+;; |              |                                      |
+;; +--------------|          Edit                        |
+;; |   History    |                                      |
+;; |              |                                      |
+;; +------+-------+                                      |
+;; |              |                                      |
+;; |   Methods    |                                      |
+;; |              |                                      |
+;; +-----------------------------------------------------+
+
+;; You can easily create your own layout using M-x ecb-create-new-layout
+;; see ~/emacs.d/custom.el for the configuration of my own layout
+
+
+
+
 ;; ############################################################################
 
 
