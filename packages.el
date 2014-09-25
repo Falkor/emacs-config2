@@ -32,13 +32,13 @@
 ;;
 ;; Define packages to install
 ;;
-(defvar falkor/packages '(ac-c-headers      ; auto-complete source for C headers
-						  ace-jump-mode		; 
+(defvar falkor/packages '(ace-jump-mode
 						  alert
                           apache-mode
                           auctex
 						  auto-compile
                           auto-complete
+						  auto-complete-c-headers ; auto-complete source for C/C++ header files
                           autopair
                           better-defaults
                           color-theme

@@ -4,6 +4,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(color-theme-libraries (quote ("/Users/svarrette/.emacs.d/packages/elpa/color-theme-20080305.34/themes/color-theme-library.elc")))
+ '(ecb-options-version "2.40")
  '(menu-bar-mode t)
  '(powerline-default-separator (quote arrow))
  '(safe-local-variable-values (quote ((require-final-newline))))

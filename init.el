@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-09-24 18:35 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 00:13 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -92,11 +92,6 @@
 ;; Load Lisp defined functions
 (load-dir-one defuns-dir)
 
-;; ===== Custom settings ====
-;; Overwrite with the custom settings
-;;(load-dir-one custom-dir)
-(load custom-file 'noerror)
-
 ;; === Emacs Modular Configuration entry point ===
 ;; See https://github.com/targzeta/emacs-modular-configuration
 ;; ----
@@ -107,10 +102,13 @@
 
 (load (concat emacs-root "config"))
 
+;; ===== Custom settings ====
+;; Overwrite with the custom settings
+;;(load-dir-one custom-dir)
+(load custom-file 'noerror)
 
 
 ;;; Post initialization
-
 (when window-system
   (let ((elapsed (float-time (time-subtract (current-time)
                                             emacs-start-time))))
