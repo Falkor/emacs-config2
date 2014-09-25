@@ -12,7 +12,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-09-25 15:44 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 23:50 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -58,9 +58,9 @@
 ;;  "C-@"  'er/expand-region
 ;;	"C-="  'er/contract-region
 
-
-;; === Git stuff ===
-(global-set-key (kbd "C-x g") 'magit-status)
+;; === Magit stuff ===
+;; see general_settings/magit.el
+;; "C-x g" . magit-status
 
 ;; === Buffer switching ===
 ;; C-x b permits to switch among the buffer by entering a buffer name,
@@ -612,7 +612,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/display.el
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Jeu 2014-09-25 16:32 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 16:33 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -696,7 +696,7 @@
 	;; 	  (remove-if-not #'(lambda(line) (string-match "\\.el" line))
 	;; 					 '(list color-theme-libraries)))
 	;; Personnal Hotfix - srry
-	(message (concat "****elpa package : "  (package--dir "elpa" "20080305\.34")))
+	(message (concat "****elpa package : "  (package--dir "elpa" "20080305.34/")))
 	(color-theme-initialize)
 	(setq color-theme-is-global t)
 	(color-theme-vim-colors)))
@@ -1193,17 +1193,26 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
 ;; -*- mode: lisp; -*-
+;; Time-stamp: <Jeu 2014-09-25 23:50 svarrette>
 ;; ----------------------------------------------------------------------
-;; File: magit.el -            
-;; Time-stamp: <Jeu 2014-09-25 15:50 svarrette>
-;;
-;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
-;; .             
-;; ----------------------------------------------------------------------
+;; Magit management
+
+(use-package magit
+  :config
+  (progn
+	(set-face-background 'magit-item-highlight "#121212")
+	(set-face-background 'diff-file-header "#121212")
+	(set-face-foreground 'diff-context "#666666")
+	(set-face-foreground 'diff-added "#00cc33")
+	(set-face-foreground 'diff-removed "#ff0000")
+	;;
+	(set-default 'magit-stage-all-confirm nil)
+	(set-default 'magit-unstage-all-confirm nil)
+	;;
+	(setq magit-commit-signoff t))
+  :bind ("C-x g" . magit-status))
 
 
-
-(provide 'magit)
 ;; ############################################################################
 
 
