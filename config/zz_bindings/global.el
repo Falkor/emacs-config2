@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-09-25 15:44 svarrette>
+;; Time-stamp: <Jeu 2014-09-25 23:50 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -49,9 +49,9 @@
 ;;  "C-@"  'er/expand-region
 ;;	"C-="  'er/contract-region
 
-
-;; === Git stuff ===
-(global-set-key (kbd "C-x g") 'magit-status)
+;; === Magit stuff ===
+;; see general_settings/magit.el
+;; "C-x g" . magit-status
 
 ;; === Buffer switching ===
 ;; C-x b permits to switch among the buffer by entering a buffer name,
