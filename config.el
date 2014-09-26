@@ -1195,7 +1195,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Ven 2014-09-26 12:06 svarrette>
+;; Time-stamp: <Ven 2014-09-26 12:51 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
@@ -1218,6 +1218,11 @@
 	(setq magit-commit-all-when-nothing-staged t)
 	)
   :bind ("C-x g" . magit-status))
+
+(use-package magit-gitflow
+  :config
+  (progn
+	(add-hook 'magit-mode-hook 'turn-on-magit-gitflow)))
 
 
 ;; ############################################################################

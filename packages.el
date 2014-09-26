@@ -56,6 +56,7 @@
                           js2-mode
                           load-dir
                           magit
+						  magit-gitflow
                           markdown-mode
                           marmalade
                           mic-paren
