@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-09-25 23:50 svarrette>
+;; Time-stamp: <Ven 2014-09-26 12:58 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -31,6 +31,13 @@
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-j") 'comment-indent-new-line) ;to reverse the normal binding
+
+;; === join the following line onto the current one ===
+;; tips from http://whattheemacsd.com/
+(global-set-key (kbd "M-j")
+            (lambda ()
+                  (interactive)
+                  (join-line -1)))
 
 ;; === Open files ===
 ;; Use helm to open files / recentf to open recent files
