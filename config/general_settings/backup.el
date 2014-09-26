@@ -1,5 +1,5 @@
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Mer 2014-09-24 18:32 svarrette>
+;; Time-stamp: <Ven 2014-09-26 12:19 svarrette>
 ;; ===============================================
 ;;      Auto-save and backup files Management 
 ;; ===============================================
@@ -36,3 +36,8 @@
  kept-new-versions 6
  kept-old-versions 2
  version-control t)                     ; make numeric backup versions
+
+;; ==== Save minibuffer history ===
+(setq savehist-file (get-conf-path ".history"))
+(savehist-mode 1)
+(setq history-length 1000)

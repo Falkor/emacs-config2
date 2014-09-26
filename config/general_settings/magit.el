@@ -1,16 +1,16 @@
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Ven 2014-09-26 00:27 svarrette>
+;; Time-stamp: <Ven 2014-09-26 12:06 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
   :config
   (progn
-	(set-face-background 'magit-item-highlight "#121212")
-	(set-face-background 'diff-file-header "#121212")
-	(set-face-foreground 'diff-context "#666666")
-	(set-face-foreground 'diff-added "#00cc33")
-	(set-face-foreground 'diff-removed "#ff0000")
+	;; (set-face-background 'magit-item-highlight "#121212")
+	;; (set-face-background 'diff-file-header "#121212")
+	;; (set-face-foreground 'diff-context "#666666")
+	;; (set-face-foreground 'diff-added "#00cc33")
+	;; (set-face-foreground 'diff-removed "#ff0000")
 	;;
 	(setq magit-stage-all-confirm   nil)
 	(setq magit-unstage-all-confirm nil)

@@ -467,7 +467,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/backup.el
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Mer 2014-09-24 18:32 svarrette>
+;; Time-stamp: <Ven 2014-09-26 12:19 svarrette>
 ;; ===============================================
 ;;      Auto-save and backup files Management 
 ;; ===============================================
@@ -504,6 +504,11 @@
  kept-new-versions 6
  kept-old-versions 2
  version-control t)                     ; make numeric backup versions
+
+;; ==== Save minibuffer history ===
+(setq savehist-file (get-conf-path ".history"))
+(savehist-mode 1)
+(setq history-length 1000)
 ;; ############################################################################
 
 
@@ -1193,18 +1198,18 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Ven 2014-09-26 00:27 svarrette>
+;; Time-stamp: <Ven 2014-09-26 12:06 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
   :config
   (progn
-	(set-face-background 'magit-item-highlight "#121212")
-	(set-face-background 'diff-file-header "#121212")
-	(set-face-foreground 'diff-context "#666666")
-	(set-face-foreground 'diff-added "#00cc33")
-	(set-face-foreground 'diff-removed "#ff0000")
+	;; (set-face-background 'magit-item-highlight "#121212")
+	;; (set-face-background 'diff-file-header "#121212")
+	;; (set-face-foreground 'diff-context "#666666")
+	;; (set-face-foreground 'diff-added "#00cc33")
+	;; (set-face-foreground 'diff-removed "#ff0000")
 	;;
 	(setq magit-stage-all-confirm   nil)
 	(setq magit-unstage-all-confirm nil)
@@ -1306,13 +1311,15 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/saveplace.el
 ;; -*- mode: lisp; -*-
+;; Time-stamp: <Ven 2014-09-26 11:41 svarrette>
+;; -------------------------------------------------------------------------
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
-;; (require 'saveplace)
-;; (setq-default save-place t)
 (use-package saveplace
   :init
   (progn
-	(setq-default save-place t)))
+	(setq-default save-place t)
+	(setq save-place-file (get-conf-path ".saved-places"))
+))
 ;; ############################################################################
 
 
