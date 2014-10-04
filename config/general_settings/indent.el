@@ -40,7 +40,6 @@
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
 (setq-default tab-width 2)
-
 (defvaralias 'c-basic-offset 	 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 
@@ -53,6 +52,9 @@
 (setq-default c-basic-offset 4
               tab-width 4
               indent-tabs-mode t)
+
+;; === enable automatic indentation ===
+(electric-indent-mode 1)
 
 
 ;; (setq c-brace-offset -2)
