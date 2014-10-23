@@ -1,5 +1,5 @@
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Jeu 2014-09-25 15:19 svarrette>
+;; Time-stamp: <Sam 2014-10-04 11:46 svarrette>
 ;; ----------------------------------------------------------------------
 
 ;; --------------------------------
@@ -28,6 +28,8 @@
 ;;                                         ; in the sources/hstory (SVN etc.)
 ;; ;; autostart ECB on emacs startup (put to nil to desactivate)
 ;; ;;(setq ecb-auto-activate t)
+
+;;(setq ecb-compile-window-height 12)
 
 
 ;; --- ECB layout ----

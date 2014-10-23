@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Ven 2014-09-26 12:58 svarrette>
+;; Time-stamp: <Sam 2014-10-04 11:51 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -161,8 +161,9 @@
 (global-set-key (kbd "C-x C-i") 'ido-imenu)
 
 ;; === Compilation ===
-(use-package smart-compile
-  :bind ("C-x C-e" . smart-compile))
+;; see modes/compile.el
+;; bind ("C-x C-e" . smart-compile))
+
 ;;(global-set-key (kbd "C-x C-e") 'smart-compile)
 ;;(define-key ruby-mode-map [remap ruby-send-last-sexp ] nil)
 
