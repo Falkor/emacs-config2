@@ -14,7 +14,8 @@
 
 
 ;; Automatically fill comment
-(setq comment-auto-fill-only-comments t)
+;; Bug on Latex mode
+;; (setq comment-auto-fill-only-comments t)
 
 ;; Correct copy-paste to clipboard
 (setq x-select-enable-clipboard t)

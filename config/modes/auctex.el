@@ -24,19 +24,36 @@
                                              (match-end 2))))
                 (add-to-list 'latex-help-cmd-alist (cons key value))))))
       latex-help-cmd-alist)
+	(setq TeX-parse-self t) ; enable parse on load (if no style hook is found for the file)
+	(setq TeX-directory ".")
+	(setq TeX-mode-hook '((lambda () (setq abbrev-mode t))))
+	(setq-default TeX-PDF-mode t)
+	;; number of spaces to add to the indentation for each `{' not matched by a `}'
+	(setq TeX-brace-indent-level 2)         ; 4
+	(setq TeX-newline-function 'newline-and-indent)
 
     (use-package latex-mode
       :defer t
       :config
       (progn
+		;; number of spaces to add to the indentation for each `\begin' not matched by a
+		;; `\end'
+		(setq LaTeX-indent-level 4)
+		(setq LaTeX-item-indent  2)
+
         (use-package preview)
         (use-package ac-math)
+        (use-package reftex
+		  :config
+		  (progn
+			(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+			(setq reftex-plug-into-AUCTeX t))
+		  )
 
         (defun ac-latex-mode-setup ()
           (nconc ac-sources
                  '(ac-source-math-unicode ac-source-math-latex
                                           ac-source-latex-commands)))
-
         (add-to-list 'ac-modes 'latex-mode)
         (add-hook 'latex-mode-hook 'ac-latex-mode-setup)
 
