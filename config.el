@@ -27,66 +27,66 @@
 ;; === LaTeX ===
 
 
-;; new setup
-(use-package tex-site
-  :load-path "site-lisp/auctex/preview/"
-  :defines (latex-help-cmd-alist latex-help-file)
-  :mode ("\\.tex\\'" . latex-mode)
-  :config
-  (progn
-    (defun latex-help-get-cmd-alist ()  ;corrected version:
-      "Scoop up the commands in the index of the latex info manual.
-   The values are saved in `latex-help-cmd-alist' for speed."
-      ;; mm, does it contain any cached entries
-      (if (not (assoc "\\begin" latex-help-cmd-alist))
-          (save-window-excursion
-            (setq latex-help-cmd-alist nil)
-            (Info-goto-node (concat latex-help-file "Command Index"))
-            (goto-char (point-max))
-            (while (re-search-backward "^\\* \\(.+\\): *\\(.+\\)\\." nil t)
-              (let ((key (buffer-substring (match-beginning 1) (match-end 1)))
-                    (value (buffer-substring (match-beginning 2)
-                                             (match-end 2))))
-                (add-to-list 'latex-help-cmd-alist (cons key value))))))
-      latex-help-cmd-alist)
-	(setq TeX-parse-self t) ; enable parse on load (if no style hook is found for the file)
-	(setq TeX-directory ".")
-	(setq TeX-mode-hook '((lambda () (setq abbrev-mode t))))
-	(setq-default TeX-PDF-mode t)
-	;; number of spaces to add to the indentation for each `{' not matched by a `}'
-	(setq TeX-brace-indent-level 2)         ; 4
-	(setq TeX-newline-function 'newline-and-indent)
+;; ;; new setup
+;; (use-package tex-site
+;;   :load-path "site-lisp/auctex/preview/"
+;;   :defines (latex-help-cmd-alist latex-help-file)
+;;   :mode ("\\.tex\\'" . latex-mode)
+;;   :config
+;;   (progn
+;;     (defun latex-help-get-cmd-alist ()  ;corrected version:
+;;       "Scoop up the commands in the index of the latex info manual.
+;;    The values are saved in `latex-help-cmd-alist' for speed."
+;;       ;; mm, does it contain any cached entries
+;;       (if (not (assoc "\\begin" latex-help-cmd-alist))
+;;           (save-window-excursion
+;;             (setq latex-help-cmd-alist nil)
+;;             (Info-goto-node (concat latex-help-file "Command Index"))
+;;             (goto-char (point-max))
+;;             (while (re-search-backward "^\\* \\(.+\\): *\\(.+\\)\\." nil t)
+;;               (let ((key (buffer-substring (match-beginning 1) (match-end 1)))
+;;                     (value (buffer-substring (match-beginning 2)
+;;                                              (match-end 2))))
+;;                 (add-to-list 'latex-help-cmd-alist (cons key value))))))
+;;       latex-help-cmd-alist)
+;; 	(setq TeX-parse-self t) ; enable parse on load (if no style hook is found for the file)
+;; 	(setq TeX-directory ".")
+;; 	(setq TeX-mode-hook '((lambda () (setq abbrev-mode t))))
+;; 	(setq-default TeX-PDF-mode t)
+;; 	;; number of spaces to add to the indentation for each `{' not matched by a `}'
+;; 	(setq TeX-brace-indent-level 2)         ; 4
+;; 	(setq TeX-newline-function 'newline-and-indent)
 
-    (use-package latex-mode
-      :defer t
-      :config
-      (progn
-		;; number of spaces to add to the indentation for each `\begin' not matched by a
-		;; `\end'
-		(setq LaTeX-indent-level 4)
-		(setq LaTeX-item-indent  2)
+;;     (use-package latex-mode
+;;       :defer t
+;;       :config
+;;       (progn
+;; 		;; number of spaces to add to the indentation for each `\begin' not matched by a
+;; 		;; `\end'
+;; 		(setq LaTeX-indent-level 4)
+;; 		(setq LaTeX-item-indent  2)
 
-        (use-package preview)
-        (use-package ac-math)
-        (use-package reftex
-		  :config
-		  (progn
-			(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-			(setq reftex-plug-into-AUCTeX t))
-		  )
+;;         (use-package preview)
+;;         (use-package ac-math)
+;;         (use-package reftex
+;; 		  :config
+;; 		  (progn
+;; 			(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+;; 			(setq reftex-plug-into-AUCTeX t))
+;; 		  )
 
-        (defun ac-latex-mode-setup ()
-          (nconc ac-sources
-                 '(ac-source-math-unicode ac-source-math-latex
-                                          ac-source-latex-commands)))
-        (add-to-list 'ac-modes 'latex-mode)
-        (add-hook 'latex-mode-hook 'ac-latex-mode-setup)
+;;         (defun ac-latex-mode-setup ()
+;;           (nconc ac-sources
+;;                  '(ac-source-math-unicode ac-source-math-latex
+;;                                           ac-source-latex-commands)))
+;;         (add-to-list 'ac-modes 'latex-mode)
+;;         (add-hook 'latex-mode-hook 'ac-latex-mode-setup)
 
-        (info-lookup-add-help :mode 'latex-mode
-                              :regexp ".*"
-                              :parse-rule "\\\\?[a-zA-Z]+\\|\\\\[^a-zA-Z]"
-                              :doc-spec '(("(latex2e)Concept Index" )
-                                          ("(latex2e)Command Index")))))))
+;;         (info-lookup-add-help :mode 'latex-mode
+;;                               :regexp ".*"
+;;                               :parse-rule "\\\\?[a-zA-Z]+\\|\\\\[^a-zA-Z]"
+;;                               :doc-spec '(("(latex2e)Concept Index" )
+;;                                           ("(latex2e)Command Index")))))))
 
 
 ;; OLD setup
@@ -157,7 +157,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/compile.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Ven 2014-10-10 12:23 svarrette>
+;; Time-stamp: <Lun 2014-11-10 10:46 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Compilation mode
 
@@ -311,6 +311,7 @@
 
 
 (global-set-key (kbd "C-x C-e")  'save-and-compile-again)
+(global-set-key (kbd "<f6>")     'save-and-compile-again)
 
 
 ; Kill compilation buffer upon successful compilation
@@ -371,6 +372,37 @@
 ;; Configure helm mode
 ;; see http://emacs-helm.github.io/helm/
 ;;(helm-mode 1)
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/markdown.el
+;; -*- mode: lisp; -*-
+;; === Markdown ===
+;; see http://jblevins.org/projects/markdown-mode/
+;;(require 'markdown-mode)
+
+(defun markdown-preview-file ()
+      "run Marked on the current file and revert the buffer"
+      (interactive)
+      (shell-command
+       (format "open -a /Applications/Marked\ 2.app %s"
+               (shell-quote-argument (buffer-file-name)))))
+
+(use-package markdown-mode
+  :mode (("\\.txt\\'"   . markdown-mode)
+		 ("\\.md\\'"    . markdown-mode)
+		 ("\\.mdown\\'" . markdown-mode))
+  :init
+  (progn
+	(setq markdown-command "pandoc --smart -f markdown -t html")
+	(setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
+  :bind ("C-x M" . markdown-preview-file)
+  :config
+  (progn
+	(use-package gfm-mode
+	  :mode ("README\\.md\\'" . gfm-mode))))
+
 ;; ############################################################################
 
 
@@ -495,6 +527,34 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/general_settings/autocomplete.el
+;; -*- mode: lisp; -*-
+;; ----------------------------------------------------------------------
+;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
+;; Time-stamp: <Lun 2014-11-10 11:28 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; .
+;; ----------------------------------------------------------------------
+
+(use-package pabbrev
+  :commands pabbrev-mode
+  :diminish pabbrev-mode)
+
+
+(use-package auto-complete-config
+  :diminish auto-complete-mode
+  :init
+  (progn
+	(setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
+	(ac-config-default))
+  :config
+  (progn
+	(ac-set-trigger-key "<backtab>")))
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/backup.el
 ;; -*- mode: lisp -*-
 ;; Time-stamp: <Ven 2014-09-26 12:19 svarrette>
@@ -543,116 +603,14 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/general_settings/completion.el
-;; -*- mode: lisp -*-
-;; Time-stamp: <Jeu 2014-09-25 11:47 svarrette>
-;; ;; ===============================================
-;; ;;  Code/Tab completion
-;; ;; ===============================================
-
-;; ;; see http://www.emacswiki.org/emacs/TabCompletion
-;; ;;(require 'smart-tab)
-;; (use-package smart-tab
-;;   :init
-;;   (progn
-;;  (add-to-list 'hippie-expand-try-functions-list
-;;               'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-;;  (setq smart-tab-using-hippie-expand t)
-;;  (global-smart-tab-mode t)))
-
-;; ;; Disable indent "smart" alignement to insert real tabs
-;; (defun indent-with-real-tab-hook ()
-;;   (setq indent-line-function 'insert-tab)
-;;   )
-;; ;;(add-hook 'text-mode-hook   'indent-with-real-tab-hook)
-;; (add-hook 'conf-mode-hook   'indent-with-real-tab-hook)
-
-
-
-;; === Yasnippet ===
-;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
-;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
-;; Installation notes: see README
-
-(use-package yasnippet
-  :if (not noninteractive)
-  :diminish yas-minor-mode
-  :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
-  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
-  :init
-  (hook-into-modes #'(lambda () (yas-minor-mode 1))
-                   '(prog-mode-hook
-                     text-mode-hook
-                     org-mode-hook
-                     ruby-mode-hook
-                     message-mode-hook))
-  :config
-  (progn
-    (setq yas-verbosity 0)
-    (bind-keys :map yas-minor-mode-map
-               ("C-<return>" . yas-expand)
-               ("M-<return>" . yas-expand)
-               ("C-c y n"    . yas-new-snippet)
-               ("C-c y f"    . yas-find-snippets)
-               ("C-c y r"    . yas-reload-all)
-               ("C-c y v"    . yas-visit-snippet-file)
-               )
-    ;; Hotfix for conflicts between yasnippet and smart-tab
-    ;; see https://github.com/haxney/smart-tab/issues/1
-    (add-to-list 'hippie-expand-try-functions-list
-                 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-    )
-  :idle
-  (progn
-    (yas-reload-all)))
-
-;; (define-key yas-minor-mode-map (kbd "C-<return>") 'yas-expand)
-;; (define-key yas-minor-mode-map (kbd "M-<return>") 'yas-expand)
-
-;; add C/C++ headers directly in auto-complete
-;; see https://github.com/mooz/auto-complete-c-headers
-(defun my:ac-c-header-init ()
-  (auto-complete-mode 1)
-  (require 'auto-complete-c-headers)
-  (add-to-list 'ac-sources 'ac-source-c-headers)
-  ;; below list from the output of `gcc -xc -E -v -` or `gcc -xc++ -E -v -` as
-  ;; advided in the variable achead:include-directories
-  (when is-mac
-    (add-to-list 'achead:include-directories '"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1"))
-  )
-
-;; Turn on auto completion
-;; See http://www.emacswiki.org/emacs/AutoComplete
-;;(require 'auto-complete-config)
-(use-package auto-complete
-  :config (use-package auto-complete-config
-            :diminish auto-complete-mode
-            :init
-            (progn
-              (setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
-              (ac-config-default)
-              (hook-into-modes #'my:ac-c-header-init
-                               '(c-mode-common-hook
-                                 c-mode-hook
-                                 c++-mode-hook))
-              )
-            :config
-            (progn
-              (ac-set-trigger-key "TAB")
-              (ac-set-trigger-key "<tab>")
-              )))
-;; ############################################################################
-
-
-;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/display.el
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Jeu 2014-09-25 16:33 svarrette>
+;; Time-stamp: <Lun 2014-11-10 11:06 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
 ;;
-(require 'cl)
+(require 'cl-lib)
 
 
 ;; === defaults ===
@@ -750,6 +708,8 @@
 
 ;; See also trailing whitespace
 (setq-default show-trailing-whitespace t)
+(setq whitespace-trailing-regexp
+        "\\b\\(\\(\t\\| \\|\xA0\\|\x8A0\\|\x920\\|\xE20\\|\xF20\\)+\\)$")
 
 ;; === Auto fit the size of the frame to the buffer content ===
 ;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
@@ -1027,12 +987,16 @@
 ;; Don't highlight matches with jump-char - it's distracting
 (setq jump-char-lazy-highlight-face nil)
 
-;; === Auto-fill configuration ===
+;; === Auto-fill  / visual-line configuration ===
 ;; automatic wrapping of lines and insertion of newlines when the cursor
 ;; goes over the column limit.
 (setq-default fill-column 80)
-(setq auto-fill-mode t)                 ; activate by default
+;;(setq auto-fill-mode t)                 ; activate by default
 
+;;Finally, visual-line-mode is so much better than auto-fill-mode. It doesn't
+;;actually break the text into multiple lines - it only looks that way.  
+(remove-hook 'text-mode-hook #'turn-on-auto-fill)
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 
 ;; Undo/redo window configuration with C-c <left>/<right>
 (winner-mode 1)
@@ -1212,7 +1176,6 @@
 ;; Add flyspell to the following major modes
 (dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
   (add-hook hook (lambda ()
-                   (turn-on-auto-fill)
                    (flyspell-mode t))))
 
 ;; disable flyspell in change log and log-edit mode that derives from text-mode
@@ -1389,13 +1352,62 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/general_settings/yasnippets.el
+;; -*- mode: lisp; -*-
+;; ----------------------------------------------------------------------
+;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
+;; Time-stamp: <Lun 2014-11-10 10:54 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; ----------------------------------------------------------------------
+
+;; === Yasnippet ===
+;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
+;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
+;; Installation notes: see README
+
+(use-package yasnippet
+  :if (not noninteractive)
+  :diminish yas-minor-mode
+  :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
+  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
+  :init
+  (hook-into-modes #'(lambda () (yas-minor-mode 1))
+                   '(prog-mode-hook
+                     text-mode-hook
+                     org-mode-hook
+                     ruby-mode-hook
+                     message-mode-hook))
+  :config
+  (progn
+    (setq yas-verbosity 0)
+    (bind-keys :map yas-minor-mode-map
+               ("C-<return>" . yas-expand)
+               ("M-<return>" . yas-expand)
+               ("C-c y n"    . yas-new-snippet)
+               ("C-c y f"    . yas-find-snippets)
+               ("C-c y r"    . yas-reload-all)
+               ("C-c y v"    . yas-visit-snippet-file)
+               )
+    ;; Hotfix for conflicts between yasnippet and smart-tab
+    ;; see https://github.com/haxney/smart-tab/issues/1
+    (add-to-list 'hippie-expand-try-functions-list
+                 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+    )
+  :idle
+  (progn
+    (yas-reload-all)))
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/bindings/global.el
 ;; ----------------------------------------------------------------------
 ;; File: bindings/global.el - setup my gloabl key bindings in emacs
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Sam 2014-10-04 11:51 svarrette>
+;; Time-stamp: <Lun 2014-11-10 10:49 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
