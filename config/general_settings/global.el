@@ -87,12 +87,16 @@
 ;; Don't highlight matches with jump-char - it's distracting
 (setq jump-char-lazy-highlight-face nil)
 
-;; === Auto-fill configuration ===
+;; === Auto-fill  / visual-line configuration ===
 ;; automatic wrapping of lines and insertion of newlines when the cursor
 ;; goes over the column limit.
 (setq-default fill-column 80)
-(setq auto-fill-mode t)                 ; activate by default
+;;(setq auto-fill-mode t)                 ; activate by default
 
+;;Finally, visual-line-mode is so much better than auto-fill-mode. It doesn't
+;;actually break the text into multiple lines - it only looks that way.  
+(remove-hook 'text-mode-hook #'turn-on-auto-fill)
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 
 ;; Undo/redo window configuration with C-c <left>/<right>
 (winner-mode 1)

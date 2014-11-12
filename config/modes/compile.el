@@ -1,5 +1,5 @@
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Ven 2014-10-10 12:23 svarrette>
+;; Time-stamp: <Lun 2014-11-10 10:46 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Compilation mode
 
@@ -153,6 +153,7 @@
 
 
 (global-set-key (kbd "C-x C-e")  'save-and-compile-again)
+(global-set-key (kbd "<f6>")     'save-and-compile-again)
 
 
 ; Kill compilation buffer upon successful compilation

@@ -11,23 +11,21 @@
                (shell-quote-argument (buffer-file-name)))))
 
 (use-package markdown-mode
-  :mode (("\\.md\\'"    . markdown-mode)
+  :mode (("\\.txt\\'"   . markdown-mode)
+		 ("\\.md\\'"    . markdown-mode)
 		 ("\\.mdown\\'" . markdown-mode))
   :init
   (progn
 	(setq markdown-command "pandoc --smart -f markdown -t html")
 	(setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
-  :bind ("C-x M" . markdown-preview-file))
+  :bind ("C-x M" . markdown-preview-file)
+  :config
+  (progn
+	(use-package gfm-mode
+	  :mode ("README\\.md\\'" . gfm-mode))
+	(add-hook 'markdown-mode-hook
+			  (lambda ()
+				(visual-line-mode t)
+				(whitespace-mode  -1)
+				(flyspell-mode    t)))))
 
-
-;; (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
-;; (add-to-list 'auto-mode-alist '("\\.mdown$" . markdown-mode))
-
-;; (add-hook 'markdown-mode-hook
-;;           (lambda ()
-;;             (visual-line-mode t)
-;;             (writegood-mode t)
-;;             (flyspell-mode t)))
-
-;; 
-;; 

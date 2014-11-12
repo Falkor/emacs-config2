@@ -1,0 +1,18 @@
+;; -*- mode: lisp; -*-
+;; ----------------------------------------------------------------------
+;; File: smartscan.el -            
+;; Time-stamp: <Dim 2014-11-09 11:34 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; .             
+;; ----------------------------------------------------------------------
+
+;; See http://www.masteringemacs.org/article/smart-scan-jump-symbols-buffer
+;; and https://github.com/itsjeyd/emacs-config/blob/emacs24/init.el
+
+;;
+;; M-n et M-p to move to the next (resp. previous) symbol corresponding to your
+;; current cursor 
+(use-package smartscan
+  :init (global-smartscan-mode t))
+

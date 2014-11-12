@@ -1,10 +1,10 @@
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Jeu 2014-09-25 16:33 svarrette>
+;; Time-stamp: <Lun 2014-11-10 12:25 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
 ;;
-(require 'cl)
+(require 'cl-lib)
 
 
 ;; === defaults ===
@@ -101,7 +101,7 @@
   (toggle-indicate-empty-lines))
 
 ;; See also trailing whitespace
-(setq-default show-trailing-whitespace t)
+;;(setq-default show-trailing-whitespace t)
 
 ;; === Auto fit the size of the frame to the buffer content ===
 ;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames

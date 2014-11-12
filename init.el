@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Sam 2014-10-04 13:51 svarrette>
+;; Time-stamp: <Lun 2014-11-10 13:24 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -67,6 +67,7 @@
 (defvar packages-dir   (get-conf-path "packages/"))
 (defvar custom-dir     (get-conf-path ".customs/"))
 (setq   custom-file    (get-conf-path "custom.el"))
+
 
 ;; === ENVIRONMENT ===
 (load (get-conf-path "env"))

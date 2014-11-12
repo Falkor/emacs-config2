@@ -52,7 +52,6 @@
                           helm-c-yasnippet
                           helm-package
                           htmlize
-                          jabber
                           js2-mode
                           load-dir
                           magit

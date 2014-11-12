@@ -18,7 +18,6 @@
 ;; Add flyspell to the following major modes
 (dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
   (add-hook hook (lambda ()
-                   (turn-on-auto-fill)
                    (flyspell-mode t))))
 
 ;; disable flyspell in change log and log-edit mode that derives from text-mode
@@ -30,3 +29,7 @@
 (dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
                                    sh-mode-hook))
   (add-hook hook 'flyspell-prog-mode))
+
+(eval-after-load "flyspell" '(progn
+  (define-key flyspell-mouse-map (kbd "<C-down-mouse-3>") #'flyspell-correct-word)
+  (define-key flyspell-mouse-map (kbd "<C-mouse-3>") 'undefined) ))

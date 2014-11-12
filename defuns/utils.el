@@ -68,6 +68,14 @@
         (t
          (indent-according-to-mode))))
 
+;; See http://www.emacswiki.org/emacs/ExecuteExternalCommand
+(defun execvp (&rest args)
+    "Simulate C's execvp() function.
+  Quote each argument seperately, join with spaces and call shell-command-to-string to run in a shell."
+    (let ((cmd (mapconcat 'shell-quote-argument args " ")))
+          (shell-command-to-string cmd)))
+
+
 
 
 (provide 'falkor/utils)

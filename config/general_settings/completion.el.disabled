@@ -1,5 +1,5 @@
 ;; -*- mode: lisp -*-
-;; Time-stamp: <Jeu 2014-09-25 11:47 svarrette>
+;; Time-stamp: <Lun 2014-11-10 10:57 svarrette>
 ;; ;; ===============================================
 ;; ;;  Code/Tab completion
 ;; ;; ===============================================
@@ -22,43 +22,20 @@
 ;; (add-hook 'conf-mode-hook   'indent-with-real-tab-hook)
 
 
+;; hippie expand is dabbrev expand on steroids
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                         try-expand-dabbrev-all-buffers
+                                         try-expand-dabbrev-from-kill
+                                         try-complete-file-name-partially
+                                         try-complete-file-name
+                                         try-expand-all-abbrevs
+                                         try-expand-list
+                                         try-expand-line
+                                         try-complete-lisp-symbol-partially
+                                         try-complete-lisp-symbol))
 
-;; === Yasnippet ===
-;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
-;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
-;; Installation notes: see README
 
-(use-package yasnippet
-  :if (not noninteractive)
-  :diminish yas-minor-mode
-  :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
-  :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
-  :init
-  (hook-into-modes #'(lambda () (yas-minor-mode 1))
-                   '(prog-mode-hook
-                     text-mode-hook
-                     org-mode-hook
-                     ruby-mode-hook
-                     message-mode-hook))
-  :config
-  (progn
-    (setq yas-verbosity 0)
-    (bind-keys :map yas-minor-mode-map
-               ("C-<return>" . yas-expand)
-               ("M-<return>" . yas-expand)
-               ("C-c y n"    . yas-new-snippet)
-               ("C-c y f"    . yas-find-snippets)
-               ("C-c y r"    . yas-reload-all)
-               ("C-c y v"    . yas-visit-snippet-file)
-               )
-    ;; Hotfix for conflicts between yasnippet and smart-tab
-    ;; see https://github.com/haxney/smart-tab/issues/1
-    (add-to-list 'hippie-expand-try-functions-list
-                 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-    )
-  :idle
-  (progn
-    (yas-reload-all)))
+
 
 ;; (define-key yas-minor-mode-map (kbd "C-<return>") 'yas-expand)
 ;; (define-key yas-minor-mode-map (kbd "M-<return>") 'yas-expand)
@@ -85,7 +62,8 @@
             (progn
               (setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
               (ac-config-default)
-              (hook-into-modes #'my:ac-c-header-init
+			  (use-package ac-math)
+			  (hook-into-modes #'my:ac-c-header-init
                                '(c-mode-common-hook
                                  c-mode-hook
                                  c++-mode-hook))

@@ -27,6 +27,83 @@
 ;; === LaTeX ===
 
 
+;; Automagic detection of master file
+;; See http://www.emacswiki.org/AUCTeX#toc19
+(defun guess-TeX-master (filename)
+  "Guess the master file for FILENAME from currently open .tex files."
+  (let ((candidate nil)
+		(filename (file-name-nondirectory filename)))
+	(save-excursion
+	  (dolist (buffer (buffer-list))
+		(with-current-buffer buffer
+		  (let ((name (buffer-name))
+				(file buffer-file-name))
+			(if (and file (string-match "\\.tex$" file))
+				(progn
+				  (goto-char (point-min))
+				  (if (re-search-forward (concat "\\\\begin{document}") nil t)
+					  (setq candidate file))
+				  (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
+					  (setq candidate file))
+				  (if (re-search-forward (concat "\\\\include{" (file-name-sans-extension filename) "}") nil t)
+					  (setq candidate file))))))))
+	(if candidate
+		(message "TeX master document: %s" (file-name-nondirectory candidate)))
+	candidate))
+
+
+(use-package tex-site
+  :config
+  (progn
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil) ; Query for master file.
+    ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
+    (setq TeX-PDF-mode t)
+	;;
+    ;; use Skim as default pdf viewer
+    ;; Skim's displayline is used for forward search (from .tex to .pdf)
+    ;; option -b highlights the current line; option -g opens Skim in the background
+    (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+    ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
+    (setq TeX-view-program-list
+          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))))
+
+(use-package latex-mode
+  :commands LaTeX-math-mode
+  :mode ("\\.tex\\'" . latex-mode)
+  :config
+  (progn
+    (add-hook 'LaTeX-mode-hook
+              (lambda ()
+                (visual-line-mode t)
+                (LaTeX-math-mode)
+                ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
+                ;; RefTex: manage cross references, bibliographies, indices, document navigation
+                ;; and a few other things
+                ;; see http://www.emacswiki.org/emacs/RefTeX
+                (turn-on-reftex)))
+	(setq LaTeX-command "pdflatex -synctex=1")
+
+	;; make latexmk available via C-c C-c
+	;; Note: SyncTeX is setup via ~/.latexmkrc as follows:
+	;;
+	;;  $pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S';
+	;;  $pdf_previewer = 'open -a skim';
+	;;  $clean_ext = 'bbl rel %R-blx.bib %R.synctex.gz';
+    ;;
+	;; (add-hook 'LaTeX-mode-hook (lambda ()
+    ;;                              (push
+    ;;                               '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+    ;;                                 :help "Run latexmk on file")
+    ;;                               TeX-command-list)))
+	(setq reftex-plug-into-AUCTeX t)
+    (setq LaTeX-item-indent 0)
+    (setq TeX-brace-indent-level 2)))
+
+
+
+
 ;; ;; new setup
 ;; (use-package tex-site
 ;;   :load-path "site-lisp/auctex/preview/"
@@ -49,31 +126,31 @@
 ;;                                              (match-end 2))))
 ;;                 (add-to-list 'latex-help-cmd-alist (cons key value))))))
 ;;       latex-help-cmd-alist)
-;; 	(setq TeX-parse-self t) ; enable parse on load (if no style hook is found for the file)
-;; 	(setq TeX-directory ".")
-;; 	(setq TeX-mode-hook '((lambda () (setq abbrev-mode t))))
-;; 	(setq-default TeX-PDF-mode t)
-;; 	;; number of spaces to add to the indentation for each `{' not matched by a `}'
-;; 	(setq TeX-brace-indent-level 2)         ; 4
-;; 	(setq TeX-newline-function 'newline-and-indent)
+;;    (setq TeX-parse-self t) ; enable parse on load (if no style hook is found for the file)
+;;    (setq TeX-directory ".")
+;;    (setq TeX-mode-hook '((lambda () (setq abbrev-mode t))))
+;;    (setq-default TeX-PDF-mode t)
+;;    ;; number of spaces to add to the indentation for each `{' not matched by a `}'
+;;    (setq TeX-brace-indent-level 2)         ; 4
+;;    (setq TeX-newline-function 'newline-and-indent)
 
 ;;     (use-package latex-mode
 ;;       :defer t
 ;;       :config
 ;;       (progn
-;; 		;; number of spaces to add to the indentation for each `\begin' not matched by a
-;; 		;; `\end'
-;; 		(setq LaTeX-indent-level 4)
-;; 		(setq LaTeX-item-indent  2)
+;;        ;; number of spaces to add to the indentation for each `\begin' not matched by a
+;;        ;; `\end'
+;;        (setq LaTeX-indent-level 4)
+;;        (setq LaTeX-item-indent  2)
 
 ;;         (use-package preview)
 ;;         (use-package ac-math)
 ;;         (use-package reftex
-;; 		  :config
-;; 		  (progn
-;; 			(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-;; 			(setq reftex-plug-into-AUCTeX t))
-;; 		  )
+;;          :config
+;;          (progn
+;;            (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+;;            (setq reftex-plug-into-AUCTeX t))
+;;          )
 
 ;;         (defun ac-latex-mode-setup ()
 ;;           (nconc ac-sources
@@ -401,7 +478,72 @@
   :config
   (progn
 	(use-package gfm-mode
-	  :mode ("README\\.md\\'" . gfm-mode))))
+	  :mode ("README\\.md\\'" . gfm-mode))
+	(add-hook 'markdown-mode-hook
+			  (lambda ()
+				(visual-line-mode t)
+				(whitespace-mode  -1)
+				(flyspell-mode    t)))))
+
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/programming/global.el
+;; -*- mode: lisp; -*-
+;; ----------------------------------------------------------------------
+;; File: global.el -  Global setting for any programming language          
+;; Time-stamp: <Lun 2014-11-10 12:30 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; .             
+;; ----------------------------------------------------------------------
+
+(add-hook 'prog-mode-hook (lambda ()
+							(setq show-trailing-whitespace t)))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/programming/ruby.el
+;; -*- mode: lisp; -*-
+
+
+;; https://github.com/magnars/.emacs.d/blob/master/setup-ruby-mode.el
+
+(defun ruby--jump-to-test ()
+  (find-file
+   (replace-regexp-in-string
+    "/lib/" "/test/"
+    (replace-regexp-in-string
+     "/\\([^/]+\\).rb$" "/test_\\1.rb"
+     (buffer-file-name)))))
+
+(defun ruby--jump-to-lib ()
+  (find-file
+   (replace-regexp-in-string
+    "/test/" "/lib/"
+    (replace-regexp-in-string
+     "/test_\\([^/]+\\).rb$" "/\\1.rb"
+     (buffer-file-name)))))
+
+(defun ruby-jump-to-other ()
+  (interactive)
+  (if (string-match-p "/test/" (buffer-file-name))
+      (ruby--jump-to-lib)
+    (ruby--jump-to-test)))
+
+
+(setq auto-mode-alist
+      (append
+       '(("\\.rake$"        . ruby-mode)
+         ("\\.gemspec$"     . ruby-mode)
+         ("\\.rb$"          . ruby-mode)
+         ("Rakefile$"       . ruby-mode)
+         ("Gemfile$"        . ruby-mode)
+         ("Capfile$"        . ruby-mode)
+         ("Vagrantfile"     . ruby-mode))
+       auto-mode-alist))
 
 ;; ############################################################################
 
@@ -605,7 +747,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/display.el
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Lun 2014-11-10 11:06 svarrette>
+;; Time-stamp: <Lun 2014-11-10 12:25 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -707,9 +849,7 @@
   (toggle-indicate-empty-lines))
 
 ;; See also trailing whitespace
-(setq-default show-trailing-whitespace t)
-(setq whitespace-trailing-regexp
-        "\\b\\(\\(\t\\| \\|\xA0\\|\x8A0\\|\x920\\|\xE20\\|\xF20\\)+\\)$")
+;;(setq-default show-trailing-whitespace t)
 
 ;; === Auto fit the size of the frame to the buffer content ===
 ;; see http://www.emacswiki.org/emacs/Shrink-Wrapping_Frames
@@ -1187,6 +1327,10 @@
 (dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
                                    sh-mode-hook))
   (add-hook hook 'flyspell-prog-mode))
+
+(eval-after-load "flyspell" '(progn
+  (define-key flyspell-mouse-map (kbd "<C-down-mouse-3>") #'flyspell-correct-word)
+  (define-key flyspell-mouse-map (kbd "<C-mouse-3>") 'undefined) ))
 ;; ############################################################################
 
 
