@@ -53,6 +53,7 @@
                           helm-package
                           htmlize
                           js2-mode
+						  latex-extra
                           load-dir
                           magit
 						  magit-gitflow

@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Lun 2014-11-10 13:24 svarrette>
+;; Time-stamp: <Mer 2014-11-12 23:03 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -89,7 +89,6 @@
 (require 'use-package)
 (setq use-package-verbose nil)
 (use-package load-dir)
-
 
 ;; Load Lisp defined functions
 (load-dir-one defuns-dir)
