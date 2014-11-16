@@ -1,5 +1,5 @@
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Mer 2014-09-24 12:18 svarrette>
+;; Time-stamp: <Dim 2014-11-16 10:30 svarrette>
 ;; ========================================================
 ;; Auto-insert: automatic insertion of text into new files
 ;; ========================================================
@@ -41,6 +41,8 @@
         ("[Mm]akefile$"    . "Makefile")         ; Makefile
         ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
         ("\\.md$"          . "Text")             ; Text
+        ("\\.markdown$"    . "Text")             ; Text
+        ("\\.mdown$"       . "Text")             ; Text
         ("\\.txt$"         . "Text")             ; Text
         ("\\.gpg$"         . "GPG")              ; GPG 
         ("[Rr]eadme$"      . "Readme")           ; Readme

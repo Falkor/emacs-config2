@@ -462,7 +462,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/auto-insert.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Mer 2014-09-24 12:18 svarrette>
+;; Time-stamp: <Dim 2014-11-16 10:30 svarrette>
 ;; ========================================================
 ;; Auto-insert: automatic insertion of text into new files
 ;; ========================================================
@@ -504,6 +504,8 @@
         ("[Mm]akefile$"    . "Makefile")         ; Makefile
         ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
         ("\\.md$"          . "Text")             ; Text
+        ("\\.markdown$"    . "Text")             ; Text
+        ("\\.mdown$"       . "Text")             ; Text
         ("\\.txt$"         . "Text")             ; Text
         ("\\.gpg$"         . "GPG")              ; GPG 
         ("[Rr]eadme$"      . "Readme")           ; Readme
@@ -1444,7 +1446,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mer 2014-11-12 23:49 svarrette>
+;; Time-stamp: <Dim 2014-11-16 10:28 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
