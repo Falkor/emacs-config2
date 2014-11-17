@@ -1,5 +1,5 @@
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mer 2014-11-12 23:03 svarrette>
+;; Time-stamp: <Lun 2014-11-17 13:20 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -41,6 +41,8 @@
 ;; keep all emacs-related stuff under ~/emacs.d
 (defvar emacs-root "~/.emacs.d/"
   "the root of  personal emacs load-path.")
+
+
 
 ;; Helper function for root path
 (defun get-conf-path(path)

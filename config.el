@@ -72,6 +72,7 @@
   :mode ("\\.tex\\'" . latex-mode)
   :config
   (progn
+	(use-package auto-complete-auctex)
     (add-hook 'LaTeX-mode-hook
               (lambda ()
                 (visual-line-mode t)
@@ -343,18 +344,26 @@
 ;; see http://emacs-helm.github.io/helm/
 ;;(helm-mode 1)
 
+
+(defun helm-do-grep-recursive (&optional non-recursive)
+  "Like `helm-do-grep', but greps recursively by default."
+  (interactive "P")
+  (let* ((current-prefix-arg (not non-recursive))
+         (helm-current-prefix-arg non-recursive))
+    (call-interactively 'helm-do-grep)))
+
 (use-package helm
   :init
-  (progn 
+  (progn
     (require 'helm-config)
-	(setq helm-candidate-number-limit 100)
-	(helm-mode))
-  :bind (("C-c h"   . helm-mini) 
+    (setq helm-candidate-number-limit 100))
+  :bind (("C-c h"   . helm-mini)
          ("M-x"     . helm-M-x)
-		 ("C-x C-f" . helm-find-files)
-		 ("C-x C-r" . helm-recentf)
-		 ("C-x C-g" . helm-do-grep)
-		 ("C-x C-p" . helm-projectile)))
+         ("C-x C-f" . helm-find-files)
+         ("C-x C-r" . helm-recentf)
+         ("C-x C-g" . helm-do-grep)
+		 ;; see projectile.el
+         ))
 ;; ############################################################################
 
 
@@ -581,7 +590,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Lun 2014-11-17 12:05 svarrette>
+;; Time-stamp: <Lun 2014-11-17 15:00 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
@@ -602,6 +611,8 @@
   :commands pabbrev-mode
   :diminish pabbrev-mode)
 
+
+
 ;; (use-package company
 ;;   :config
 ;;   (global-company-mode))
@@ -611,23 +622,41 @@
   :init
   (progn
     (setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
-    (define-key ac-mode-map (kbd "M-/") 'ac-fuzzy-complete)
-    (dolist (ac-mode '(text-mode org-mode latex-mode))
-      (add-to-list 'ac-modes ac-mode))
-    (dolist (ac-mode-hook '(text-mode-hook org-mode-hook prog-mode-hook))
-      (add-hook ac-mode-hook
-                (lambda ()
-                  (setq ac-fuzzy-enable t)
-                  (add-to-list 'ac-sources 'ac-source-files-in-current-dir)
-                  (add-to-list 'ac-sources 'ac-source-filename))))
+    (add-to-list 'ac-dictionary-directories "~/.emacs.d/.ac-dict")
+    ;; (define-key ac-mode-map (kbd "M-/") 'ac-fuzzy-complete)
+    ;; (dolist (ac-mode '(text-mode org-mode latex-mode))
+    ;;   (add-to-list 'ac-modes ac-mode))
+    ;; (dolist (ac-mode-hook '(text-mode-hook org-mode-hook prog-mode-hook))
+    ;;   (add-hook ac-mode-hook
+    ;;             (lambda ()
+    ;;               (setq ac-fuzzy-enable t)
+    ;;               (add-to-list 'ac-sources 'ac-source-files-in-current-dir)
+    ;;               (add-to-list 'ac-sources 'ac-source-filename))))
 
-    (ac-config-default))
+    (ac-config-default)
+                                        ; resetting ac-sources
+    (setq-default ac-sources '(
+                               ac-source-yasnippet
+                               ac-source-abbrev
+                               ac-source-dictionary
+                               ac-source-words-in-same-mode-buffers
+                               ))
+
+
+
+    )
   :config
   (progn
-	;;(bind-keys :map ac-mode-map
-	;;		   ("<tab>" . ac-fuzzy-complete)
-	;;		   ("TAB"   . ac-fuzzy-complete)
-	;;		   )
+    ;; set the trigger key so that it can work together with yasnippet on tab key,
+    ;; if the word exists in yasnippet, pressing tab will cause yasnippet to
+    ;; activate, otherwise, auto-complete will
+    (ac-set-trigger-key "TAB")
+    (ac-set-trigger-key "<tab>")
+
+    ;;(bind-keys :map ac-mode-map
+    ;;         ("<tab>" . ac-fuzzy-complete)
+    ;;         ("TAB"   . ac-fuzzy-complete)
+    ;;         )
     ;;(ac-set-trigger-key "<backtab>")
     ))
 ;; ############################################################################
@@ -1139,6 +1168,31 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/general_settings/guide-key.el
+;; -*- mode: lisp; -*-
+;; ----------------------------------------------------------------------
+;; File: guide-key.el - Guide key usage
+;; Time-stamp: <Lun 2014-11-17 16:29 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; .             see https://github.com/kai2nenobu/guide-key
+;; ----------------------------------------------------------------------
+
+
+
+;; It's hard to remember keyboard shortcuts. The guide-key package pops up help after a short delay.
+(use-package guide-key
+  :init
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
+  (setq guide-key/popup-window-position "bottom")
+  (setq guide-key/idle-delay 0.1)
+  (use-package guide-key-tip
+	:config (setq guide-key-tip/enabled t))
+  (guide-key-mode 1))  ; Enable guide-key-mode
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/hotfix-x-popup.el
 ;; -*- mode: lisp; -*-
 ;; Time-stamp: <Mer 2014-09-17 21:52 svarrette>
@@ -1371,20 +1425,36 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Lun 2014-11-17 11:43 svarrette>
+;; Time-stamp: <Lun 2014-11-17 15:23 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
 
 
 (setq projectile-keymap-prefix (kbd "C-c p"))
+
 (use-package projectile
   :init
   (progn
-    (projectile-global-mode)
+    (setq projectile-cache-file (get-conf-path ".projectile.cache"))
+    (setq projectile-known-projects-file (get-conf-path ".projectile-bookmarks.eld")))
+  :config
+  (progn
+    (projectile-global-mode t)
+    (setq projectile-enable-caching t)
+    (setq projectile-require-project-root nil)
     (setq projectile-completion-system 'default)
-    (setq projectile-enable-caching t)))
+    ;;(setq projectile-completion-system 'ido)
+    ;;(setq projectile-switch-project-action 'projectile-dired)
+    ;;(setq projectile-switch-project-action 'projectile-find-dir)
+    (setq projectile-switch-project-action 'projectile-find-file)
+    (add-to-list 'projectile-globally-ignored-files
+                 ".DS_Store")))
 
+(use-package helm-projectile
+  :config (setq projectile-completion-system 'helm)
+  :bind (("C-c p h" . helm-projectile)
+         ("C-x C-p" . helm-projectile)))
 ;; ############################################################################
 
 
@@ -1459,7 +1529,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Lun 2014-11-17 12:02 svarrette>
+;; Time-stamp: <Lun 2014-11-17 14:42 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1488,7 +1558,7 @@
 			   ("<tab>"      . nil)  ; unbind tab
 			   ("TAB"        . nil)  ; idem
                ("C-<return>" . yas-expand)
-               ("M-<return>" . yas-expand)
+               ;; ("M-<return>" . yas-expand)
                ("C-c y n"    . yas-new-snippet)
                ("C-c y f"    . yas-find-snippets)
                ("C-c y r"    . yas-reload-all)
@@ -1501,7 +1571,8 @@
     )
   :idle
   (progn
-    (yas-reload-all)))
+    (yas-reload-all)
+	))
 ;; ############################################################################
 
 
@@ -1512,7 +1583,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Lun 2014-11-17 12:17 svarrette>
+;; Time-stamp: <Lun 2014-11-17 16:27 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1541,6 +1612,10 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-j") 'comment-indent-new-line) ;to reverse the normal binding
 
+;; === expand etc. ===
+(global-set-key (kbd "M-=") 'hippie-expand)
+;; see also autocomplete.el and yasnippet.el
+
 ;; === join the following line onto the current one ===
 ;; tips from http://whattheemacsd.com/
 (global-set-key (kbd "M-j")
@@ -1566,6 +1641,12 @@
 ;; see general_settings/expand-region.el
 ;;  "C-@"  'er/expand-region
 ;;	"C-="  'er/contract-region
+;;
+;; Rectangular selection - C-SPC being tacken by Alfred, C-<return> by yasnippet ;)
+(cua-selection-mode 1)
+(setq cua-rectangle-mark-key "C-x SPC")
+
+
 
 ;; Select full buffer: Put mark at end of page, point at beginning.
 (global-set-key (kbd "M-a") 'mark-page)

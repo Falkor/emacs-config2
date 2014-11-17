@@ -48,10 +48,12 @@
                           fit-frame
                           find-file-in-project
                           flycheck
+						  guide-key
                           helm
                           helm-c-yasnippet
                           helm-package
-                          htmlize
+						  helm-projectile
+						  htmlize
                           js2-mode
 						  latex-extra
                           load-dir
@@ -66,6 +68,7 @@
                           paredit
                           php-mode
                           powerline
+						  projectile
                           puppet-mode
                           restclient
                           ruby-compilation

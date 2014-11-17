@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-11-16 10:28 svarrette>
+;; Time-stamp: <Lun 2014-11-17 16:27 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -32,6 +32,10 @@
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-j") 'comment-indent-new-line) ;to reverse the normal binding
 
+;; === expand etc. ===
+(global-set-key (kbd "M-=") 'hippie-expand)
+;; see also autocomplete.el and yasnippet.el
+
 ;; === join the following line onto the current one ===
 ;; tips from http://whattheemacsd.com/
 (global-set-key (kbd "M-j")
@@ -40,12 +44,14 @@
                   (join-line -1)))
 
 ;; === Open files ===
-;; Use helm to open files / recentf to open recent files
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x C-r") 'helm-recentf)
-(global-set-key (kbd "C-x C-g") 'helm-do-grep)
-
-;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
+;; Use helm to open files in various context
+;; see config/modes/helm.el
+;;   "C-c h"   . helm-mini
+;;   "M-x"     . helm-M-x
+;;   "C-x C-f" . helm-find-files
+;;   "C-x C-r" . helm-recentf
+;;   "C-x C-g" . helm-do-grep
+;;   "C-x C-p" . helm-projectile
 
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
@@ -55,6 +61,15 @@
 ;; see general_settings/expand-region.el
 ;;  "C-@"  'er/expand-region
 ;;	"C-="  'er/contract-region
+;;
+;; Rectangular selection - C-SPC being tacken by Alfred, C-<return> by yasnippet ;)
+(cua-selection-mode 1)
+(setq cua-rectangle-mark-key "C-x SPC")
+
+
+
+;; Select full buffer: Put mark at end of page, point at beginning.
+(global-set-key (kbd "M-a") 'mark-page)
 
 ;; === Magit stuff ===
 ;; see general_settings/magit.el
@@ -75,10 +90,6 @@
 ;;(global-set-key (kbd "C->") 'cyclebuffer-backward)
 (global-set-key (kbd "C-<") 'previous-buffer)
 (global-set-key (kbd "C->") 'next-buffer)
-
-;; === helm ===
-(global-set-key (kbd "C-c h") 'helm-mini)
-(global-set-key (kbd "M-x")   'helm-M-x)
 
 ;; === Window switching ===
 (global-set-key [C-prior] 'other-window)

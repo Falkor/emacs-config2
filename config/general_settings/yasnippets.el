@@ -1,7 +1,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Lun 2014-11-10 10:54 svarrette>
+;; Time-stamp: <Lun 2014-11-17 14:42 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -27,18 +27,21 @@
   (progn
     (setq yas-verbosity 0)
     (bind-keys :map yas-minor-mode-map
+			   ("<tab>"      . nil)  ; unbind tab
+			   ("TAB"        . nil)  ; idem
                ("C-<return>" . yas-expand)
-               ("M-<return>" . yas-expand)
+               ;; ("M-<return>" . yas-expand)
                ("C-c y n"    . yas-new-snippet)
                ("C-c y f"    . yas-find-snippets)
                ("C-c y r"    . yas-reload-all)
                ("C-c y v"    . yas-visit-snippet-file)
                )
-    ;; Hotfix for conflicts between yasnippet and smart-tab
-    ;; see https://github.com/haxney/smart-tab/issues/1
-    (add-to-list 'hippie-expand-try-functions-list
-                 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+    ;; ;; Hotfix for conflicts between yasnippet and smart-tab
+    ;; ;; see https://github.com/haxney/smart-tab/issues/1
+    ;; (add-to-list 'hippie-expand-try-functions-list
+    ;;              'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
     )
   :idle
   (progn
-    (yas-reload-all)))
+    (yas-reload-all)
+	))

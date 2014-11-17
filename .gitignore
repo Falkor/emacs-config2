@@ -11,3 +11,5 @@ ac-comphist.dat
 .yas-compiled-snippets.el
 /.history
 /.saved-places
+/.projectile-bookmarks.eld
+/.projectile.cache

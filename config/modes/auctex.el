@@ -47,6 +47,7 @@
   :mode ("\\.tex\\'" . latex-mode)
   :config
   (progn
+	(use-package auto-complete-auctex)
     (add-hook 'LaTeX-mode-hook
               (lambda ()
                 (visual-line-mode t)
