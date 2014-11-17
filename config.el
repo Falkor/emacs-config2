@@ -1529,7 +1529,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Lun 2014-11-17 14:42 svarrette>
+;; Time-stamp: <Lun 2014-11-17 16:32 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1557,7 +1557,7 @@
     (bind-keys :map yas-minor-mode-map
 			   ("<tab>"      . nil)  ; unbind tab
 			   ("TAB"        . nil)  ; idem
-               ("C-<return>" . yas-expand)
+               ("M-<return>" . yas-expand)
                ;; ("M-<return>" . yas-expand)
                ("C-c y n"    . yas-new-snippet)
                ("C-c y f"    . yas-find-snippets)
@@ -1583,7 +1583,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Lun 2014-11-17 16:27 svarrette>
+;; Time-stamp: <Lun 2014-11-17 16:35 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1643,9 +1643,8 @@
 ;;	"C-="  'er/contract-region
 ;;
 ;; Rectangular selection - C-SPC being tacken by Alfred, C-<return> by yasnippet ;)
+(setq cua-rectangle-mark-key (kbd "C-S-<return>"))
 (cua-selection-mode 1)
-(setq cua-rectangle-mark-key "C-x SPC")
-
 
 
 ;; Select full buffer: Put mark at end of page, point at beginning.
