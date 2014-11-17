@@ -342,6 +342,19 @@
 ;; Configure helm mode
 ;; see http://emacs-helm.github.io/helm/
 ;;(helm-mode 1)
+
+(use-package helm
+  :init
+  (progn 
+    (require 'helm-config)
+	(setq helm-candidate-number-limit 100)
+	(helm-mode))
+  :bind (("C-c h"   . helm-mini) 
+         ("M-x"     . helm-M-x)
+		 ("C-x C-f" . helm-find-files)
+		 ("C-x C-r" . helm-recentf)
+		 ("C-x C-g" . helm-do-grep)
+		 ("C-x C-p" . helm-projectile)))
 ;; ############################################################################
 
 
@@ -568,26 +581,55 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Lun 2014-11-10 11:28 svarrette>
+;; Time-stamp: <Lun 2014-11-17 12:05 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
 ;; ----------------------------------------------------------------------
 
+(setq hippie-expand-try-functions-list '(try-expand-dabbrev
+                                         try-expand-dabbrev-all-buffers
+                                         try-expand-dabbrev-from-kill
+                                         try-complete-file-name-partially
+                                         try-complete-file-name
+                                         try-expand-all-abbrevs
+                                         try-expand-list
+                                         try-expand-line
+                                         try-complete-lisp-symbol-partially
+                                         try-complete-lisp-symbol))
+
 (use-package pabbrev
   :commands pabbrev-mode
   :diminish pabbrev-mode)
 
+;; (use-package company
+;;   :config
+;;   (global-company-mode))
 
 (use-package auto-complete-config
   :diminish auto-complete-mode
   :init
   (progn
-	(setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
-	(ac-config-default))
+    (setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
+    (define-key ac-mode-map (kbd "M-/") 'ac-fuzzy-complete)
+    (dolist (ac-mode '(text-mode org-mode latex-mode))
+      (add-to-list 'ac-modes ac-mode))
+    (dolist (ac-mode-hook '(text-mode-hook org-mode-hook prog-mode-hook))
+      (add-hook ac-mode-hook
+                (lambda ()
+                  (setq ac-fuzzy-enable t)
+                  (add-to-list 'ac-sources 'ac-source-files-in-current-dir)
+                  (add-to-list 'ac-sources 'ac-source-filename))))
+
+    (ac-config-default))
   :config
   (progn
-	(ac-set-trigger-key "<backtab>")))
+	;;(bind-keys :map ac-mode-map
+	;;		   ("<tab>" . ac-fuzzy-complete)
+	;;		   ("TAB"   . ac-fuzzy-complete)
+	;;		   )
+    ;;(ac-set-trigger-key "<backtab>")
+    ))
 ;; ############################################################################
 
 
@@ -1325,6 +1367,28 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/general_settings/projectile.el
+;; -*- mode: lisp; -*-
+;; ----------------------------------------------------------------------
+;; File: projectile.el - Manage projects via projectile
+;; Time-stamp: <Lun 2014-11-17 11:43 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; ----------------------------------------------------------------------
+
+
+(setq projectile-keymap-prefix (kbd "C-c p"))
+(use-package projectile
+  :init
+  (progn
+    (projectile-global-mode)
+    (setq projectile-completion-system 'default)
+    (setq projectile-enable-caching t)))
+
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/recentf.el
 ;; === Recentf mode ===
 ;; see http://www.emacswiki.org/emacs/RecentFiles
@@ -1395,7 +1459,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Lun 2014-11-10 10:54 svarrette>
+;; Time-stamp: <Lun 2014-11-17 12:02 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1421,6 +1485,8 @@
   (progn
     (setq yas-verbosity 0)
     (bind-keys :map yas-minor-mode-map
+			   ("<tab>"      . nil)  ; unbind tab
+			   ("TAB"        . nil)  ; idem
                ("C-<return>" . yas-expand)
                ("M-<return>" . yas-expand)
                ("C-c y n"    . yas-new-snippet)
@@ -1428,10 +1494,10 @@
                ("C-c y r"    . yas-reload-all)
                ("C-c y v"    . yas-visit-snippet-file)
                )
-    ;; Hotfix for conflicts between yasnippet and smart-tab
-    ;; see https://github.com/haxney/smart-tab/issues/1
-    (add-to-list 'hippie-expand-try-functions-list
-                 'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
+    ;; ;; Hotfix for conflicts between yasnippet and smart-tab
+    ;; ;; see https://github.com/haxney/smart-tab/issues/1
+    ;; (add-to-list 'hippie-expand-try-functions-list
+    ;;              'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
     )
   :idle
   (progn
@@ -1446,7 +1512,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Dim 2014-11-16 10:28 svarrette>
+;; Time-stamp: <Lun 2014-11-17 12:17 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1472,7 +1538,7 @@
 (require 'use-package)
 
 ;; === Always indent on return ===
-(global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "<return>") 'newline-and-indent)
 (global-set-key (kbd "C-j") 'comment-indent-new-line) ;to reverse the normal binding
 
 ;; === join the following line onto the current one ===
@@ -1483,12 +1549,14 @@
                   (join-line -1)))
 
 ;; === Open files ===
-;; Use helm to open files / recentf to open recent files
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x C-r") 'helm-recentf)
-(global-set-key (kbd "C-x C-g") 'helm-do-grep)
-
-;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
+;; Use helm to open files in various context
+;; see config/modes/helm.el
+;;   "C-c h"   . helm-mini
+;;   "M-x"     . helm-M-x
+;;   "C-x C-f" . helm-find-files
+;;   "C-x C-r" . helm-recentf
+;;   "C-x C-g" . helm-do-grep
+;;   "C-x C-p" . helm-projectile
 
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
@@ -1498,6 +1566,9 @@
 ;; see general_settings/expand-region.el
 ;;  "C-@"  'er/expand-region
 ;;	"C-="  'er/contract-region
+
+;; Select full buffer: Put mark at end of page, point at beginning.
+(global-set-key (kbd "M-a") 'mark-page)
 
 ;; === Magit stuff ===
 ;; see general_settings/magit.el
@@ -1518,10 +1589,6 @@
 ;;(global-set-key (kbd "C->") 'cyclebuffer-backward)
 (global-set-key (kbd "C-<") 'previous-buffer)
 (global-set-key (kbd "C->") 'next-buffer)
-
-;; === helm ===
-(global-set-key (kbd "C-c h") 'helm-mini)
-(global-set-key (kbd "M-x")   'helm-M-x)
 
 ;; === Window switching ===
 (global-set-key [C-prior] 'other-window)
