@@ -1172,7 +1172,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: guide-key.el - Guide key usage
-;; Time-stamp: <Lun 2014-11-17 16:29 svarrette>
+;; Time-stamp: <Lun 2014-11-17 16:43 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             see https://github.com/kai2nenobu/guide-key
@@ -1183,7 +1183,7 @@
 ;; It's hard to remember keyboard shortcuts. The guide-key package pops up help after a short delay.
 (use-package guide-key
   :init
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c"))
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c" "C-c r"))
   (setq guide-key/popup-window-position "bottom")
   (setq guide-key/idle-delay 0.1)
   (use-package guide-key-tip
@@ -1425,7 +1425,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Lun 2014-11-17 15:23 svarrette>
+;; Time-stamp: <Lun 2014-11-17 16:37 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1442,7 +1442,7 @@
   (progn
     (projectile-global-mode t)
     (setq projectile-enable-caching t)
-    (setq projectile-require-project-root nil)
+    ;;(setq projectile-require-project-root nil)
     (setq projectile-completion-system 'default)
     ;;(setq projectile-completion-system 'ido)
     ;;(setq projectile-switch-project-action 'projectile-dired)
@@ -1583,7 +1583,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Lun 2014-11-17 16:35 svarrette>
+;; Time-stamp: <Lun 2014-11-17 16:44 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
