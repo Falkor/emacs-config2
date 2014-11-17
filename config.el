@@ -1538,7 +1538,7 @@
 (require 'use-package)
 
 ;; === Always indent on return ===
-(global-set-key (kbd "<return>") 'newline-and-indent)
+(global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key (kbd "C-j") 'comment-indent-new-line) ;to reverse the normal binding
 
 ;; === join the following line onto the current one ===
