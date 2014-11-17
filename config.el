@@ -362,7 +362,7 @@
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
-		 ;; see projectile.el
+		 ;; see projectile.el for C-x C-p
          ))
 ;; ############################################################################
 
@@ -387,9 +387,10 @@
 		 ("\\.mdown\\'" . markdown-mode))
   :init
   (progn
+	(local-unset-key "<tab>") ;; disable markdown-cycle
 	(setq markdown-command "pandoc --smart -f markdown -t html")
 	(setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
-  :bind ("C-x M" . markdown-preview-file)
+  :bind ("C-c C-v" . markdown-preview-file)
   :config
   (progn
 	(use-package gfm-mode
@@ -1465,11 +1466,10 @@
 ;; A minor mode that builds a list of recently opened files
 ;;(require 'recentf)
 (use-package recentf
-  :init
+  :config
   (progn
     ;;  file to save the recent list into
     (setq recentf-save-file "~/.emacs.d/.recentf")
-
     ;; maximum number of items in the recentf menu
     (setq recentf-max-menu-items 40)
 

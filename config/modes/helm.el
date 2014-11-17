@@ -20,5 +20,5 @@
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
-		 ;; see projectile.el
+		 ;; see projectile.el for C-x C-p
          ))

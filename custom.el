@@ -9,7 +9,7 @@
  '(magit-commit-ask-to-stage nil)
  '(menu-bar-mode t)
  '(powerline-default-separator (quote arrow))
- '(safe-local-variable-values (quote ((require-final-newline))))
+ '(safe-local-variable-values (quote ((encoding . utf-8) (require-final-newline))))
  '(truncate-lines nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

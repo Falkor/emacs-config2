@@ -3,11 +3,10 @@
 ;; A minor mode that builds a list of recently opened files
 ;;(require 'recentf)
 (use-package recentf
-  :init
+  :config
   (progn
     ;;  file to save the recent list into
     (setq recentf-save-file "~/.emacs.d/.recentf")
-
     ;; maximum number of items in the recentf menu
     (setq recentf-max-menu-items 40)
 
