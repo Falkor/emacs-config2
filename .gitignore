@@ -13,3 +13,5 @@ ac-comphist.dat
 /.saved-places
 /.projectile-bookmarks.eld
 /.projectile.cache
+/.emacs-semanticdb/
+/tests/
