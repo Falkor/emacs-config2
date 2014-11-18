@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mer 2014-09-24 17:17 svarrette>
+# Time-stamp: <Mar 2014-11-18 11:17 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -61,7 +61,7 @@ NO_COLOR     =\033[0m
 
 ### Emacs stuff
 EMACS	         = emacs
-DIRS	         = site-lisp defuns
+DIRS	         = site-lisp core
 SPECIAL_SOURCES  = config.el init.el 
 CONFIG_SOURCES   = $(shell find config   -name '*.el')
 SNIPPETS_SOURCES = $(shell find snippets -name '*.el')

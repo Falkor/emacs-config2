@@ -1,7 +1,7 @@
-;; -*- mode: lisp; -*-
+;; -*- mode: elisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Lun 2014-11-17 15:00 svarrette>
+;; Time-stamp: <Mar 2014-11-18 11:00 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
@@ -45,7 +45,8 @@
     ;;               (add-to-list 'ac-sources 'ac-source-filename))))
 
     (ac-config-default)
-                                        ; resetting ac-sources
+
+	;; resetting ac-sources
     (setq-default ac-sources '(
                                ac-source-yasnippet
                                ac-source-abbrev
@@ -53,9 +54,6 @@
                                ac-source-words-in-same-mode-buffers
                                ))
 
-
-
-    )
   :config
   (progn
     ;; set the trigger key so that it can work together with yasnippet on tab key,
@@ -64,9 +62,16 @@
     (ac-set-trigger-key "TAB")
     (ac-set-trigger-key "<tab>")
 
+	(add-hook 'emacs-lisp-mode-hook    'ac-emacs-lisp-mode-setup)
+  ;; (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
+	(add-hook 'ruby-mode-hook          'ac-ruby-mode-setup)
+	(add-hook 'css-mode-hook           'ac-css-mode-setup)
+	(add-hook 'auto-complete-mode-hook 'ac-common-setup)
+
+	
     ;;(bind-keys :map ac-mode-map
     ;;         ("<tab>" . ac-fuzzy-complete)
     ;;         ("TAB"   . ac-fuzzy-complete)
     ;;         )
     ;;(ac-set-trigger-key "<backtab>")
-    ))
+    )))

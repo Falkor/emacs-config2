@@ -1,5 +1,6 @@
+;; -*- mode: elisp; -*-
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Lun 2014-11-17 13:20 svarrette>
+;; Time-stamp: <Mar 2014-11-18 11:16 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -42,12 +43,11 @@
 (defvar emacs-root "~/.emacs.d/"
   "the root of  personal emacs load-path.")
 
-
-
 ;; Helper function for root path
 (defun get-conf-path(path)
   "Appends argument at the end of emacs-root using expand-file-name"
   (expand-file-name path emacs-root))
+
 
 ;; ============================ Let's go! ============================
 ;; Turn off mouse interface early in startup to avoid momentary display
@@ -65,6 +65,7 @@
 ;; === Special Directory components ====
 
 (defvar config-dir     (get-conf-path "config/"))
+(defvar core-dir       (get-conf-path "core/"))
 (defvar defuns-dir     (get-conf-path "defuns/"))
 (defvar packages-dir   (get-conf-path "packages/"))
 (defvar custom-dir     (get-conf-path ".customs/"))
@@ -72,7 +73,7 @@
 
 
 ;; === ENVIRONMENT ===
-(load (get-conf-path "env"))
+(load (get-conf-path "core/env"))
 
 ;; === PACKAGES ===
 
@@ -83,17 +84,16 @@
 ;;  (load-file custom-package-file))
 
 ;; Now load/setup packages
-(load (get-conf-path "packages"))
-
+(load (get-conf-path "core/packages"))
 
 ;; === KEY LIBRARIES ===
 ;; Below are the key libraries you wish to see loaded asap
 (require 'use-package)
 (setq use-package-verbose nil)
-(use-package load-dir)
+;;(use-package load-dir)
 
-;; Load Lisp defined functions
-(load-dir-one defuns-dir)
+(load (get-conf-path "core/utils"))
+(load (get-conf-path "core/auto-complete"))
 
 ;; === Emacs Modular Configuration entry point ===
 ;; See https://github.com/targzeta/emacs-modular-configuration
