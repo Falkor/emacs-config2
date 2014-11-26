@@ -10,10 +10,6 @@
        (format "open -a /Applications/Marked\ 2.app %s"
                (shell-quote-argument (buffer-file-name)))))
 
-(defun markdown-unset-tab ()
-  "markdown-mode-hook"
-  (define-key markdown-mode-map (kbd "<tab>") nil))
-
 (use-package markdown-mode
   :mode (("\\.txt\\'"   . markdown-mode)
 		 ("\\.md\\'"    . markdown-mode)
@@ -27,10 +23,13 @@
   (progn
 	(use-package gfm-mode
 	  :mode ("README\\.md\\'" . gfm-mode))
+	(defun markdown-unset-tab ()
+	  "markdown-mode-hook"
+	  (define-key markdown-mode-map (kbd "<tab>") nil))
 	(add-hook 'markdown-mode-hook
 			  (lambda ()
 				(visual-line-mode t)
-                                (markdown-unset-tab)
+				(markdown-unset-tab)
 				(whitespace-mode  -1)
 				(flyspell-mode    t)))))
 

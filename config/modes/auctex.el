@@ -14,9 +14,9 @@
             (if (and file (string-match "\\.tex$" file))
                 (progn
                   (goto-char (point-min))
-				  (if (re-search-forward (concat "\\\\begin{document}") nil t)
+                  (if (re-search-forward (concat "\\\\begin{document}") nil t)
                       (setq candidate file))
-                   (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
+                  (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
                       (setq candidate file))
                   (if (re-search-forward (concat "\\\\include{" (file-name-sans-extension filename) "}") nil t)
                       (setq candidate file))))))))
@@ -26,6 +26,7 @@
 
 ;; ------------------
 (use-package tex-site
+  :ensure auctex
   :config
   (progn
     (setq TeX-auto-save t)
@@ -33,54 +34,58 @@
     (setq-default TeX-master nil) ; Query for master file.
     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
     (setq TeX-PDF-mode t)
-	;;
+    ;;
     ;; use Skim as default pdf viewer
     ;; Skim's displayline is used for forward search (from .tex to .pdf)
     ;; option -b highlights the current line; option -g opens Skim in the background
     (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
     ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
     (setq TeX-view-program-list
-          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))))
+          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+    ))
+
 
 (use-package latex-mode
-  :commands LaTeX-math-mode
+  :ensure auctex
+  :commands (LaTeX-mode) ;;LaTeX-math-mode
   :mode ("\\.tex\\'" . latex-mode)
   :config
-  (progn
-	(use-package auto-complete-auctex)
+  (progn	
+    (use-package auto-complete-auctex)
     (add-hook 'LaTeX-mode-hook
               (lambda ()
                 (visual-line-mode t)
                 (LaTeX-math-mode)
-				(setq TeX-master nil)
-				(setq LaTeX-command "pdflatex -synctex=1")
-				;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
+                (setq TeX-master nil)
+                (setq LaTeX-command "pdflatex -synctex=1")
+                ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
                 ;; RefTex: manage cross references, bibliographies, indices, document navigation
                 ;; and a few other things
                 ;; see http://www.emacswiki.org/emacs/RefTeX
                 (turn-on-reftex)))
-	;; make latexmk available via C-c C-c
-	;; Note: SyncTeX is setup via ~/.latexmkrc as follows:
-	;;
-	;;  $pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S';
-	;;  $pdf_previewer = 'open -a skim';
-	;;  $clean_ext = 'bbl rel %R-blx.bib %R.synctex.gz';
+    ;; make latexmk available via C-c C-c
+    ;; Note: SyncTeX is setup via ~/.latexmkrc as follows:
     ;;
-	;; (add-hook 'LaTeX-mode-hook (lambda ()
+    ;;  $pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S';
+    ;;  $pdf_previewer = 'open -a skim';
+    ;;  $clean_ext = 'bbl rel %R-blx.bib %R.synctex.gz';
+    ;;
+    ;; (add-hook 'LaTeX-mode-hook (lambda ()
     ;;                              (push
     ;;                               '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
     ;;                                 :help "Run latexmk on file")
     ;;                               TeX-command-list)))
-	(setq reftex-plug-into-AUCTeX t)
+    (setq reftex-plug-into-AUCTeX t)
     (setq LaTeX-item-indent 0)
     (setq TeX-brace-indent-level 2)))
+
 
 ;; (use-package latex-extra
 ;;   :init
 ;;   (progn
-;; 	(add-hook 'LaTeX-mode-hook #'latex-extra-mode)
-;; 	;; turn off auto-fill-mode, one can turn on it manually
-;; 	(add-hook 'latex-extra-mode-hook (lambda () (auto-fill-mode -1)) t)))
+;;  (add-hook 'LaTeX-mode-hook #'latex-extra-mode)
+;;  ;; turn off auto-fill-mode, one can turn on it manually
+;;  (add-hook 'latex-extra-mode-hook (lambda () (auto-fill-mode -1)) t)))
 
 
 

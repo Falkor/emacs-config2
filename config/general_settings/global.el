@@ -25,7 +25,7 @@
 
 ;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
 ;;(require 'better-defaults)
-(use-package better-defaults)
+;;(use-package better-defaults)
 
 ;; Finding Files (and URLs) At Point (FFAP)
 ;; see http://www.gnu.org/software/emacs/manual/html_node/emacs/FFAP.html

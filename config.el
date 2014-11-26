@@ -39,9 +39,9 @@
             (if (and file (string-match "\\.tex$" file))
                 (progn
                   (goto-char (point-min))
-				  (if (re-search-forward (concat "\\\\begin{document}") nil t)
+                  (if (re-search-forward (concat "\\\\begin{document}") nil t)
                       (setq candidate file))
-                   (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
+                  (if (re-search-forward (concat "\\\\input{" filename "}") nil t)
                       (setq candidate file))
                   (if (re-search-forward (concat "\\\\include{" (file-name-sans-extension filename) "}") nil t)
                       (setq candidate file))))))))
@@ -51,6 +51,7 @@
 
 ;; ------------------
 (use-package tex-site
+  :ensure auctex
   :config
   (progn
     (setq TeX-auto-save t)
@@ -58,54 +59,58 @@
     (setq-default TeX-master nil) ; Query for master file.
     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
     (setq TeX-PDF-mode t)
-	;;
+    ;;
     ;; use Skim as default pdf viewer
     ;; Skim's displayline is used for forward search (from .tex to .pdf)
     ;; option -b highlights the current line; option -g opens Skim in the background
     (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
     ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
     (setq TeX-view-program-list
-          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))))
+          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+    ))
+
 
 (use-package latex-mode
-  :commands LaTeX-math-mode
+  :ensure auctex
+  :commands (LaTeX-mode) ;;LaTeX-math-mode
   :mode ("\\.tex\\'" . latex-mode)
   :config
-  (progn
-	(use-package auto-complete-auctex)
+  (progn	
+    (use-package auto-complete-auctex)
     (add-hook 'LaTeX-mode-hook
               (lambda ()
                 (visual-line-mode t)
                 (LaTeX-math-mode)
-				(setq TeX-master nil)
-				(setq LaTeX-command "pdflatex -synctex=1")
-				;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
+                (setq TeX-master nil)
+                (setq LaTeX-command "pdflatex -synctex=1")
+                ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
                 ;; RefTex: manage cross references, bibliographies, indices, document navigation
                 ;; and a few other things
                 ;; see http://www.emacswiki.org/emacs/RefTeX
                 (turn-on-reftex)))
-	;; make latexmk available via C-c C-c
-	;; Note: SyncTeX is setup via ~/.latexmkrc as follows:
-	;;
-	;;  $pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S';
-	;;  $pdf_previewer = 'open -a skim';
-	;;  $clean_ext = 'bbl rel %R-blx.bib %R.synctex.gz';
+    ;; make latexmk available via C-c C-c
+    ;; Note: SyncTeX is setup via ~/.latexmkrc as follows:
     ;;
-	;; (add-hook 'LaTeX-mode-hook (lambda ()
+    ;;  $pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S';
+    ;;  $pdf_previewer = 'open -a skim';
+    ;;  $clean_ext = 'bbl rel %R-blx.bib %R.synctex.gz';
+    ;;
+    ;; (add-hook 'LaTeX-mode-hook (lambda ()
     ;;                              (push
     ;;                               '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
     ;;                                 :help "Run latexmk on file")
     ;;                               TeX-command-list)))
-	(setq reftex-plug-into-AUCTeX t)
+    (setq reftex-plug-into-AUCTeX t)
     (setq LaTeX-item-indent 0)
     (setq TeX-brace-indent-level 2)))
+
 
 ;; (use-package latex-extra
 ;;   :init
 ;;   (progn
-;; 	(add-hook 'LaTeX-mode-hook #'latex-extra-mode)
-;; 	;; turn off auto-fill-mode, one can turn on it manually
-;; 	(add-hook 'latex-extra-mode-hook (lambda () (auto-fill-mode -1)) t)))
+;;  (add-hook 'LaTeX-mode-hook #'latex-extra-mode)
+;;  ;; turn off auto-fill-mode, one can turn on it manually
+;;  (add-hook 'latex-extra-mode-hook (lambda () (auto-fill-mode -1)) t)))
 
 
 
@@ -456,12 +461,26 @@
          (helm-current-prefix-arg non-recursive))
     (call-interactively 'helm-do-grep)))
 
+;; see also http://tuhdo.github.io/helm-intro.html
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h".
+(setq helm-command-prefix-key (kbd "C-c h"))
+
 (use-package helm
   :init
   (progn
     (require 'helm-config)
-    (setq helm-candidate-number-limit 100))
-  :bind (("C-c h"   . helm-mini)
+	
+    (setq helm-candidate-number-limit 100)
+
+    ;;(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+    ;;(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+    ;;(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+    (when (executable-find "curl")
+      (setq helm-google-suggest-use-curl-p t))
+    (helm-mode t))
+  :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
@@ -470,29 +489,17 @@
          )
   :config
   (progn
-    (use-package helm-gtags
-      :init
-      (progn
-        (setq
-         helm-gtags-ignore-case         t
-         helm-gtags-auto-update         t
-         helm-gtags-use-input-at-cursor t
-         helm-gtags-pulse-at-cursor     t
+	(setq helm-locate-command
+		  (case system-type
+			('gnu/linux     "locate -i -r %s")
+			('berkeley-unix "locate -i %s")
+			('windows-nt    "es %s")
+			('darwin        "mdfind -name %s %s")
+			(t "locate %s"))))
+  )
 
-         helm-gtags-suggested-key-mapping t))
-      :config
-      (progn
-        ;; Enable helm-gtags-mode in Dired so you can jump to any tag
-        ;; when navigate project tree with Dired
-        (add-hook 'dired-mode-hook 'helm-gtags-mode)
-		;; Enable helm-gtags-mode in Eshell for the same reason as above
-		(add-hook 'eshell-mode-hook 'helm-gtags-mode)
-
-		;; Enable helm-gtags-mode in languages that GNU Global supports
-		(add-hook 'c-mode-hook    'helm-gtags-mode)
-		(add-hook 'c++-mode-hook  'helm-gtags-mode)
-		(add-hook 'java-mode-hook 'helm-gtags-mode)
-		(add-hook 'asm-mode-hook  'helm-gtags-mode)))))
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-z")    'helm-select-action)
 ;; ############################################################################
 
 
@@ -510,10 +517,6 @@
        (format "open -a /Applications/Marked\ 2.app %s"
                (shell-quote-argument (buffer-file-name)))))
 
-(defun markdown-unset-tab ()
-  "markdown-mode-hook"
-  (define-key markdown-mode-map (kbd "<tab>") nil))
-
 (use-package markdown-mode
   :mode (("\\.txt\\'"   . markdown-mode)
 		 ("\\.md\\'"    . markdown-mode)
@@ -527,10 +530,13 @@
   (progn
 	(use-package gfm-mode
 	  :mode ("README\\.md\\'" . gfm-mode))
+	(defun markdown-unset-tab ()
+	  "markdown-mode-hook"
+	  (define-key markdown-mode-map (kbd "<tab>") nil))
 	(add-hook 'markdown-mode-hook
 			  (lambda ()
 				(visual-line-mode t)
-                                (markdown-unset-tab)
+				(markdown-unset-tab)
 				(whitespace-mode  -1)
 				(flyspell-mode    t)))))
 
@@ -716,88 +722,6 @@
         ("OAR"         . "insert.oar")
         ))
 
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/general_settings/autocomplete.el
-;; -*- mode: elisp; -*-
-;; ----------------------------------------------------------------------
-;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Mar 2014-11-18 11:00 svarrette>
-;;
-;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
-;; .
-;; ----------------------------------------------------------------------
-
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev
-                                         try-expand-dabbrev-all-buffers
-                                         try-expand-dabbrev-from-kill
-                                         try-complete-file-name-partially
-                                         try-complete-file-name
-                                         try-expand-all-abbrevs
-                                         try-expand-list
-                                         try-expand-line
-                                         try-complete-lisp-symbol-partially
-                                         try-complete-lisp-symbol))
-
-(use-package pabbrev
-  :commands pabbrev-mode
-  :diminish pabbrev-mode)
-
-
-
-;; (use-package company
-;;   :config
-;;   (global-company-mode))
-
-(use-package auto-complete-config
-  :diminish auto-complete-mode
-  :init
-  (progn
-    (setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
-    (add-to-list 'ac-dictionary-directories "~/.emacs.d/.ac-dict")
-    ;; (define-key ac-mode-map (kbd "M-/") 'ac-fuzzy-complete)
-    ;; (dolist (ac-mode '(text-mode org-mode latex-mode))
-    ;;   (add-to-list 'ac-modes ac-mode))
-    ;; (dolist (ac-mode-hook '(text-mode-hook org-mode-hook prog-mode-hook))
-    ;;   (add-hook ac-mode-hook
-    ;;             (lambda ()
-    ;;               (setq ac-fuzzy-enable t)
-    ;;               (add-to-list 'ac-sources 'ac-source-files-in-current-dir)
-    ;;               (add-to-list 'ac-sources 'ac-source-filename))))
-
-    (ac-config-default)
-
-	;; resetting ac-sources
-    (setq-default ac-sources '(
-                               ac-source-yasnippet
-                               ac-source-abbrev
-                               ac-source-dictionary
-                               ac-source-words-in-same-mode-buffers
-                               ))
-
-  :config
-  (progn
-    ;; set the trigger key so that it can work together with yasnippet on tab key,
-    ;; if the word exists in yasnippet, pressing tab will cause yasnippet to
-    ;; activate, otherwise, auto-complete will
-    (ac-set-trigger-key "TAB")
-    (ac-set-trigger-key "<tab>")
-
-	(add-hook 'emacs-lisp-mode-hook    'ac-emacs-lisp-mode-setup)
-  ;; (add-hook 'c-mode-common-hook 'ac-cc-mode-setup)
-	(add-hook 'ruby-mode-hook          'ac-ruby-mode-setup)
-	(add-hook 'css-mode-hook           'ac-css-mode-setup)
-	(add-hook 'auto-complete-mode-hook 'ac-common-setup)
-
-	
-    ;;(bind-keys :map ac-mode-map
-    ;;         ("<tab>" . ac-fuzzy-complete)
-    ;;         ("TAB"   . ac-fuzzy-complete)
-    ;;         )
-    ;;(ac-set-trigger-key "<backtab>")
-    )))
 ;; ############################################################################
 
 
@@ -1146,7 +1070,7 @@
 ;; -*- mode: elisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: ggtags.el - Emacs frontend to GNU Global source code tagging system
-;; Time-stamp: <Mar 2014-11-18 11:00 svarrette>
+;; Time-stamp: <Mar 2014-11-18 11:58 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             See https://github.com/leoliu/ggtags
@@ -1159,18 +1083,42 @@
 (use-package ggtags
   :config
   (progn
-	(bind-keys :map ggtags-mode-map
-			   ("C-c g s" . ggtags-find-other-symbol)
-			   ("C-c g h" . ggtags-view-tag-history)
-			   ("C-c g r" . ggtags-find-reference)
-			   ("C-c g f" . ggtags-find-file)
-			   ("C-c g c" . ggtags-create-tags)
-			   ("C-c g u" . ggtags-update-tags)
-			   ("M-,"     . pop-tag-mark))
-	(add-hook 'c-mode-common-hook
-			  (lambda ()
-				(when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-				  (ggtags-mode 1))))))
+    (bind-keys :map ggtags-mode-map
+               ("C-c g s" . ggtags-find-other-symbol)
+               ("C-c g h" . ggtags-view-tag-history)
+               ("C-c g r" . ggtags-find-reference)
+               ("C-c g f" . ggtags-find-file)
+               ("C-c g c" . ggtags-create-tags)
+               ("C-c g u" . ggtags-update-tags)
+               ("M-,"     . pop-tag-mark))
+    (use-package helm-gtags
+      :init
+      (progn
+        (setq
+         helm-gtags-ignore-case         t
+         helm-gtags-auto-update         t
+         helm-gtags-use-input-at-cursor t
+		 
+         helm-gtags-pulse-at-cursor     t
+
+         helm-gtags-suggested-key-mapping t))
+      :config
+      (progn
+        ;; Enable helm-gtags-mode in Dired so you can jump to any tag
+        ;; when navigate project tree with Dired
+        (add-hook 'dired-mode-hook 'helm-gtags-mode)
+        ;; Enable helm-gtags-mode in Eshell for the same reason as above
+        (add-hook 'eshell-mode-hook 'helm-gtags-mode)
+
+        ;; Enable helm-gtags-mode in languages that GNU Global supports
+        (add-hook 'c-mode-hook    'helm-gtags-mode)
+        (add-hook 'c++-mode-hook  'helm-gtags-mode)
+        (add-hook 'java-mode-hook 'helm-gtags-mode)
+        (add-hook 'asm-mode-hook  'helm-gtags-mode)))
+    (add-hook 'c-mode-common-hook
+              (lambda ()
+                (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
+                  (ggtags-mode 1))))))
 ;; ############################################################################
 
 
@@ -1203,7 +1151,7 @@
 
 ;; Technomancy better defaults -- see https://github.com/technomancy/better-defaults
 ;;(require 'better-defaults)
-(use-package better-defaults)
+;;(use-package better-defaults)
 
 ;; Finding Files (and URLs) At Point (FFAP)
 ;; see http://www.gnu.org/software/emacs/manual/html_node/emacs/FFAP.html
@@ -1344,7 +1292,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: guide-key.el - Guide key usage
-;; Time-stamp: <Lun 2014-11-17 16:43 svarrette>
+;; Time-stamp: <Mar 2014-11-18 14:10 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             see https://github.com/kai2nenobu/guide-key
@@ -1355,7 +1303,7 @@
 ;; It's hard to remember keyboard shortcuts. The guide-key package pops up help after a short delay.
 (use-package guide-key
   :init
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c" "C-c r"))
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c" "C-c r" "C-c h"))
   (setq guide-key/popup-window-position "bottom")
   (setq guide-key/idle-delay 0.1)
   (use-package guide-key-tip
@@ -1387,11 +1335,23 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/indent.el
-;; -*- mode: lisp; -*-
+;; -*- mode: elisp; -*-
 
 ;;
 ;; Helper functions 
 ;;
+
+(defun untabify-buffer ()
+  (interactive)
+  (untabify (point-min) (point-max)))
+
+(defun cleanup-buffer ()
+  "Perform a bunch of operations on the whitespace content of a buffer."
+  (interactive)
+  (indent-buffer)
+  (untabify-buffer)
+  (delete-trailing-whitespace))
+
 ;; === Indentation of the full buffer ===
 ;; Courtesy from http://emacsblog.org/2007/01/17/indent-whole-buffer/
 (defun indent-buffer ()

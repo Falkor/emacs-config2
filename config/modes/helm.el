@@ -10,12 +10,26 @@
          (helm-current-prefix-arg non-recursive))
     (call-interactively 'helm-do-grep)))
 
+;; see also http://tuhdo.github.io/helm-intro.html
+
+;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
+;; Changed to "C-c h".
+(setq helm-command-prefix-key (kbd "C-c h"))
+
 (use-package helm
   :init
   (progn
     (require 'helm-config)
-    (setq helm-candidate-number-limit 100))
-  :bind (("C-c h"   . helm-mini)
+	
+    (setq helm-candidate-number-limit 100)
+
+    ;;(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+    ;;(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
+    ;;(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+    (when (executable-find "curl")
+      (setq helm-google-suggest-use-curl-p t))
+    (helm-mode t))
+  :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
@@ -24,26 +38,14 @@
          )
   :config
   (progn
-    (use-package helm-gtags
-      :init
-      (progn
-        (setq
-         helm-gtags-ignore-case         t
-         helm-gtags-auto-update         t
-         helm-gtags-use-input-at-cursor t
-         helm-gtags-pulse-at-cursor     t
+	(setq helm-locate-command
+		  (case system-type
+			('gnu/linux     "locate -i -r %s")
+			('berkeley-unix "locate -i %s")
+			('windows-nt    "es %s")
+			('darwin        "mdfind -name %s %s")
+			(t "locate %s"))))
+  )
 
-         helm-gtags-suggested-key-mapping t))
-      :config
-      (progn
-        ;; Enable helm-gtags-mode in Dired so you can jump to any tag
-        ;; when navigate project tree with Dired
-        (add-hook 'dired-mode-hook 'helm-gtags-mode)
-		;; Enable helm-gtags-mode in Eshell for the same reason as above
-		(add-hook 'eshell-mode-hook 'helm-gtags-mode)
-
-		;; Enable helm-gtags-mode in languages that GNU Global supports
-		(add-hook 'c-mode-hook    'helm-gtags-mode)
-		(add-hook 'c++-mode-hook  'helm-gtags-mode)
-		(add-hook 'java-mode-hook 'helm-gtags-mode)
-		(add-hook 'asm-mode-hook  'helm-gtags-mode)))))
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+(define-key helm-map (kbd "C-z")    'helm-select-action)
