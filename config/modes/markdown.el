@@ -7,7 +7,7 @@
       "run Marked on the current file and revert the buffer"
       (interactive)
       (shell-command
-       (format "open -a /Applications/Marked\ 2.app %s"
+       (format "open -a /Applications/Marked.app %s"
                (shell-quote-argument (buffer-file-name)))))
 
 (use-package markdown-mode
