@@ -1,7 +1,7 @@
 ;; -*- mode: elisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Mar 2014-11-18 11:00 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 00:43 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
@@ -33,6 +33,8 @@
   :init
   (progn
     (setq ac-comphist-file (get-conf-path ".ac-comphist.dat"))
+	(setq ac-auto-start 3)
+	(setq ac-auto-show-menu 0.1)
     (add-to-list 'ac-dictionary-directories "~/.emacs.d/.ac-dict")
     ;; (define-key ac-mode-map (kbd "M-/") 'ac-fuzzy-complete)
     ;; (dolist (ac-mode '(text-mode org-mode latex-mode))

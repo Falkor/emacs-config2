@@ -1,5 +1,5 @@
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Sam 2014-10-04 11:46 svarrette>
+;; Time-stamp: <Mer 2014-11-26 18:16 svarrette>
 ;; ----------------------------------------------------------------------
 
 ;; --------------------------------
@@ -33,7 +33,7 @@
 
 
 ;; --- ECB layout ----
-(setq ecb-create-layout-file (get-conf-path ".ecb-falkor-layout.el")) ; where my layout are saved
+(setq ecb-create-layout-file (get-conf-path ".ecb-falkor-layout.el")) ; where my layout is saved
 (setq ecb-windows-width 37)
 (setq ecb-layout-name "falkor")
 

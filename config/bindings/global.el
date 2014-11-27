@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Lun 2014-11-17 16:44 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 00:37 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -65,6 +65,10 @@
 ;; Rectangular selection - C-SPC being tacken by Alfred, C-<return> by yasnippet ;)
 (setq cua-rectangle-mark-key (kbd "C-S-<return>"))
 (cua-selection-mode 1)
+
+
+;; Fix iedit bug in Mac -- see modes/cedel.el
+;; "C-c ;" 'iedit-mode 
 
 
 ;; Select full buffer: Put mark at end of page, point at beginning.

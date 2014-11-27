@@ -132,11 +132,11 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/cedet.el
-;; -*- mode: elisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: cedet.el - Mainly rely on Collection Of Emacs Development
 ;; .                Environment Tools (CEDET)
-;; Time-stamp: <Mar 2014-11-18 11:09 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 01:11 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -145,6 +145,34 @@
 
 ;; see http://tuhdo.github.io/c-ide.html
 
+
+(defun falkor/ac-c-header-init ()
+  (require 'auto-complete-c-headers)
+  (add-to-list 'ac-sources 'ac-source-c-headers)
+  ;; $> gcc -xc++ -E -v -
+  ;; [...]
+  ;; #include <...> search starts here:
+  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1
+  ;; /usr/local/include
+  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/include
+  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
+  ;; /usr/include
+  ;; /System/Library/Frameworks (framework directory)
+  ;; /Library/Frameworks (framework directory)
+  ;; End of search list
+  ;;
+  ;; See also the variable `semantic-dependency-system-include-path`
+  (add-to-list 'achead:include-directories
+               '(("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
+                 ("."))
+               ))
+
+(defun falkor/semantic-init ()
+  (semantic-add-system-include "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" 'c++-mode)
+  ;;(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
+  )
+
+
 ;; ----------------
 ;; === Semantic ===
 ;; ----------------
@@ -152,60 +180,82 @@
 ;; The most critical part as it is the code parser that will latter provide text
 ;; analysis in Emacs
 
-;;(use-package 'cc-mode)
+(use-package cc-mode)
+(use-package semantic
+  :init
+  (progn
+    ;; Depending on your requirements, you can use one of the commands, described
+    ;; below, to load corresponding set of features (these commands are listed in
+    ;; increasing order, and each command include features of previous commands):
+    ;;
+    ;;     o   This is the default. Enables the database and idle reparse
+    ;;         engines
+    ;;(semantic-load-enable-minimum-features)
+
+    ;;     o This enables some tools useful for coding, such as summary mode imenu
+    ;;       support, the semantic navigator i.e prototype help and smart completion
+    ;; (semantic-load-enable-code-helpers)
+
+    ;;     o   This enables even more coding tools such as the nascent
+    ;;         intellisense mode decoration mode, and stickyfunc mode (plus
+    ;;         regular code helpers)
+    ;;(semantic-load-enable-guady-code-helpers)
+
+    ;;     o   This turns on which-func support (plus all other code
+    ;;         helpers)
+    ;;(semantic-load-enable-excessive-code-helpers)
+
+    ;;     o   This turns on modes that aid in writing grammar and developing
+    ;;         semantic tool.
+    ;;         It does not enable any other features such as code helpers above.
+    ;;(semantic-load-enable-semantic-debugging-helpers)
+
+    ;; Directory that semantic use to cache its files
+    (setq semanticdb-default-save-directory "~/.emacs.d/.emacs-semanticdb") ; getting rid of semantic.caches
+
+    (global-semanticdb-minor-mode        1)
+    (global-semantic-idle-scheduler-mode 1)
+    (global-semantic-stickyfunc-mode     1)
+
+    (semantic-mode 1))
+  :config
+  (progn
+    ;;(use-package )
+    (add-hook 'semantic-init-hooks 'falkor/semantic-init)
+    ))
+
+;; IEdit: Interactive, multi-occurrence editing in your buffer
+;; see https://github.com/victorhge/iedit
+(use-package iedit
+  :bind ("C-c ;" . iedit-mode))
+;; (define-key global-map (kbd "C-c ;") 'iedit-mode)
 
 
-	;; (use-package auto-complete-clang)
-	;; (use-package auto-complete-exuberant-ctags
-	;;   :config (ac-exuberant-ctags-setup))
-    ;; )
 
 
 
 
-
-;; (require 'cc-mode)
-
-;; (use-package semantic
-  
+;; (use-package 'function-args
 ;;   )
+;; (fa-config-default)
+;; (define-key c-mode-map  [(contrl tab)] 'moo-complete)
+;; (define-key c++-mode-map  [(control tab)] 'moo-complete)
+;; (define-key c-mode-map (kbd "M-o")  'fa-show)
+;; (define-key c++-mode-map (kbd "M-o")  'fa-show))
 
 
+;; This extension provides several commands that are useful for c++-mode:
 
-;; ;; Depending on your requirements, you can use one of the commands, described
-;; ;; below, to load corresponding set of features (these commands are listed in
-;; ;; increasing order, and each command include features of previous commands):
-;; ;;
-;; ;;     o   This is the default. Enables the database and idle reparse
-;; ;;         engines
-;; ;;(semantic-load-enable-minimum-features)
+;; * `fa-show' -- show an overlay hint with current function arguments.
+;; * `fa-jump' -- jump to definition of current element of `fa-show'.
+;; * `moo-complete' -- a c++-specific version of `semantic-ia-complete-symbol'.
+;; * `moo-propose-virtual' -- in class declaration, list all virtual
+;;   methods that the current class can override.
+;; * `moo-propose-override' -- similar to `moo-propose-virtual', but lists all
+;;   inherited methods instead.
+;; * `moo-jump-local' -- jump to a tag defined in current buffer.
 
-;; ;;     o This enables some tools useful for coding, such as summary mode imenu
-;; ;;       support, the semantic navigator i.e prototype help and smart completion
-;; ;; (semantic-load-enable-code-helpers)
 
-;; ;;     o   This enables even more coding tools such as the nascent
-;; ;;         intellisense mode decoration mode, and stickyfunc mode (plus
-;; ;;         regular code helpers)
-;; ;;(semantic-load-enable-guady-code-helpers)
-
-;; ;;     o   This turns on which-func support (plus all other code
-;; ;;         helpers)
-;; ;;(semantic-load-enable-excessive-code-helpers)
-
-;; ;;     o   This turns on modes that aid in writing grammar and developing
-;; ;;         semantic tool.
-;; ;;         It does not enable any other features such as code helpers above.
-;; ;;(semantic-load-enable-semantic-debugging-helpers)
-
-;; ;; Directory that semantic use to cache its files
-;; (setq semanticdb-default-save-directory "~/.emacs.d/.emacs-semanticdb") ; getting rid of semantic.caches
-
-;; (global-semanticdb-minor-mode        1)
-;; (global-semantic-idle-scheduler-mode 1)
-;; (global-semantic-stickyfunc-mode     1)
-
-;; (semantic-mode 1)
 
 ;; ;; === Prepare CEDET binding ===
 ;; (defun falkor/cedet-hook ()
@@ -225,12 +275,6 @@
 ;; (add-hook 'c-mode-common-hook 'falkor/cedet-hook)
 ;; (add-hook 'c-mode-hook        'falkor/cedet-hook)
 ;; (add-hook 'c++-mode-hook      'falkor/cedet-hook)
-
-
-
-
-
-
 ;; ############################################################################
 
 
@@ -462,7 +506,8 @@
     (call-interactively 'helm-do-grep)))
 
 ;; see also http://tuhdo.github.io/helm-intro.html
-
+;; see also https://github.com/xiaohanyu/oh-my-emacs/blob/master/core/ome-completion.org
+;;
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
 ;; Changed to "C-c h".
 (setq helm-command-prefix-key (kbd "C-c h"))
@@ -474,17 +519,16 @@
 	
     (setq helm-candidate-number-limit 100)
 
-    ;;(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-    ;;(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-    ;;(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
-    (helm-mode t))
+    (helm-mode t)
+	)
   :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
+		 ("C-x b"   . helm-buffers-list)
          ;; see projectile.el for C-x C-p
          )
   :config
@@ -495,11 +539,12 @@
 			('berkeley-unix "locate -i %s")
 			('windows-nt    "es %s")
 			('darwin        "mdfind -name %s %s")
-			(t "locate %s"))))
-  )
+			(t "locate %s")))
+	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+	(define-key helm-map (kbd "C-z")   'helm-select-action)
 
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-z")    'helm-select-action)
+	))
+
 ;; ############################################################################
 
 
@@ -914,7 +959,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/ecb.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Sam 2014-10-04 11:46 svarrette>
+;; Time-stamp: <Mer 2014-11-26 18:16 svarrette>
 ;; ----------------------------------------------------------------------
 
 ;; --------------------------------
@@ -948,7 +993,7 @@
 
 
 ;; --- ECB layout ----
-(setq ecb-create-layout-file (get-conf-path ".ecb-falkor-layout.el")) ; where my layout are saved
+(setq ecb-create-layout-file (get-conf-path ".ecb-falkor-layout.el")) ; where my layout is saved
 (setq ecb-windows-width 37)
 (setq ecb-layout-name "falkor")
 
@@ -1067,10 +1112,10 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/ggtags.el
-;; -*- mode: elisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: ggtags.el - Emacs frontend to GNU Global source code tagging system
-;; Time-stamp: <Mar 2014-11-18 11:58 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 01:11 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             See https://github.com/leoliu/ggtags
@@ -1091,6 +1136,10 @@
                ("C-c g c" . ggtags-create-tags)
                ("C-c g u" . ggtags-update-tags)
                ("M-,"     . pop-tag-mark))
+
+	;; See Suggested Key Mapping of https://github.com/syohex/emacs-helm-gtags
+	(setq helm-gtags-prefix-key (kbd "C-t"))
+	
     (use-package helm-gtags
       :init
       (progn
@@ -1098,9 +1147,7 @@
          helm-gtags-ignore-case         t
          helm-gtags-auto-update         t
          helm-gtags-use-input-at-cursor t
-		 
          helm-gtags-pulse-at-cursor     t
-
          helm-gtags-suggested-key-mapping t))
       :config
       (progn
@@ -1114,11 +1161,30 @@
         (add-hook 'c-mode-hook    'helm-gtags-mode)
         (add-hook 'c++-mode-hook  'helm-gtags-mode)
         (add-hook 'java-mode-hook 'helm-gtags-mode)
-        (add-hook 'asm-mode-hook  'helm-gtags-mode)))
+        (add-hook 'asm-mode-hook  'helm-gtags-mode)
+        (bind-keys :map helm-gtags-mode-map 
+                   ("C-c g a" . helm-gtags-tags-in-this-function)
+                   ("C-t s"   . helm-gtags-select) ; Tag jump using gtags and helm
+				   ("C-:"     . helm-gtags-dwim)   ; Find name by context.
+				   ;;                - Jump to header file if cursor is on include statement
+				   ;;                - Jump to tag definition if cursor is on tag reference
+				   ;;                - Jump to tag reference if cursor is on tag definition
+				   ("C-t <"    . helm-gtags-previous-history) ; Move to previous history on context stack
+				   ("C-t >"    . helm-gtags-next-history)     ; Move to next history on context stack.
+				   ("C-t C-t"  . helm-gtags-pop-stack)        ; Move to previous 
+										; point on the stack. helm-gtags pushes
+										; current point to stack before
+										; executing each jump functions. 
+				   )
+		))
     (add-hook 'c-mode-common-hook
               (lambda ()
                 (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-                  (ggtags-mode 1))))))
+                  (ggtags-mode 1))))
+	(setq-local hippie-expand-try-functions-list
+				(cons 'ggtags-try-complete-tag hippie-expand-try-functions-list))
+	(setq-local imenu-create-index-function #'ggtags-build-imenu-index)
+	))
 ;; ############################################################################
 
 
@@ -1335,7 +1401,7 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/indent.el
-;; -*- mode: elisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
 ;;
 ;; Helper functions 
@@ -1557,7 +1623,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Lun 2014-11-17 16:37 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 01:33 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1573,7 +1639,7 @@
   :config
   (progn
     (projectile-global-mode t)
-    (setq projectile-enable-caching t)
+    (setq projectile-enable-caching nil)
     ;;(setq projectile-require-project-root nil)
     (setq projectile-completion-system 'default)
     ;;(setq projectile-completion-system 'ido)
@@ -1658,10 +1724,10 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/yasnippets.el
-;; -*- mode: lisp; -*-
+;; -*- mode: emasc-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Mar 2014-11-18 00:11 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 09:55 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1670,6 +1736,7 @@
 ;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
 ;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
 ;; Installation notes: see README
+
 
 (use-package yasnippet
   :if (not noninteractive)
@@ -1700,7 +1767,8 @@
     ;; ;; see https://github.com/haxney/smart-tab/issues/1
     ;; (add-to-list 'hippie-expand-try-functions-list
     ;;              'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-    )
+	(add-hook 'emacs-lisp-mode-hook #'(lambda () (yas-activate-extra-mode 'lisp-mode)))
+	)
   :idle
   (progn
     (yas-reload-all)
@@ -1715,7 +1783,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Lun 2014-11-17 16:44 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 00:37 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1777,6 +1845,10 @@
 ;; Rectangular selection - C-SPC being tacken by Alfred, C-<return> by yasnippet ;)
 (setq cua-rectangle-mark-key (kbd "C-S-<return>"))
 (cua-selection-mode 1)
+
+
+;; Fix iedit bug in Mac -- see modes/cedel.el
+;; "C-c ;" 'iedit-mode 
 
 
 ;; Select full buffer: Put mark at end of page, point at beginning.

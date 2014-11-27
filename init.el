@@ -1,6 +1,6 @@
-;; -*- mode: elisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mar 2014-11-18 11:16 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 10:45 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -91,6 +91,7 @@
 (require 'use-package)
 (setq use-package-verbose nil)
 ;;(use-package load-dir)
+
 
 (load (get-conf-path "core/utils"))
 (load (get-conf-path "core/auto-complete"))

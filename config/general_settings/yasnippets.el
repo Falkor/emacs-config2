@@ -1,7 +1,7 @@
-;; -*- mode: lisp; -*-
+;; -*- mode: emasc-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Mar 2014-11-18 00:11 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 09:55 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -10,6 +10,7 @@
 ;; Templates using Yasnippet: Yet Another Snippet extension for Emacs.
 ;; see http://www.emacswiki.org/emacs/Yasnippet and http://yasnippet.googlecode.com
 ;; Installation notes: see README
+
 
 (use-package yasnippet
   :if (not noninteractive)
@@ -40,7 +41,8 @@
     ;; ;; see https://github.com/haxney/smart-tab/issues/1
     ;; (add-to-list 'hippie-expand-try-functions-list
     ;;              'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
-    )
+	(add-hook 'emacs-lisp-mode-hook #'(lambda () (yas-activate-extra-mode 'lisp-mode)))
+	)
   :idle
   (progn
     (yas-reload-all)

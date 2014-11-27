@@ -48,9 +48,11 @@
                           fit-frame
                           find-file-in-project
                           flycheck
+						  ggtags
 						  guide-key
                           helm
                           helm-c-yasnippet
+						  helm-gtags
                           helm-package
 						  helm-projectile
 						  htmlize
@@ -78,6 +80,7 @@
                           smart-tabs-mode
                           smex
                           solarized-theme
+						  sr-speedbar
                           use-package
                           web-mode
                           yaml-mode

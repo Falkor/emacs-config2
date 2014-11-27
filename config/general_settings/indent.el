@@ -1,4 +1,4 @@
-;; -*- mode: elisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
 ;;
 ;; Helper functions 

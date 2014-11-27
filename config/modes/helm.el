@@ -11,7 +11,8 @@
     (call-interactively 'helm-do-grep)))
 
 ;; see also http://tuhdo.github.io/helm-intro.html
-
+;; see also https://github.com/xiaohanyu/oh-my-emacs/blob/master/core/ome-completion.org
+;;
 ;; The default "C-x c" is quite close to "C-x C-c", which quits Emacs.
 ;; Changed to "C-c h".
 (setq helm-command-prefix-key (kbd "C-c h"))
@@ -23,17 +24,16 @@
 	
     (setq helm-candidate-number-limit 100)
 
-    ;;(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
-    ;;(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB works in terminal
-    ;;(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
     (when (executable-find "curl")
       (setq helm-google-suggest-use-curl-p t))
-    (helm-mode t))
+    (helm-mode t)
+	)
   :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
+		 ("C-x b"   . helm-buffers-list)
          ;; see projectile.el for C-x C-p
          )
   :config
@@ -44,8 +44,9 @@
 			('berkeley-unix "locate -i %s")
 			('windows-nt    "es %s")
 			('darwin        "mdfind -name %s %s")
-			(t "locate %s"))))
-  )
+			(t "locate %s")))
+	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+	(define-key helm-map (kbd "C-z")   'helm-select-action)
 
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-z")    'helm-select-action)
+	))
+
