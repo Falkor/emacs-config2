@@ -1,7 +1,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Lun 2014-11-17 16:37 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 01:33 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -17,7 +17,7 @@
   :config
   (progn
     (projectile-global-mode t)
-    (setq projectile-enable-caching t)
+    (setq projectile-enable-caching nil)
     ;;(setq projectile-require-project-root nil)
     (setq projectile-completion-system 'default)
     ;;(setq projectile-completion-system 'ido)
