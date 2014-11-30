@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-11-27 00:37 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 22:29 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -60,7 +60,7 @@
 ;; Using [expand-region](https://github.com/magnars/expand-region.el)
 ;; see general_settings/expand-region.el
 ;;  "C-@"  'er/expand-region
-;;	"C-="  'er/contract-region
+;;	"C-&"  'er/contract-region
 ;;
 ;; Rectangular selection - C-SPC being tacken by Alfred, C-<return> by yasnippet ;)
 (setq cua-rectangle-mark-key (kbd "C-S-<return>"))
