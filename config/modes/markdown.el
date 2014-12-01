@@ -10,6 +10,18 @@
    (format "open -a /Applications/Marked.app %s"
            (shell-quote-argument (buffer-file-name)))))
 
+(defun markdown-unset-tab ()
+  "markdown-mode-hook"
+  (define-key markdown-mode-map (kbd "<tab>")     nil)
+  (define-key markdown-mode-map (kbd "TAB")       nil)
+  (define-key markdown-mode-map (kbd "<backtab>") nil))
+
+(defun cleanup-org-tables-for-markdown ()
+  (save-excursion
+    (goto-char (point-min))
+    (while (search-forward "-+-" nil t) (replace-match "-|-"))
+    ))
+
 (use-package markdown-mode
   :mode (("\\.txt\\'"   . markdown-mode)
          ("\\.md\\'"    . markdown-mode)
@@ -29,26 +41,15 @@
       :bind ("C-c C-e" . pandoc-convert-to-pdf))
 
     ;; alter markdown-mode way of handling tabs
-    (defun markdown-unset-tab ()
-      "markdown-mode-hook"
-      (define-key markdown-mode-map (kbd "<tab>")     nil)
-	  (define-key markdown-mode-map (kbd "TAB")       company-complete)
-      (define-key markdown-mode-map (kbd "<backtab>") nil))
-
-    (defun cleanup-org-tables-for-markdown ()
-      (save-excursion
-        (goto-char (point-min))
-        (while (search-forward "-+-" nil t) (replace-match "-|-"))
-        ))
+    (add-hook 'after-save-hook 'cleanup-org-tables-for-markdown  nil 'make-it-local)
 
     (add-hook 'markdown-mode-hook
               (lambda ()
                 (visual-line-mode t)
                 (markdown-unset-tab)
-                (orgtbl-mode         t)
-                (global-company-mode t)
-                (pandoc-mode         t)
+                (orgtbl-mode)
+                (global-company-mode)
+                (pandoc-mode)
                 (whitespace-mode  -1)
                 (flyspell-mode    t)))
-	(add-hook 'after-save-hook 'cleanup-org-tables-for-markdown  nil 'make-it-local)
-	))
+    ))
