@@ -49,84 +49,92 @@
         (message "TeX master document: %s" (file-name-nondirectory candidate)))
     candidate))
 
-;; ------------------
-(use-package tex-site
-  :ensure auctex
+(use-package tex
   :config
   (progn
-    (setq TeX-auto-save t)
-    (setq TeX-parse-self t)
-    (setq-default TeX-master nil) ; Query for master file.
-    ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
-    (setq TeX-PDF-mode t)
-    ;;
-    ;; use Skim as default pdf viewer
-    ;; Skim's displayline is used for forward search (from .tex to .pdf)
-    ;; option -b highlights the current line; option -g opens Skim in the background
-    (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
-    ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
-    (setq TeX-view-program-list
-          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+	(require 'reftex)
+	(require 'latex)
+	(require 'reftex-vars)
+
+    ;; ------------------
+    (use-package tex-site
+      :ensure auctex
+      :config
+      (progn
+        (setq TeX-auto-save t)
+        (setq TeX-parse-self t)
+        (setq-default TeX-master nil) ; Query for master file.
+        ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
+        (setq TeX-PDF-mode t)
+        ;;
+        ;; use Skim as default pdf viewer
+        ;; Skim's displayline is used for forward search (from .tex to .pdf)
+        ;; option -b highlights the current line; option -g opens Skim in the background
+        (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+        ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
+        (setq TeX-view-program-list
+              '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+        ))
+
+
+    (use-package latex-mode
+      :ensure auctex
+      :mode ("\\.tex\\'" . latex-mode)
+      :config
+      (progn
+        (use-package auto-complete-auctex)
+        (add-hook 'LaTeX-mode-hook
+                  (lambda ()
+					(require 'auctex)
+                    (visual-line-mode t)
+                    (LaTeX-math-mode)
+                    (setq TeX-master nil)
+                    (setq LaTeX-command "pdflatex -synctex=1")
+                    ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
+                    ;; RefTex: manage cross references, bibliographies, indices, document navigation
+                    ;; and a few other things
+                    ;; see http://www.emacswiki.org/emacs/RefTeX
+                    (turn-on-reftex)))
+        ;; make latexmk available via C-c C-c
+        ;; Note: SyncTeX is setup via ~/.latexmkrc as follows:
+        ;;
+        ;;  $pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S';
+        ;;  $pdf_previewer = 'open -a skim';
+        ;;  $clean_ext = 'bbl rel %R-blx.bib %R.synctex.gz';
+        ;;
+        ;; (add-hook 'LaTeX-mode-hook (lambda ()
+        ;;                              (push
+        ;;                               '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
+        ;;                                 :help "Run latexmk on file")
+        ;;                               TeX-command-list)))
+        (setq reftex-plug-into-AUCTeX t)
+        (setq LaTeX-item-indent 0)
+        (setq TeX-brace-indent-level 2)))
+
+
+    ;; (use-package latex-extra
+    ;;   :init
+    ;;   (progn
+    ;;  (add-hook 'LaTeX-mode-hook #'latex-extra-mode)
+    ;;  ;; turn off auto-fill-mode, one can turn on it manually
+    ;;  (add-hook 'latex-extra-mode-hook (lambda () (auto-fill-mode -1)) t)))
+
+
+
+
+
+
+
+    ;; ;; make a LaTeX reference (to a label) by pressing `C-c )'
+    ;; ;; insert a label by pressing `C-c (' (or `C-('
+    ;; ;; insert a citation by pressing `C-c [' (or `C-['
+
+    ;; ;; hit `C-c ='; the buffer will split into 2 and in the top half you
+    ;; ;; will see a TOC, hitting `l' there will show all the labels and cites.
+
+    ;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex) ; with AUCTeX LaTeX mode
+    ;; (setq reftex-plug-into-AUCTeX t)
     ))
-
-
-(use-package latex-mode
-  :ensure auctex
-  :commands (LaTeX-mode) ;;LaTeX-math-mode
-  :mode ("\\.tex\\'" . latex-mode)
-  :config
-  (progn	
-    (use-package auto-complete-auctex)
-    (add-hook 'LaTeX-mode-hook
-              (lambda ()
-                (visual-line-mode t)
-                (LaTeX-math-mode)
-                (setq TeX-master nil)
-                (setq LaTeX-command "pdflatex -synctex=1")
-                ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
-                ;; RefTex: manage cross references, bibliographies, indices, document navigation
-                ;; and a few other things
-                ;; see http://www.emacswiki.org/emacs/RefTeX
-                (turn-on-reftex)))
-    ;; make latexmk available via C-c C-c
-    ;; Note: SyncTeX is setup via ~/.latexmkrc as follows:
-    ;;
-    ;;  $pdflatex = 'pdflatex -interaction=nonstopmode -synctex=1 %O %S';
-    ;;  $pdf_previewer = 'open -a skim';
-    ;;  $clean_ext = 'bbl rel %R-blx.bib %R.synctex.gz';
-    ;;
-    ;; (add-hook 'LaTeX-mode-hook (lambda ()
-    ;;                              (push
-    ;;                               '("latexmk" "latexmk -pdf %s" TeX-run-TeX nil t
-    ;;                                 :help "Run latexmk on file")
-    ;;                               TeX-command-list)))
-    (setq reftex-plug-into-AUCTeX t)
-    (setq LaTeX-item-indent 0)
-    (setq TeX-brace-indent-level 2)))
-
-
-;; (use-package latex-extra
-;;   :init
-;;   (progn
-;;  (add-hook 'LaTeX-mode-hook #'latex-extra-mode)
-;;  ;; turn off auto-fill-mode, one can turn on it manually
-;;  (add-hook 'latex-extra-mode-hook (lambda () (auto-fill-mode -1)) t)))
-
-
-
-
-
-
-
-;; ;; make a LaTeX reference (to a label) by pressing `C-c )'
-;; ;; insert a label by pressing `C-c (' (or `C-('
-;; ;; insert a citation by pressing `C-c [' (or `C-['
-
-;; ;; hit `C-c ='; the buffer will split into 2 and in the top half you
-;; ;; will see a TOC, hitting `l' there will show all the labels and cites.
-
-;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex) ; with AUCTeX LaTeX mode
-;; (setq reftex-plug-into-AUCTeX t)
 ;; ############################################################################
 
 
@@ -408,35 +416,54 @@
 ;;(require 'markdown-mode)
 
 (defun markdown-preview-file ()
-      "run Marked on the current file and revert the buffer"
-      (interactive)
-      (shell-command
-       (format "open -a /Applications/Marked.app %s"
-               (shell-quote-argument (buffer-file-name)))))
+  "run Marked on the current file and revert the buffer"
+  (interactive)
+  (shell-command
+   (format "open -a /Applications/Marked.app %s"
+           (shell-quote-argument (buffer-file-name)))))
 
 (use-package markdown-mode
   :mode (("\\.txt\\'"   . markdown-mode)
-		 ("\\.md\\'"    . markdown-mode)
-		 ("\\.mdown\\'" . markdown-mode))
+         ("\\.md\\'"    . markdown-mode)
+         ("\\.mdown\\'" . markdown-mode))
   :init
   (progn
-    (setq markdown-command "pandoc --smart -f markdown -t html")
+    (setq markdown-command "pandoc --smart -f markdown -t pdf")
     (setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
-  :bind ("C-c C-v" . markdown-preview-file)
+  :bind (("C-c C-v" . markdown-preview-file)
+         ;;("C-c C-e" . )
+         )
   :config
   (progn
-	(use-package gfm-mode
-	  :mode ("README\\.md\\'" . gfm-mode))
-	(defun markdown-unset-tab ()
-	  "markdown-mode-hook"
-	  (define-key markdown-mode-map (kbd "<tab>") nil))
-	(add-hook 'markdown-mode-hook
-			  (lambda ()
-				(visual-line-mode t)
-				(markdown-unset-tab)
-				(whitespace-mode  -1)
-				(flyspell-mode    t)))))
+    (use-package gfm-mode
+      :mode ("README\\.md\\'" . gfm-mode))
+    (use-package pandoc-mode
+      :bind ("C-c C-e" . pandoc-convert-to-pdf))
 
+    ;; alter markdown-mode way of handling tabs
+    (defun markdown-unset-tab ()
+      "markdown-mode-hook"
+      (define-key markdown-mode-map (kbd "<tab>")     nil)
+	  (define-key markdown-mode-map (kbd "TAB")       company-complete)
+      (define-key markdown-mode-map (kbd "<backtab>") nil))
+
+    (defun cleanup-org-tables-for-markdown ()
+      (save-excursion
+        (goto-char (point-min))
+        (while (search-forward "-+-" nil t) (replace-match "-|-"))
+        ))
+
+    (add-hook 'markdown-mode-hook
+              (lambda ()
+                (visual-line-mode t)
+                (markdown-unset-tab)
+                (orgtbl-mode         t)
+                (global-company-mode t)
+                (pandoc-mode         t)
+                (whitespace-mode  -1)
+                (flyspell-mode    t)))
+	(add-hook 'after-save-hook 'cleanup-org-tables-for-markdown  nil 'make-it-local)
+	))
 ;; ############################################################################
 
 
@@ -446,7 +473,7 @@
 ;; ----------------------------------------------------------------------
 ;; File: cedet.el - Mainly rely on Collection Of Emacs Development
 ;; .                Environment Tools (CEDET)
-;; Time-stamp: <Jeu 2014-11-27 10:59 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 23:21 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -456,31 +483,62 @@
 ;; see http://tuhdo.github.io/c-ide.html
 
 
-(defun falkor/ac-c-header-init ()
-  (require 'auto-complete-c-headers)
-  (add-to-list 'ac-sources 'ac-source-c-headers)
-  ;; $> gcc -xc++ -E -v -
-  ;; [...]
-  ;; #include <...> search starts here:
-  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1
-  ;; /usr/local/include
-  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/include
-  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
-  ;; /usr/include
-  ;; /System/Library/Frameworks (framework directory)
-  ;; /Library/Frameworks (framework directory)
-  ;; End of search list
-  ;;
-  ;; See also the variable `semantic-dependency-system-include-path`
-  (add-to-list 'achead:include-directories
-               '(("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
-                 ("."))
-               ))
+;; See http://p.writequit.org/org/settings.html
+(defun my/add-watchwords ()
+  "Highlight FIXME, TODO, and NOCOMMIT in code"
+  (font-lock-add-keywords
+   nil '(("\\<\\(FIXME\\|TODO\\|NOCOMMIT\\)\\>"
+          1 '((:foreground "#d7a3ad") (:weight bold)) t))))
+
+(add-hook 'prog-mode-hook 'my/add-watchwords)
+
+
+;; (use-package auto-complete-c-headers
+;;   :init
+;;   (progn
+;; 	(defun falkor/ac-c-header-init ()
+;; 	  (require 'auto-complete-c-headers)
+
+;; 	  (add-to-list 'ac-sources 'ac-source-c-headers)
+
+;; 	  ;; complete below using the output of `gcc -xc++ -E -v -`
+;; 	  (add-to-list 'achead:include-directories
+;;                '(("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
+;;                  ("."))))
+
+;; 	(add-hook 'c++-mode-hook 'falkor/ac-c-header-init)
+;; 	(add-hook 'c-mode-hook   'falkor/ac-c-header-init)))
+
 
 (defun falkor/semantic-init ()
   (semantic-add-system-include "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" 'c++-mode)
   ;;(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
+
+  ;;  adds semantic as a suggestion backend to auto complete
+  ;; (add-to-list 'ac-sources 'ac-source-semantic))
+)
+
+;; ;; === Prepare CEDET binding ===
+(defun falkor/cedet-hook ()
+
+  ;; Intellisense menu
+  (local-set-key (read-kbd-macro "M-<return>") 'semantic-ia-complete-symbol-menu)
+  ;;  jump to declaration of variable or function, whose name is under point
+  (local-set-key "\C-j"  'semantic-ia-fast-jump)
+  (local-set-key "\C-p"  'semantic-analyze-proto-impl-toggle) ; swith to/from declaration/implement
+
+  ;; shows documentation for function or variable, whose names is under point
+  (local-set-key "\C-cd" 'semantic-ia-show-doc)     ; in a separate buffer
+  (local-set-key "\C-cs" 'semantic-ia-show-summary) ; in the mini-buffer
+
+
+  ;;(add-to-list 'ac-sources 'ac-source-semantic)
   )
+
+(add-hook 'c-mode-common-hook 'falkor/cedet-hook)
+(add-hook 'c-mode-hook        'falkor/cedet-hook)
+(add-hook 'c++-mode-hook      'falkor/cedet-hook)
+
 
 
 ;; ----------------
@@ -490,7 +548,28 @@
 ;; The most critical part as it is the code parser that will latter provide text
 ;; analysis in Emacs
 
-(use-package cc-mode)
+(use-package cc-mode
+  :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
+         ("\\.m\\'"                   . c-mode)
+         ("\\.mm\\'"                  . c++-mode))
+  :config
+  ;; (progn
+  ;;   (bind-key "#" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "{" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "}" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "/" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "*" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key ";" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "," 'self-insert-command c-mode-base-map)
+  ;;   (bind-key ":" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "(" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key ")" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "<" 'self-insert-command c++-mode-map)
+  ;;   (bind-key ">" 'self-insert-command c++-mode-map)
+  ;;   )
+  )
+
+
 (use-package semantic
   :init
   (progn
@@ -524,13 +603,18 @@
     (setq semanticdb-default-save-directory "~/.emacs.d/.emacs-semanticdb") ; getting rid of semantic.caches
 
     (global-semanticdb-minor-mode        1)
+	;;  turn on automatic reparsing of open buffers in semantic
     (global-semantic-idle-scheduler-mode 1)
     (global-semantic-stickyfunc-mode     1)
 
     (semantic-mode 1))
   :config
   (progn
-    ;;(use-package )
+	(require 'semantic)
+	(require 'semantic/bovine/gcc)
+
+
+	
     (add-hook 'semantic-init-hooks 'falkor/semantic-init)
     ))
 
@@ -538,14 +622,21 @@
 ;; see https://github.com/victorhge/iedit
 (use-package iedit
   :bind ("C-c ;" . iedit-mode))
-;; (define-key global-map (kbd "C-c ;") 'iedit-mode)
 
 
+;; GNU Emacs package for showing an inline arguments hint for the C/C++ function at point.
 (use-package function-args
   :config
   (progn
-	)
-  :bind ())
+    (fa-config-default)
+    ;; (bind-keys :map c-mode-map
+    ;;            ("C-TAB" . moo-complete)
+    ;;            ("M-o"   . fa-show))
+    ;; (bind-map :map
+	;;c++-mode-map
+    ;;            ("C-TAB" . moo-complete)
+    ;;            ("M-o"   . fa-show))
+	))
 
 
 
@@ -575,24 +666,6 @@
 
 
 
-;; ;; === Prepare CEDET binding ===
-;; (defun falkor/cedet-hook ()
-;;   ;; Intellisense menu
-;;   (local-set-key (read-kbd-macro "M-<return>") 'semantic-ia-complete-symbol-menu)
-;;   ;;  jump to declaration of variable or function, whose name is under point
-;;   (local-set-key "\C-cj" 'semantic-ia-fast-jump)
-;;   (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle) ; swith to/from declaration/implement
-;;   ;;
-;;   (local-set-key "\C-ch" 'semantic-decoration-include-visit) ; visit the header file under point
-;;   ;;
-;;   ;; shows documentation for function or variable, whose names is under point
-;;   (local-set-key "\C-cd" 'semantic-ia-show-doc)     ; in a separate buffer
-;;   (local-set-key "\C-cs" 'semantic-ia-show-summary) ; in the mini-buffer
-;;   )
-
-;; (add-hook 'c-mode-common-hook 'falkor/cedet-hook)
-;; (add-hook 'c-mode-hook        'falkor/cedet-hook)
-;; (add-hook 'c++-mode-hook      'falkor/cedet-hook)
 ;; ############################################################################
 
 
@@ -1032,13 +1105,13 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/expand-region.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Mer 2014-09-24 23:12 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 22:29 svarrette>
 ;; ===============================================
 ;; Expand region increases the selected region by semantic units.
 
 (use-package expand-region
   :bind (("C-@" . er/expand-region)
-		 ("C-=" . er/contract-region)))
+		 ("C-&" . er/contract-region)))
 ;; ############################################################################
 
 
@@ -1735,7 +1808,7 @@
 ;; -*- mode: emasc-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Jeu 2014-11-27 09:55 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 22:00 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1752,12 +1825,15 @@
   :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
   :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
   :init
+  (progn 
   (hook-into-modes #'(lambda () (yas-minor-mode 1))
                    '(prog-mode-hook
                      text-mode-hook
                      org-mode-hook
                      ruby-mode-hook
                      message-mode-hook))
+  ;;(add-to-list 'ac-sources 'ac-source-yasnippet)
+  )
   :config
   (progn
     (setq yas-verbosity 0)
@@ -1791,7 +1867,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-11-27 00:37 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 22:29 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1848,7 +1924,7 @@
 ;; Using [expand-region](https://github.com/magnars/expand-region.el)
 ;; see general_settings/expand-region.el
 ;;  "C-@"  'er/expand-region
-;;	"C-="  'er/contract-region
+;;	"C-&"  'er/contract-region
 ;;
 ;; Rectangular selection - C-SPC being tacken by Alfred, C-<return> by yasnippet ;)
 (setq cua-rectangle-mark-key (kbd "C-S-<return>"))

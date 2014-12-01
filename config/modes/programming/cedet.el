@@ -2,7 +2,7 @@
 ;; ----------------------------------------------------------------------
 ;; File: cedet.el - Mainly rely on Collection Of Emacs Development
 ;; .                Environment Tools (CEDET)
-;; Time-stamp: <Jeu 2014-11-27 01:11 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 23:21 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -12,31 +12,62 @@
 ;; see http://tuhdo.github.io/c-ide.html
 
 
-(defun falkor/ac-c-header-init ()
-  (require 'auto-complete-c-headers)
-  (add-to-list 'ac-sources 'ac-source-c-headers)
-  ;; $> gcc -xc++ -E -v -
-  ;; [...]
-  ;; #include <...> search starts here:
-  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1
-  ;; /usr/local/include
-  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/6.0/include
-  ;; /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
-  ;; /usr/include
-  ;; /System/Library/Frameworks (framework directory)
-  ;; /Library/Frameworks (framework directory)
-  ;; End of search list
-  ;;
-  ;; See also the variable `semantic-dependency-system-include-path`
-  (add-to-list 'achead:include-directories
-               '(("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
-                 ("."))
-               ))
+;; See http://p.writequit.org/org/settings.html
+(defun my/add-watchwords ()
+  "Highlight FIXME, TODO, and NOCOMMIT in code"
+  (font-lock-add-keywords
+   nil '(("\\<\\(FIXME\\|TODO\\|NOCOMMIT\\)\\>"
+          1 '((:foreground "#d7a3ad") (:weight bold)) t))))
+
+(add-hook 'prog-mode-hook 'my/add-watchwords)
+
+
+;; (use-package auto-complete-c-headers
+;;   :init
+;;   (progn
+;; 	(defun falkor/ac-c-header-init ()
+;; 	  (require 'auto-complete-c-headers)
+
+;; 	  (add-to-list 'ac-sources 'ac-source-c-headers)
+
+;; 	  ;; complete below using the output of `gcc -xc++ -E -v -`
+;; 	  (add-to-list 'achead:include-directories
+;;                '(("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
+;;                  ("."))))
+
+;; 	(add-hook 'c++-mode-hook 'falkor/ac-c-header-init)
+;; 	(add-hook 'c-mode-hook   'falkor/ac-c-header-init)))
+
 
 (defun falkor/semantic-init ()
   (semantic-add-system-include "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" 'c++-mode)
   ;;(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
+
+  ;;  adds semantic as a suggestion backend to auto complete
+  ;; (add-to-list 'ac-sources 'ac-source-semantic))
+)
+
+;; ;; === Prepare CEDET binding ===
+(defun falkor/cedet-hook ()
+
+  ;; Intellisense menu
+  (local-set-key (read-kbd-macro "M-<return>") 'semantic-ia-complete-symbol-menu)
+  ;;  jump to declaration of variable or function, whose name is under point
+  (local-set-key "\C-j"  'semantic-ia-fast-jump)
+  (local-set-key "\C-p"  'semantic-analyze-proto-impl-toggle) ; swith to/from declaration/implement
+
+  ;; shows documentation for function or variable, whose names is under point
+  (local-set-key "\C-cd" 'semantic-ia-show-doc)     ; in a separate buffer
+  (local-set-key "\C-cs" 'semantic-ia-show-summary) ; in the mini-buffer
+
+
+  ;;(add-to-list 'ac-sources 'ac-source-semantic)
   )
+
+(add-hook 'c-mode-common-hook 'falkor/cedet-hook)
+(add-hook 'c-mode-hook        'falkor/cedet-hook)
+(add-hook 'c++-mode-hook      'falkor/cedet-hook)
+
 
 
 ;; ----------------
@@ -46,7 +77,28 @@
 ;; The most critical part as it is the code parser that will latter provide text
 ;; analysis in Emacs
 
-(use-package cc-mode)
+(use-package cc-mode
+  :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
+         ("\\.m\\'"                   . c-mode)
+         ("\\.mm\\'"                  . c++-mode))
+  :config
+  ;; (progn
+  ;;   (bind-key "#" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "{" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "}" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "/" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "*" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key ";" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "," 'self-insert-command c-mode-base-map)
+  ;;   (bind-key ":" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "(" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key ")" 'self-insert-command c-mode-base-map)
+  ;;   (bind-key "<" 'self-insert-command c++-mode-map)
+  ;;   (bind-key ">" 'self-insert-command c++-mode-map)
+  ;;   )
+  )
+
+
 (use-package semantic
   :init
   (progn
@@ -80,13 +132,18 @@
     (setq semanticdb-default-save-directory "~/.emacs.d/.emacs-semanticdb") ; getting rid of semantic.caches
 
     (global-semanticdb-minor-mode        1)
+	;;  turn on automatic reparsing of open buffers in semantic
     (global-semantic-idle-scheduler-mode 1)
     (global-semantic-stickyfunc-mode     1)
 
     (semantic-mode 1))
   :config
   (progn
-    ;;(use-package )
+	(require 'semantic)
+	(require 'semantic/bovine/gcc)
+
+
+	
     (add-hook 'semantic-init-hooks 'falkor/semantic-init)
     ))
 
@@ -94,7 +151,22 @@
 ;; see https://github.com/victorhge/iedit
 (use-package iedit
   :bind ("C-c ;" . iedit-mode))
-;; (define-key global-map (kbd "C-c ;") 'iedit-mode)
+
+
+;; GNU Emacs package for showing an inline arguments hint for the C/C++ function at point.
+(use-package function-args
+  :config
+  (progn
+    (fa-config-default)
+    ;; (bind-keys :map c-mode-map
+    ;;            ("C-TAB" . moo-complete)
+    ;;            ("M-o"   . fa-show))
+    ;; (bind-map :map
+	;;c++-mode-map
+    ;;            ("C-TAB" . moo-complete)
+    ;;            ("M-o"   . fa-show))
+	))
+
 
 
 
@@ -123,21 +195,3 @@
 
 
 
-;; ;; === Prepare CEDET binding ===
-;; (defun falkor/cedet-hook ()
-;;   ;; Intellisense menu
-;;   (local-set-key (read-kbd-macro "M-<return>") 'semantic-ia-complete-symbol-menu)
-;;   ;;  jump to declaration of variable or function, whose name is under point
-;;   (local-set-key "\C-cj" 'semantic-ia-fast-jump)
-;;   (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle) ; swith to/from declaration/implement
-;;   ;;
-;;   (local-set-key "\C-ch" 'semantic-decoration-include-visit) ; visit the header file under point
-;;   ;;
-;;   ;; shows documentation for function or variable, whose names is under point
-;;   (local-set-key "\C-cd" 'semantic-ia-show-doc)     ; in a separate buffer
-;;   (local-set-key "\C-cs" 'semantic-ia-show-summary) ; in the mini-buffer
-;;   )
-
-;; (add-hook 'c-mode-common-hook 'falkor/cedet-hook)
-;; (add-hook 'c-mode-hook        'falkor/cedet-hook)
-;; (add-hook 'c++-mode-hook      'falkor/cedet-hook)

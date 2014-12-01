@@ -1,7 +1,7 @@
 ;; -*- mode: emasc-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Jeu 2014-11-27 09:55 svarrette>
+;; Time-stamp: <Jeu 2014-11-27 22:00 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -18,12 +18,15 @@
   :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
   :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
   :init
+  (progn 
   (hook-into-modes #'(lambda () (yas-minor-mode 1))
                    '(prog-mode-hook
                      text-mode-hook
                      org-mode-hook
                      ruby-mode-hook
                      message-mode-hook))
+  ;;(add-to-list 'ac-sources 'ac-source-yasnippet)
+  )
   :config
   (progn
     (setq yas-verbosity 0)

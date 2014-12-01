@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Mar 2014-11-18 11:17 svarrette>
+# Time-stamp: <Lun 2014-12-01 07:27 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -110,8 +110,8 @@ eval_boottime:
 	$(BATCH_LOAD) --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
 
 # Clean option
- clean:
-	rm -f *.elc
+clean:
+	echo rm -f *.elc $(foreach dir,$(DIRS),$(wildcard $(dir)/*.elc))
 	rm -rf backups auto-save-list 
 
 clobber: clean
