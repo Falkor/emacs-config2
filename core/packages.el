@@ -7,7 +7,7 @@
 ;;
 
 (require 'cl)
-
+(require 'falkor-env)
 ;; =================================
 ;; === ELPA, the package manager ===
 ;; see http://tromey.com/elpa/
@@ -17,6 +17,8 @@
 ;;      (expand-file-name "~/.emacs.d/elpa/package.el"))
 ;;   (package-initialize)
 ;;   (require 'init-elpa))
+
+
 (require 'package)
 
 
@@ -26,41 +28,45 @@
                          ("melpa"     . "http://melpa.milkbox.net/packages/")
                                         ;("marmalade" . "http://marmalade-repo.org/packages/")
                          ))
-(setq package-user-dir  (concat packages-dir "elpa/"))
+
+(setq package-user-dir     (concat packages-dir "elpa/"))
+;;(setq package-enable-at-startup nil)
 (package-initialize)
 
 ;;
 ;; Define packages to install
 ;;
 (defvar falkor/packages '(ace-jump-mode
-						  alert
+                          alert
                           apache-mode
                           auctex
-						  auto-compile
+                          auto-compile
                           auto-complete
-						  auto-complete-c-headers ; auto-complete source for C/C++ header files
+                          auto-complete-c-headers ; auto-complete source for C/C++ header files
                           autopair
                           better-defaults
                           color-theme
+                          company
+                          company-c-headers
                           el-get
                           expand-region
                           feature-mode
                           fit-frame
                           find-file-in-project
                           flycheck
-						  ggtags
-						  guide-key
+                          ggtags
+                          guide-key
                           helm
                           helm-c-yasnippet
-						  helm-gtags
+                          helm-gtags
                           helm-package
-						  helm-projectile
-						  htmlize
+                          helm-projectile
+                          htmlize
                           js2-mode
-						  latex-extra
+                          latex-extra
                           load-dir
                           magit
-						  magit-gitflow
+                          magit-gitflow
                           markdown-mode
                           marmalade
                           mic-paren
@@ -70,7 +76,7 @@
                           paredit
                           php-mode
                           powerline
-						  projectile
+                          projectile
                           puppet-mode
                           restclient
                           ruby-compilation
@@ -80,7 +86,7 @@
                           smart-tabs-mode
                           smex
                           solarized-theme
-						  sr-speedbar
+                          sr-speedbar
                           use-package
                           web-mode
                           yaml-mode
@@ -108,16 +114,16 @@
 
 ;; =========== EL-Get =============
 ;; See https://github.com/dimitri/el-get
-(unless (require 'el-get nil 'noerror)
-  (with-current-buffer
-      (url-retrieve-synchronously
-       "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-    (let (el-get-master-branch)
-      (goto-char (point-max))
-      (eval-print-last-sexp))))
+;; (unless (require 'el-get nil 'noerror)
+;;   (with-current-buffer
+;;       (url-retrieve-synchronously
+;;        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
+;;     (let (el-get-master-branch)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp))))
 
 
-(setq el-get-dir (concat packages-dir "el-get/"))
+(setq el-get-dir           (concat packages-dir "el-get/"))
 (setq el-get-status-file   (concat el-get-dir ".status.el"))
 (setq el-get-autoload-file (concat el-get-dir ".loaddefs.el"))
 
@@ -125,19 +131,20 @@
 
 (require 'el-get)
 
-;;(setq el-get-byte-compile nil)
-;; Load the local recipes
-(add-to-list 'el-get-recipe-path (concat el-get-dir "recipes"))
+;; ;;(setq el-get-byte-compile nil)
+;; ;; Load the local recipes
+;; (add-to-list 'el-get-recipe-path (concat el-get-dir "recipes"))
 
-;; ECB for emacs 24
-(setq el-get-sources
-      '((:name ecb
-               :type git
-               :url "https://github.com/alexott/ecb.git"
-               :load "ecb.el"
-               :compile ("ecb.el"))
-        ))
-(setq my-packages
-      (append '(el-get)
-              (mapcar 'el-get-source-name el-get-sources)))
-(el-get 'sync my-packages)
+;; ;; ECB for emacs 24
+;; (setq el-get-sources
+;;       '((:name ecb
+;;                :type git
+;;                :url "https://github.com/alexott/ecb.git"
+;;                :load "ecb.el"
+;;                :compile ("ecb.el"))
+;;         ))
+;; (setq my-packages
+;;       (append '(el-get)
+;;               (mapcar 'el-get-source-name el-get-sources)))
+;; (el-get 'sync my-packages)
+

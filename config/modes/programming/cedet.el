@@ -2,7 +2,7 @@
 ;; ----------------------------------------------------------------------
 ;; File: cedet.el - Mainly rely on Collection Of Emacs Development
 ;; .                Environment Tools (CEDET)
-;; Time-stamp: <Jeu 2014-11-27 23:21 svarrette>
+;; Time-stamp: <Lun 2014-12-01 14:59 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -140,9 +140,9 @@
   :config
   (progn
 	(require 'semantic)
+	(require 'semantic/ia)
+	(require 'semantic/wisent)
 	(require 'semantic/bovine/gcc)
-
-
 	
     (add-hook 'semantic-init-hooks 'falkor/semantic-init)
     ))

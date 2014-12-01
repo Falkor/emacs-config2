@@ -1,6 +1,6 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Jeu 2014-11-27 10:45 svarrette>
+;; Time-stamp: <Lun 2014-12-01 16:20 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -41,7 +41,7 @@
 
 ;; keep all emacs-related stuff under ~/emacs.d
 (defvar emacs-root "~/.emacs.d/"
-  "the root of  personal emacs load-path.")
+  "the root of my personal emacs load-path.")
 
 ;; Helper function for root path
 (defun get-conf-path(path)
@@ -60,20 +60,17 @@
                       (add-to-list 'load-path
                                    (concat emacs-root p))))
   (add-path "site-lisp")
+  (add-path "core")
   )
 
-;; === Special Directory components ====
 
-(defvar config-dir     (get-conf-path "config/"))
-(defvar core-dir       (get-conf-path "core/"))
-(defvar defuns-dir     (get-conf-path "defuns/"))
-(defvar packages-dir   (get-conf-path "packages/"))
-(defvar custom-dir     (get-conf-path ".customs/"))
+
 (setq   custom-file    (get-conf-path "custom.el"))
 
 
 ;; === ENVIRONMENT ===
-(load (get-conf-path "core/env"))
+(load (get-conf-path "core/falkor-env"))
+(require 'falkor-env)
 
 ;; === PACKAGES ===
 

@@ -52,29 +52,29 @@
 (use-package tex
   :config
   (progn
-	(require 'reftex)
-	(require 'latex)
-	(require 'reftex-vars)
+    (require 'reftex)
+    (require 'latex)
+    (require 'reftex-vars)
 
     ;; ------------------
-    (use-package tex-site
-      :ensure auctex
-      :config
-      (progn
-        (setq TeX-auto-save t)
-        (setq TeX-parse-self t)
-        (setq-default TeX-master nil) ; Query for master file.
-        ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
-        (setq TeX-PDF-mode t)
-        ;;
-        ;; use Skim as default pdf viewer
-        ;; Skim's displayline is used for forward search (from .tex to .pdf)
-        ;; option -b highlights the current line; option -g opens Skim in the background
-        (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
-        ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
-        (setq TeX-view-program-list
-              '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
-        ))
+    ;;(use-package tex-site
+    ;;  :ensure auctex
+    ;;  :config
+    ;;  (progn
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil) ; Query for master file.
+    ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
+    (setq TeX-PDF-mode t)
+    ;;
+    ;; use Skim as default pdf viewer
+    ;; Skim's displayline is used for forward search (from .tex to .pdf)
+    ;; option -b highlights the current line; option -g opens Skim in the background
+    (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+    ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
+    (setq TeX-view-program-list
+          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+
 
 
     (use-package latex-mode
@@ -82,10 +82,14 @@
       :mode ("\\.tex\\'" . latex-mode)
       :config
       (progn
-        (use-package auto-complete-auctex)
+
+
+
+
+        ;;(use-package auto-complete-auctex)
         (add-hook 'LaTeX-mode-hook
                   (lambda ()
-					(require 'auctex)
+                    (require 'auctex)
                     (visual-line-mode t)
                     (LaTeX-math-mode)
                     (setq TeX-master nil)
@@ -474,7 +478,7 @@
 ;; ----------------------------------------------------------------------
 ;; File: cedet.el - Mainly rely on Collection Of Emacs Development
 ;; .                Environment Tools (CEDET)
-;; Time-stamp: <Jeu 2014-11-27 23:21 svarrette>
+;; Time-stamp: <Lun 2014-12-01 14:59 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -612,9 +616,9 @@
   :config
   (progn
 	(require 'semantic)
+	(require 'semantic/ia)
+	(require 'semantic/wisent)
 	(require 'semantic/bovine/gcc)
-
-
 	
     (add-hook 'semantic-init-hooks 'falkor/semantic-init)
     ))
@@ -987,7 +991,7 @@
 	;; 	  (remove-if-not #'(lambda(line) (string-match "\\.el" line))
 	;; 					 '(list color-theme-libraries)))
 	;; Personnal Hotfix - srry
-	(message (concat "****elpa package : "  (package--dir "elpa" "20080305.34/")))
+	;;(message (concat "****elpa package : "  (package--dir "elpa" "20080305.34/")))
 	(color-theme-initialize)
 	(setq color-theme-is-global t)
 	(color-theme-vim-colors)))
@@ -1035,71 +1039,6 @@
 ;; 	(epa-file-enable)))
 
 (epa-file-enable)
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/general_settings/ecb.el
-;; -*- mode: lisp; -*-
-;; Time-stamp: <Mer 2014-11-26 18:16 svarrette>
-;; ----------------------------------------------------------------------
-
-;; --------------------------------
-;; === ECB (Emacs Code Browser) ===
-;; see http://ecb.sourceforge.net/
-;; or  http://www.emacswiki.org/emacs/EmacsCodeBrowser
-;; or  http://www.emacswiki.org/emacs/PracticalECB
-(require 'ecb)
-;;(require 'ecb-autoloads)
-
-;; ;; /!\ Caution on ECB variable configuration
-;; ;; see http://ecb.sourceforge.net/docs/setq-or-customize.html#setq-or-customize 
-;; ;; for the options that shouldn't be configured via setq ;(
-
-;; --- Annoyances
-;; use the primary button to navigate in the source tree -- middle button otherwise (!?!)
-(setq ecb-primary-secondary-mouse-buttons (quote mouse-1--mouse-2))
-(setq ecb-show-sources-in-directories-buffer 'always)
-(setq ecb-tip-of-the-day nil)           ; disable tips of the day
-(setq ecb-version-check nil)			; to prevent ecb failing to start up
-
-(setq ecb-history-sort-method nil)	 ; No sorting, means the most recently used
-										; buffers are on the top of the history
-                                        ; and the seldom used buffers at the bottom
-;; (setq ecb-vc-enable-support t)          ; show versionning status of the files
-;;                                         ; in the sources/hstory (SVN etc.)
-;; ;; autostart ECB on emacs startup (put to nil to desactivate)
-;; ;;(setq ecb-auto-activate t)
-
-;;(setq ecb-compile-window-height 12)
-
-
-;; --- ECB layout ----
-(setq ecb-create-layout-file (get-conf-path ".ecb-falkor-layout.el")) ; where my layout is saved
-(setq ecb-windows-width 37)
-(setq ecb-layout-name "falkor")
-
-;; The "falkor" layout is as follows:
-;; +------+-------+--------------------------------------+
-;; |              |                                      |
-;; |              |                                      |
-;; | Directories  |                                      |
-;; |              |                                      |
-;; +--------------|          Edit                        |
-;; |   History    |                                      |
-;; |              |                                      |
-;; +------+-------+                                      |
-;; |              |                                      |
-;; |   Methods    |                                      |
-;; |              |                                      |
-;; +-----------------------------------------------------+
-
-;; You can easily create your own layout using M-x ecb-create-new-layout
-;; see ~/emacs.d/custom.el for the configuration of my own layout
-
-
-
-
 ;; ############################################################################
 
 
@@ -1868,7 +1807,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-11-27 22:29 svarrette>
+;; Time-stamp: <Lun 2014-12-01 14:56 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1892,6 +1831,32 @@
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;; ----------------------------------------------------------------------
 (require 'use-package)
+
+
+(defun check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+        (backward-char 1)
+        (if (looking-at "->") t nil)))))
+
+(defun do-yas-expand ()
+  (let ((yas/fallback-behavior 'return-nil))
+    (yas/expand)))
+
+(defun tab-indent-or-complete ()
+  (interactive)
+  (if (minibufferp)
+      (minibuffer-complete)
+    (if (or (not yas/minor-mode)
+            (null (do-yas-expand)))
+        (if (check-expansion)
+            (company-complete-common)
+          (indent-for-tab-command)))))
+
+(global-set-key (kbd "TAB") 'tab-indent-or-complete)
+
 
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)

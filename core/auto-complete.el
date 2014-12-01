@@ -1,7 +1,7 @@
 ;; -*- mode: elisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Dim 2014-11-30 09:08 svarrette>
+;; Time-stamp: <Lun 2014-12-01 16:20 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
@@ -23,19 +23,21 @@
   :diminish pabbrev-mode)
 
 
+
+
 (use-package company
   :commands global-company-mode
   :init (progn
           (global-company-mode)
-		  (add-hook 'after-init-hook 'global-company-mode)
+          (add-hook 'after-init-hook 'global-company-mode)
           ;;(setq company-global-modes '(not python-mode cython-mode sage-mode))
           )
   :bind ("<C-tab>" . company-complete)
   :config
   (progn
     (setq company-tooltip-limit 20
-		  company-idle-delay    0.2
-		  company-echo-delay    0
+          company-idle-delay    0.2
+          company-echo-delay    0
           ;; min prefix of 2 chars
           company-minimum-prefix-length 2
           company-selection-wrap-around t
@@ -46,19 +48,23 @@
                ("C-n" . company-select-next)
                ("C-p" . company-select-previous)
                ("C-d" . company-show-doc-buffer)
+			   ("C-=" . helm-company)
                ("<tab>" . company-complete))))
 
 (add-hook 'prog-mode-hook 'company-mode)
 (add-hook 'text-mode-hook 'company-mode)
 
+(use-package company-c-headers
+  :config
+  (progn
+    (defun falkor/company-c-headers ()
+	  (add-to-list 'company-backends 'company-c-headers))
+
+	(add-hook 'c-mode-hook   'falkor/company-c-headers)
+	(add-hook 'c++-mode-hook 'falkor/company-c-headers)))
 
 
-;; (use-package company-c-headers
-;;   :config
-;;   (progn
-;;     ;; (defun falkor/company-c-headers ()
-;;     ;;  (add-to-list 'company-backends 'company-c-headers))
-
+	
 ;;     (setq company-backends (delete 'company-semantic company-backends))
 ;;     (define-key c-mode-map  [(tab)]   'company-complete)
 ;;     (define-key c++-mode-map  [(tab)] 'company-complete)
@@ -134,3 +140,5 @@
 ;; (add-hook 'after-init-hook
 ;;           (lambda ()
 ;;             (ac-config-default)))
+
+(provide 'falkor/core/auto-complete)

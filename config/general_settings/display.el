@@ -83,7 +83,7 @@
 	;; 	  (remove-if-not #'(lambda(line) (string-match "\\.el" line))
 	;; 					 '(list color-theme-libraries)))
 	;; Personnal Hotfix - srry
-	(message (concat "****elpa package : "  (package--dir "elpa" "20080305.34/")))
+	;;(message (concat "****elpa package : "  (package--dir "elpa" "20080305.34/")))
 	(color-theme-initialize)
 	(setq color-theme-is-global t)
 	(color-theme-vim-colors)))

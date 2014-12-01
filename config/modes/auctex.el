@@ -27,29 +27,29 @@
 (use-package tex
   :config
   (progn
-	(require 'reftex)
-	(require 'latex)
-	(require 'reftex-vars)
+    (require 'reftex)
+    (require 'latex)
+    (require 'reftex-vars)
 
     ;; ------------------
-    (use-package tex-site
-      :ensure auctex
-      :config
-      (progn
-        (setq TeX-auto-save t)
-        (setq TeX-parse-self t)
-        (setq-default TeX-master nil) ; Query for master file.
-        ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
-        (setq TeX-PDF-mode t)
-        ;;
-        ;; use Skim as default pdf viewer
-        ;; Skim's displayline is used for forward search (from .tex to .pdf)
-        ;; option -b highlights the current line; option -g opens Skim in the background
-        (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
-        ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
-        (setq TeX-view-program-list
-              '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
-        ))
+    ;;(use-package tex-site
+    ;;  :ensure auctex
+    ;;  :config
+    ;;  (progn
+    (setq TeX-auto-save t)
+    (setq TeX-parse-self t)
+    (setq-default TeX-master nil) ; Query for master file.
+    ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
+    (setq TeX-PDF-mode t)
+    ;;
+    ;; use Skim as default pdf viewer
+    ;; Skim's displayline is used for forward search (from .tex to .pdf)
+    ;; option -b highlights the current line; option -g opens Skim in the background
+    (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+    ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
+    (setq TeX-view-program-list
+          '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+
 
 
     (use-package latex-mode
@@ -57,10 +57,14 @@
       :mode ("\\.tex\\'" . latex-mode)
       :config
       (progn
-        (use-package auto-complete-auctex)
+
+
+
+
+        ;;(use-package auto-complete-auctex)
         (add-hook 'LaTeX-mode-hook
                   (lambda ()
-					(require 'auctex)
+                    (require 'auctex)
                     (visual-line-mode t)
                     (LaTeX-math-mode)
                     (setq TeX-master nil)
