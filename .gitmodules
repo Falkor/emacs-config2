@@ -22,3 +22,6 @@
 [submodule "resources/emacs.d/xiaohanyu"]
 	path = resources/emacs.d/xiaohanyu
 	url = https://github.com/xiaohanyu/oh-my-emacs.git
+[submodule "resources/emacs.d/capdevc"]
+	path = resources/emacs.d/capdevc
+	url = https://github.com/capdevc/dotfiles-cc.git
