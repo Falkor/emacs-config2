@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Lun 2014-12-01 14:56 svarrette>
+;; Time-stamp: <Mar 2014-12-02 10:37 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -38,14 +38,14 @@
         (if (looking-at "->") t nil)))))
 
 (defun do-yas-expand ()
-  (let ((yas/fallback-behavior 'return-nil))
-    (yas/expand)))
+  (let ((yas-fallback-behavior 'return-nil))
+    (yas-expand)))
 
 (defun tab-indent-or-complete ()
   (interactive)
   (if (minibufferp)
       (minibuffer-complete)
-    (if (or (not yas/minor-mode)
+    (if (or (not yas-minor-mode)
             (null (do-yas-expand)))
         (if (check-expansion)
             (company-complete-common)
@@ -105,13 +105,16 @@
 ;; "C-x g" . magit-status
 
 ;; === Buffer switching ===
-;; C-x b permits to switch among the buffer by entering a buffer name,
-;; with completion.
-;; See http://www.emacswiki.org/emacs/IswitchBuffers
-(require 'iswitchb)
-(iswitchb-mode t)
-;; to ignore the *...* special buffers from the list
-(setq iswitchb-buffer-ignore '("^ " "*Buffer"))
+;; NOW DONE WITH HELM
+;; ;; C-x b permits to switch among the buffer by entering a buffer name,
+;; ;; with completion.
+;; ;; See http://www.emacswiki.org/emacs/IswitchBuffers
+;; (require 'iswitchb)
+;; (iswitchb-mode t)
+;; ;; to ignore the *...* special buffers from the list
+;; (setq iswitchb-buffer-ignore '("^ " "*Buffer"))
+
+
 
 ;; Move from one buffer to another using 'C-<' and 'C->'
 ;;(load "cyclebuffer" nil 't)
