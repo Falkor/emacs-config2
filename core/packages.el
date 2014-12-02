@@ -54,6 +54,7 @@
                           fit-frame
                           find-file-in-project
                           flycheck
+						  function-args
                           ggtags
                           guide-key
                           helm
@@ -127,15 +128,13 @@
 (setq el-get-status-file   (concat el-get-dir ".status.el"))
 (setq el-get-autoload-file (concat el-get-dir ".loaddefs.el"))
 
-
-
 (require 'el-get)
 
-;; ;;(setq el-get-byte-compile nil)
-;; ;; Load the local recipes
-;; (add-to-list 'el-get-recipe-path (concat el-get-dir "recipes"))
+;;(setq el-get-byte-compile nil)
+;; Load the local recipes
+(add-to-list 'el-get-recipe-path (concat el-get-dir "recipes"))
 
-;; ;; ECB for emacs 24
+;; ECB for emacs 24
 ;; (setq el-get-sources
 ;;       '((:name ecb
 ;;                :type git
