@@ -413,6 +413,32 @@
 
 
 ;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/json.el
+;; -*- mode: elisp; -*-
+;; ----------------------------------------------------------------------
+;; File: json.el -
+;; Time-stamp: <Mar 2014-12-02 13:00 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; .
+;; ----------------------------------------------------------------------
+
+(use-package json-mode
+  :config
+  (progn
+    ;; Beautify json -- see https://github.com/daschwa/dotfiles/blob/master/emacs.d/emacs-init.org
+    (defun beautify-json ()
+      (interactive)
+      (let ((b (if mark-active (min (point) (mark)) (point-min)))
+            (e (if mark-active (max (point) (mark)) (point-max))))
+        (shell-command-on-region b e
+                                 "python -mjson.tool" (current-buffer) t)))
+
+	))
+;; ############################################################################
+
+
+;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/markdown.el
 ;; -*- mode: lisp; -*-
 ;; === Markdown ===
@@ -432,12 +458,6 @@
   (define-key markdown-mode-map (kbd "TAB")       nil)
   (define-key markdown-mode-map (kbd "<backtab>") nil))
 
-(defun cleanup-org-tables-for-markdown ()
-  (save-excursion
-    (goto-char (point-min))
-    (while (search-forward "-+-" nil t) (replace-match "-|-"))
-    ))
-
 (use-package markdown-mode
   :mode (("\\.txt\\'"   . markdown-mode)
          ("\\.md\\'"    . markdown-mode)
@@ -453,22 +473,54 @@
   (progn
     (use-package gfm-mode
       :mode ("README\\.md\\'" . gfm-mode))
+
     (use-package pandoc-mode
-      :bind ("C-c C-e" . pandoc-convert-to-pdf))
+      :bind ("C-c C-e" . pandoc-convert-to-pdf)
+	  :config
+	  (progn
+		(add-hook 'markdown-mode-hook 'pandoc-mode)))
 
-    ;; alter markdown-mode way of handling tabs
-    (add-hook 'after-save-hook 'cleanup-org-tables-for-markdown  nil 'make-it-local)
+	(require 'org-table)
+	(add-hook 'markdown-mode-hook 'orgtbl-mode)
+	
+	;; alter markdown-mode way of handling tabs
+	(defun cleanup-org-tables-for-markdown ()
+	  (save-excursion
+		(goto-char (point-min))
+		(while (search-forward "-+-" nil t) (replace-match "-|-"))
+		))
+	(add-hook 'markdown-mode-hook
+          (lambda()
+            (add-hook 'after-save-hook 'cleanup-org-tables  nil 'make-it-local)))
 
+	;; Finalize  configuration for markdown
     (add-hook 'markdown-mode-hook
               (lambda ()
                 (visual-line-mode t)
-                (markdown-unset-tab)
-                (orgtbl-mode)
-                (global-company-mode)
                 (pandoc-mode)
                 (whitespace-mode  -1)
                 (flyspell-mode    t)))
+
+	(bind-key "<tab>" 'yas-expand markdown-mode-map)
     ))
+;; ############################################################################
+
+
+;; ############################################################################
+;; Config file: ~/.emacs.d/config/modes/yaml.el
+;; -*- mode: elisp; -*-
+;; ----------------------------------------------------------------------
+;; File: yaml.el - YAML programming support.
+;; Time-stamp: <Mar 2014-12-02 12:44 svarrette>
+;;
+;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; ----------------------------------------------------------------------
+
+(use-package yaml-mode
+  :config
+  (progn
+	(add-hook 'yaml-mode-hook 'whitespace-mode)
+	))
 ;; ############################################################################
 
 
@@ -476,9 +528,9 @@
 ;; Config file: ~/.emacs.d/config/modes/programming/cedet.el
 ;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
-;; File: cedet.el - Mainly rely on Collection Of Emacs Development
-;; .                Environment Tools (CEDET)
-;; Time-stamp: <Lun 2014-12-01 14:59 svarrette>
+;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
+;; Semantic and main programming stuff.
+;; Time-stamp: <Mar 2014-12-02 12:57 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -486,6 +538,7 @@
 ;; ----------------------------------------------------------------------
 
 ;; see http://tuhdo.github.io/c-ide.html
+
 
 
 ;; See http://p.writequit.org/org/settings.html
@@ -497,54 +550,11 @@
 
 (add-hook 'prog-mode-hook 'my/add-watchwords)
 
-
-;; (use-package auto-complete-c-headers
-;;   :init
-;;   (progn
-;; 	(defun falkor/ac-c-header-init ()
-;; 	  (require 'auto-complete-c-headers)
-
-;; 	  (add-to-list 'ac-sources 'ac-source-c-headers)
-
-;; 	  ;; complete below using the output of `gcc -xc++ -E -v -`
-;; 	  (add-to-list 'achead:include-directories
-;;                '(("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
-;;                  ("."))))
-
-;; 	(add-hook 'c++-mode-hook 'falkor/ac-c-header-init)
-;; 	(add-hook 'c-mode-hook   'falkor/ac-c-header-init)))
-
-
-(defun falkor/semantic-init ()
-  (semantic-add-system-include "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" 'c++-mode)
-  ;;(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
-
-  ;;  adds semantic as a suggestion backend to auto complete
-  ;; (add-to-list 'ac-sources 'ac-source-semantic))
-)
-
-;; ;; === Prepare CEDET binding ===
-(defun falkor/cedet-hook ()
-
-  ;; Intellisense menu
-  (local-set-key (read-kbd-macro "M-<return>") 'semantic-ia-complete-symbol-menu)
-  ;;  jump to declaration of variable or function, whose name is under point
-  (local-set-key "\C-j"  'semantic-ia-fast-jump)
-  (local-set-key "\C-p"  'semantic-analyze-proto-impl-toggle) ; swith to/from declaration/implement
-
-  ;; shows documentation for function or variable, whose names is under point
-  (local-set-key "\C-cd" 'semantic-ia-show-doc)     ; in a separate buffer
-  (local-set-key "\C-cs" 'semantic-ia-show-summary) ; in the mini-buffer
-
-
-  ;;(add-to-list 'ac-sources 'ac-source-semantic)
-  )
-
-(add-hook 'c-mode-common-hook 'falkor/cedet-hook)
-(add-hook 'c-mode-hook        'falkor/cedet-hook)
-(add-hook 'c++-mode-hook      'falkor/cedet-hook)
-
-
+;; ------------------
+;; IEdit: Interactive, multi-occurrence editing in your buffer
+;; see https://github.com/victorhge/iedit
+(use-package iedit
+  :bind ("C-c ;" . iedit-mode))
 
 ;; ----------------
 ;; === Semantic ===
@@ -605,28 +615,47 @@
     ;;(semantic-load-enable-semantic-debugging-helpers)
 
     ;; Directory that semantic use to cache its files
-    (setq semanticdb-default-save-directory "~/.emacs.d/.emacs-semanticdb") ; getting rid of semantic.caches
-
-    (global-semanticdb-minor-mode        1)
-	;;  turn on automatic reparsing of open buffers in semantic
-    (global-semantic-idle-scheduler-mode 1)
-    (global-semantic-stickyfunc-mode     1)
-
-    (semantic-mode 1))
+    (setq semanticdb-default-save-directory "~/.emacs.d/.cache/semanticdb") ; getting rid of semantic.caches
+	)
   :config
   (progn
 	(require 'semantic)
 	(require 'semantic/ia)
-	(require 'semantic/wisent)
-	(require 'semantic/bovine/gcc)
-	
-    (add-hook 'semantic-init-hooks 'falkor/semantic-init)
-    ))
+	(require 'semantic/sb) ; integrate semantic with speedbar
+	(require 'semantic/bovine/gcc) ; allows semantic to ask GCC for system include paths
+								   ; complete the above as follows: 
+	(defun falkor/semantic/bovine/gcc ()
+	  ;; complete below using the output of `gcc -xc++ -E -v -`
+	  (semantic-add-system-include "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" 'c++-mode)
+	  ;;(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
+	  )
 
-;; IEdit: Interactive, multi-occurrence editing in your buffer
-;; see https://github.com/victorhge/iedit
-(use-package iedit
-  :bind ("C-c ;" . iedit-mode))
+	
+	;; Semantic options -- see http://www.gnu.org/software/emacs/manual/html_node/semantic/Semantic-mode.html
+
+	;; MANDATORY ;) parse the code whenever you’re idle
+	(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+
+	;; Store parsing results in a database
+	(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+
+	;; Display information about the current thing under the cursor when idle.
+	(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
+
+	;; Highlight local symbols which are the same as the thing under the cursor
+	(add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode)
+
+	;; Toggle Semantic Sticky Function mode in all Semantic-enabled buffers.
+	;; displays a header line that shows the declaration line of the function or
+	;; tag on the topmost line in the text area.
+	(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+
+	;; Activate semantic
+	(semantic-mode 1))
+  
+    ;;(add-hook 'semantic-init-hooks 'falkor/semantic-init)
+  )
+
 
 
 ;; GNU Emacs package for showing an inline arguments hint for the C/C++ function at point.
@@ -638,10 +667,10 @@
     ;;            ("C-TAB" . moo-complete)
     ;;            ("M-o"   . fa-show))
     ;; (bind-map :map
-	;;c++-mode-map
+    ;;c++-mode-map
     ;;            ("C-TAB" . moo-complete)
     ;;            ("M-o"   . fa-show))
-	))
+    ))
 
 
 
@@ -671,6 +700,54 @@
 
 
 
+
+
+
+;; (use-package auto-complete-c-headers
+;;   :init
+;;   (progn
+;;  (defun falkor/ac-c-header-init ()
+;;    (require 'auto-complete-c-headers)
+
+;;    (add-to-list 'ac-sources 'ac-source-c-headers)
+
+;;    ;; complete below using the output of `gcc -xc++ -E -v -`
+;;    (add-to-list 'achead:include-directories
+;;                '(("/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
+;;                  ("."))))
+
+;;  (add-hook 'c++-mode-hook 'falkor/ac-c-header-init)
+;;  (add-hook 'c-mode-hook   'falkor/ac-c-header-init)))
+
+
+;; (defun falkor/semantic-init ()
+;;   (semantic-add-system-include "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" 'c++-mode)
+;;   ;;(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
+
+;;   ;;  adds semantic as a suggestion backend to auto complete
+;;   ;; (add-to-list 'ac-sources 'ac-source-semantic))
+;;   )
+
+;; ;; ;; === Prepare CEDET binding ===
+;; (defun falkor/cedet-hook ()
+
+;;   ;; Intellisense menu
+;;   (local-set-key (read-kbd-macro "M-<return>") 'semantic-ia-complete-symbol-menu)
+;;   ;;  jump to declaration of variable or function, whose name is under point
+;;   (local-set-key "\C-j"  'semantic-ia-fast-jump)
+;;   (local-set-key "\C-p"  'semantic-analyze-proto-impl-toggle) ; swith to/from declaration/implement
+
+;;   ;; shows documentation for function or variable, whose names is under point
+;;   (local-set-key "\C-cd" 'semantic-ia-show-doc)     ; in a separate buffer
+;;   (local-set-key "\C-cs" 'semantic-ia-show-summary) ; in the mini-buffer
+
+
+;;   ;;(add-to-list 'ac-sources 'ac-source-semantic)
+;;   )
+
+;; (add-hook 'c-mode-common-hook 'falkor/cedet-hook)
+;; (add-hook 'c-mode-hook        'falkor/cedet-hook)
+;; (add-hook 'c++-mode-hook      'falkor/cedet-hook)
 ;; ############################################################################
 
 
@@ -678,8 +755,8 @@
 ;; Config file: ~/.emacs.d/config/modes/programming/global.el
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
-;; File: global.el -  Global setting for any programming language          
-;; Time-stamp: <Lun 2014-11-10 12:30 svarrette>
+;; File: global.el -  Global setting for any programming language
+;; Time-stamp: <Mar 2014-12-02 12:46 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             
@@ -1052,34 +1129,6 @@
 (use-package expand-region
   :bind (("C-@" . er/expand-region)
 		 ("C-&" . er/contract-region)))
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/general_settings/filladapt.el
-;; -*- mode: lisp; auto-fill-mode;  -*-
-;; =============================================
-;; Activate fill adapt
-;; see http://www.emacswiki.org/emacs/FillAdapt
-;; =============================================
-
-;;(require 'filladapt)
-(use-package filladapt
-  :init
-  (progn
-    (setq-default filladapt-mode nil)
-    (cond ((equal mode-name "Change Log")
-           t)
-          (t
-           (turn-on-filladapt-mode)))))
-
-
-;; turn on filladapt mode everywhere but in ChangeLog files
-
-;; (add-hook 'c-mode-common-hook
-;;    (lambda ()
-;;      (when (featurep 'filladapt)
-;;        (c-setup-filladapt))))
 ;; ############################################################################
 
 
@@ -1807,7 +1856,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Lun 2014-12-01 14:56 svarrette>
+;; Time-stamp: <Mar 2014-12-02 10:37 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -1842,14 +1891,14 @@
         (if (looking-at "->") t nil)))))
 
 (defun do-yas-expand ()
-  (let ((yas/fallback-behavior 'return-nil))
-    (yas/expand)))
+  (let ((yas-fallback-behavior 'return-nil))
+    (yas-expand)))
 
 (defun tab-indent-or-complete ()
   (interactive)
   (if (minibufferp)
       (minibuffer-complete)
-    (if (or (not yas/minor-mode)
+    (if (or (not yas-minor-mode)
             (null (do-yas-expand)))
         (if (check-expansion)
             (company-complete-common)
@@ -1909,13 +1958,16 @@
 ;; "C-x g" . magit-status
 
 ;; === Buffer switching ===
-;; C-x b permits to switch among the buffer by entering a buffer name,
-;; with completion.
-;; See http://www.emacswiki.org/emacs/IswitchBuffers
-(require 'iswitchb)
-(iswitchb-mode t)
-;; to ignore the *...* special buffers from the list
-(setq iswitchb-buffer-ignore '("^ " "*Buffer"))
+;; NOW DONE WITH HELM
+;; ;; C-x b permits to switch among the buffer by entering a buffer name,
+;; ;; with completion.
+;; ;; See http://www.emacswiki.org/emacs/IswitchBuffers
+;; (require 'iswitchb)
+;; (iswitchb-mode t)
+;; ;; to ignore the *...* special buffers from the list
+;; (setq iswitchb-buffer-ignore '("^ " "*Buffer"))
+
+
 
 ;; Move from one buffer to another using 'C-<' and 'C->'
 ;;(load "cyclebuffer" nil 't)

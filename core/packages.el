@@ -7,7 +7,8 @@
 ;;
 
 (require 'cl)
-(require 'falkor-env)
+(require 'falkor/env)
+
 ;; =================================
 ;; === ELPA, the package manager ===
 ;; see http://tromey.com/elpa/
@@ -41,10 +42,10 @@
                           apache-mode
                           auctex
                           auto-compile
-                          auto-complete
-                          auto-complete-c-headers ; auto-complete source for C/C++ header files
+                          ;;auto-complete
+                          ;;auto-complete-c-headers ; auto-complete source for C/C++ header files
                           autopair
-                          better-defaults
+                          ;;better-defaults
                           color-theme
                           company
                           company-c-headers
@@ -53,10 +54,10 @@
                           fit-frame
                           find-file-in-project
                           flycheck
-						  function-args
+                          function-args
                           ggtags
                           guide-key
-						  guide-key-tip
+                          guide-key-tip
                           helm
                           helm-c-yasnippet
                           helm-gtags
@@ -64,8 +65,9 @@
                           helm-projectile
                           htmlize
                           js2-mode
+						  json-mode
                           latex-extra
-                          load-dir
+                          ;;load-dir
                           magit
                           magit-gitflow
                           markdown-mode
@@ -74,6 +76,7 @@
                           neotree
                           nodejs-repl
                           org
+						  pabbrev
                           paredit
                           php-mode
                           powerline
@@ -116,22 +119,11 @@
 ;; =========== EL-Get =============
 ;; See https://github.com/dimitri/el-get
 
-
-
-;; (unless (require 'el-get nil 'noerror)
-;;   (with-current-buffer
-;;       (url-retrieve-synchronously
-;;        "https://raw.github.com/dimitri/el-get/master/el-get-install.el")
-;;     (let (el-get-master-branch)
-;;       (goto-char (point-max))
-;;       (eval-print-last-sexp))))
-
-
 (setq el-get-dir           (concat packages-dir "el-get/"))
 (setq el-get-status-file   (concat el-get-dir ".status.el"))
 (setq el-get-autoload-file (concat el-get-dir ".loaddefs.el"))
 
-(add-to-list 'load-path el-get-dir)
+(add-to-list 'load-path (concat el-get-dir "el-get"))
 
 (unless (require 'el-get nil 'noerror)
   (with-current-buffer
@@ -154,6 +146,7 @@
         ))
 
 (el-get 'sync)
+
 ;; (setq my-packages
 ;;       (append '(el-get)
 ;;               (mapcar 'el-get-source-name el-get-sources)))

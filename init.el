@@ -1,6 +1,6 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Lun 2014-12-01 16:20 svarrette>
+;; Time-stamp: <Mar 2014-12-02 11:53 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -63,14 +63,11 @@
   (add-path "core")
   )
 
-
-
 (setq   custom-file    (get-conf-path "custom.el"))
 
-
 ;; === ENVIRONMENT ===
-(load (get-conf-path "core/falkor-env"))
-(require 'falkor-env)
+(load (get-conf-path "core/env"))
+(require 'falkor/env)
 
 ;; === PACKAGES ===
 
