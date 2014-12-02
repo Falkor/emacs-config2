@@ -440,7 +440,7 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/markdown.el
-;; -*- mode: lisp; -*-
+;; -*- mode: elisp; -*-
 ;; === Markdown ===
 ;; see http://jblevins.org/projects/markdown-mode/
 ;;(require 'markdown-mode)
@@ -475,7 +475,7 @@
       :mode ("README\\.md\\'" . gfm-mode))
 
     (use-package pandoc-mode
-      :bind ("C-c C-e" . pandoc-convert-to-pdf)
+	  :bind ("C-c C-e" . pandoc-convert-to-pdf)
 	  :config
 	  (progn
 		(add-hook 'markdown-mode-hook 'pandoc-mode)))
@@ -497,7 +497,6 @@
     (add-hook 'markdown-mode-hook
               (lambda ()
                 (visual-line-mode t)
-                (pandoc-mode)
                 (whitespace-mode  -1)
                 (flyspell-mode    t)))
 
@@ -530,7 +529,7 @@
 ;; ----------------------------------------------------------------------
 ;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
 ;; Semantic and main programming stuff.
-;; Time-stamp: <Mar 2014-12-02 12:57 svarrette>
+;; Time-stamp: <Mar 2014-12-02 18:17 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -585,6 +584,19 @@
   )
 
 
+(use-package flycheck
+  :commands global-flycheck-mode
+  :init (global-flycheck-mode)
+  :config (progn
+            (setq flycheck-check-syntax-automatically '(save mode-enabled))
+            (setq flycheck-standard-error-navigation nil)
+            ;; flycheck errors on a tooltip (doesnt work on console)
+            (when (display-graphic-p (selected-frame))
+              (eval-after-load 'flycheck
+                '(custom-set-variables
+                  '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+              )))
+
 (use-package semantic
   :init
   (progn
@@ -616,89 +628,93 @@
 
     ;; Directory that semantic use to cache its files
     (setq semanticdb-default-save-directory "~/.emacs.d/.cache/semanticdb") ; getting rid of semantic.caches
-	)
+    )
   :config
   (progn
-	(require 'semantic)
-	(require 'semantic/ia)
-	(require 'semantic/sb) ; integrate semantic with speedbar
-	(require 'semantic/bovine/gcc) ; allows semantic to ask GCC for system include paths
-								   ; complete the above as follows: 
-	(defun falkor/semantic/bovine/gcc ()
-	  ;; complete below using the output of `gcc -xc++ -E -v -`
-	  (semantic-add-system-include "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" 'c++-mode)
-	  ;;(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
-	  )
+    (require 'semantic)
+    (require 'semantic/ia)
+    (require 'semantic/sb) ; integrate semantic with speedbar
+    (require 'semantic/bovine/gcc) ; allows semantic to ask GCC for system include paths
+                                        ; complete the above as follows:
 
-	
-	;; Semantic options -- see http://www.gnu.org/software/emacs/manual/html_node/semantic/Semantic-mode.html
+    (defun falkor/semantic-include ()
+      "Add my own specialization of the included headers for semantic and company-c-headers"
+      ;;(semantic-reset-system-include)
 
-	;; MANDATORY ;) parse the code whenever you’re idle
-	(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+      ;; complete below using the output of `gcc -xc++ -E -v -`
+      ;; TODO: use a more generic approach
+      (semantic-add-system-include "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1" 'c++-mode)
 
-	;; Store parsing results in a database
-	(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+      ;;(semantic-add-system-include "/usr/local/include/boost" 'c++-mode)
+      )
+    (add-hook 'c++-mode-hook 'falkor/semantic-include)
+    (use-package company-c-headers
+      :init
+      (progn
+        (add-to-list 'company-c-headers-path-system "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
+        )
+      )
 
-	;; Display information about the current thing under the cursor when idle.
-	(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
 
-	;; Highlight local symbols which are the same as the thing under the cursor
-	(add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode)
 
-	;; Toggle Semantic Sticky Function mode in all Semantic-enabled buffers.
-	;; displays a header line that shows the declaration line of the function or
-	;; tag on the topmost line in the text area.
-	(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 
-	;; Activate semantic
-	(semantic-mode 1))
-  
-    ;;(add-hook 'semantic-init-hooks 'falkor/semantic-init)
+    (defun falkor/company-c-mode-common ()
+      (add-to-list 'company-backends 'company-semantic)
+      (add-to-list 'company-backends 'company-c-headers)
+      )
+    (add-hook 'c-mode-common-hook 'falkor/company-c-mode-common)
+
+    ;; ----------------
+    ;; Semantic options
+    ;; see http://www.gnu.org/software/emacs/manual/html_node/semantic/Semantic-mode.html
+
+    ;; MANDATORY ;) parse the code whenever you’re idle
+    (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+
+    ;; Store parsing results in a database
+    (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+
+    ;; Display information about the current thing under the cursor when idle.
+    (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
+
+    ;; Highlight local symbols which are the same as the thing under the cursor
+    (add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode)
+
+    ;; Toggle Semantic Sticky Function mode in all Semantic-enabled buffers.
+    ;; displays a header line that shows the declaration line of the function or
+    ;; tag on the topmost line in the text area.
+    (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+
+    ;; Activate semantic
+    (semantic-mode 1)
+
+    ;; -----------------
+    ;; GNU Emacs package for showing an inline arguments hint for the C/C++ function at point.
+    ;; This extension provides several commands that are useful for c++-mode:
+    ;; * `fa-show' -- show an overlay hint with current function arguments.
+    ;; * `fa-jump' -- jump to definition of current element of `fa-show'.
+    ;; * `moo-complete' -- a c++-specific version of `semantic-ia-complete-symbol'.
+    ;; * `moo-propose-virtual' -- in class declaration, list all virtual
+    ;;   methods that the current class can override.
+    ;; * `moo-propose-override' -- similar to `moo-propose-virtual', but lists all
+    ;;   inherited methods instead.
+    ;; * `moo-jump-local' -- jump to a tag defined in current buffer.
+
+    (use-package function-args
+      :config (fa-config-default))
+
+    (defun falkor/cedet-keybindings ()
+      (local-set-key (kbd "C-j")  'semantic-ia-fast-jump)
+      (local-set-key (kbd "C-p")  'semantic-analyze-proto-impl-toggle) ; ; swith to/from declaration/implement
+      ;; function-args specific bindings
+      (local-set-key (kbd "C-<tab>") 'moo-complete) ;  c++-specific version of semantic-ia-complete-symbol
+      (local-set-key (kbd "M-o") 'fa-show)
+      )
+    (add-hook 'c-mode-common-hook 'falkor/cedet-keybindings)
+    (add-hook 'c-mode-hook        'falkor/cedet-keybindings)
+    (add-hook 'c++-mode-hook      'falkor/cedet-keybindings)
+    )
   )
-
-
-
-;; GNU Emacs package for showing an inline arguments hint for the C/C++ function at point.
-(use-package function-args
-  :config
-  (progn
-    (fa-config-default)
-    ;; (bind-keys :map c-mode-map
-    ;;            ("C-TAB" . moo-complete)
-    ;;            ("M-o"   . fa-show))
-    ;; (bind-map :map
-    ;;c++-mode-map
-    ;;            ("C-TAB" . moo-complete)
-    ;;            ("M-o"   . fa-show))
-    ))
-
-
-
-
-
-
-
-;; (use-package 'function-args
-;;   )
-;; (fa-config-default)
-;; (define-key c-mode-map  [(contrl tab)] 'moo-complete)
-;; (define-key c++-mode-map  [(control tab)] 'moo-complete)
-;; (define-key c-mode-map (kbd "M-o")  'fa-show)
-;; (define-key c++-mode-map (kbd "M-o")  'fa-show))
-
-
-;; This extension provides several commands that are useful for c++-mode:
-
-;; * `fa-show' -- show an overlay hint with current function arguments.
-;; * `fa-jump' -- jump to definition of current element of `fa-show'.
-;; * `moo-complete' -- a c++-specific version of `semantic-ia-complete-symbol'.
-;; * `moo-propose-virtual' -- in class declaration, list all virtual
-;;   methods that the current class can override.
-;; * `moo-propose-override' -- similar to `moo-propose-virtual', but lists all
-;;   inherited methods instead.
-;; * `moo-jump-local' -- jump to a tag defined in current buffer.
-
-
 
 
 
@@ -2202,16 +2218,6 @@
 ;;   ;;ns-use-mac-modifier-symbols  nil  ; display standard Emacs (and not standard Mac) modifier symbols)
 ;;   )
 ;;  )
-;; ############################################################################
-
-
-;; ############################################################################
-;; Config file: ~/.emacs.d/config/bindings/ruby.el
-;; -*- mode: lisp; -*-
-
-(eval-after-load 'ruby-mode
-  '(progn
-	 (define-key ruby-mode-map (kbd "C-c t") 'ruby-jump-to-other)))
 ;; ############################################################################
 
 

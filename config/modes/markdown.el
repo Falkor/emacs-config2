@@ -1,4 +1,4 @@
-;; -*- mode: lisp; -*-
+;; -*- mode: elisp; -*-
 ;; === Markdown ===
 ;; see http://jblevins.org/projects/markdown-mode/
 ;;(require 'markdown-mode)
@@ -33,7 +33,7 @@
       :mode ("README\\.md\\'" . gfm-mode))
 
     (use-package pandoc-mode
-      :bind ("C-c C-e" . pandoc-convert-to-pdf)
+	  :bind ("C-c C-e" . pandoc-convert-to-pdf)
 	  :config
 	  (progn
 		(add-hook 'markdown-mode-hook 'pandoc-mode)))
@@ -55,7 +55,6 @@
     (add-hook 'markdown-mode-hook
               (lambda ()
                 (visual-line-mode t)
-                (pandoc-mode)
                 (whitespace-mode  -1)
                 (flyspell-mode    t)))
 
