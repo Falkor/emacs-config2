@@ -1,7 +1,7 @@
 ;; -*- mode: elisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Mar 2014-12-02 12:40 svarrette>
+;; Time-stamp: <Mar 2014-12-02 16:59 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
@@ -39,12 +39,14 @@
                ("C-p" . company-select-previous)
                ("C-d" . company-show-doc-buffer)
 			   ("C-=" . helm-company)
-               ("<tab>" . company-complete))
+               ("<tab>" . company-complete)
+			   ("TAB" . company-complete)
+			   )
 	(add-hook 'after-init-hook 'global-company-mode)
 	))
 
-;; (add-hook 'prog-mode-hook 'company-mode)
-;; (add-hook 'text-mode-hook 'company-mode)
+(add-hook 'prog-mode-hook 'company-mode)
+(add-hook 'text-mode-hook 'company-mode)
 
 ;; (use-package company-c-headers
 ;;   :config
