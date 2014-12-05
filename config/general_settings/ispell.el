@@ -1,35 +1,60 @@
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
-;; LaTeX-sensitive spell checking
-(setq ispell-enable-tex-parser t)
+;; ---------------
+;; Flyspell
 
-;; defautl dictionnary
-(setq ispell-local-dictionary "en")
+;; Enable flyspell in text mode.
+(defun enable-flyspell-mode ()
+  "Enable Flyspell mode."
+  (flyspell-mode t))
 
-;; save the personal dictionary without confirmation
-(setq ispell-silently-savep t)
+;; Enable flyspell in programming mode.
+(defun enable-flyspell-prog-mode ()
+  "Enable Flyspell Programming mode."
+  (flyspell-prog-mode))
 
-;; enable the likeness criteria
-;;(setq flyspell-sort-corrections nil)
+;; Perfom all setup
+(defun falkor/flyspell-setup ()
+  (dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
+    (add-hook hook 'enable-flyspell-mode))
+  ;; disable flyspell in change log and log-edit mode that derives from text-mode
+  (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode nil))))
+  (dolist (hook '(prog-mode-hook))
+    (add-hook hook 'enable-flyspell-prog-mode)))
 
-;; dash character (`-') is considered as a word delimiter
-;;(setq flyspell-consider-dash-as-word-delimiter-flag t)
+(use-package flyspell
+  :idle (falkor/flyspell-setup)
+  :bind ("<mouse-3>" . flyspell-correct-word)
+  :init
+  (progn
+	(setq ispell-program-name "aspell")
 
-;; Add flyspell to the following major modes
-(dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
-  (add-hook hook (lambda ()
-                   (flyspell-mode t))))
+	;; LaTeX-sensitive spell checking
+    (setq ispell-enable-tex-parser t)
+    ;; default dictionnary
+    (setq ispell-local-dictionary "en")
+    ;; save the personal dictionary without confirmation
+    (setq ispell-silently-savep t)
 
-;; disable flyspell in change log and log-edit mode that derives from text-mode
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode nil))))
+	;; Automatic dictionary switcher for flyspell
+	(use-package auto-dictionary
+	  :init (add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
 
-;; flyspell comments and strings in programming modes
-;; (preventing it from finding mistakes in the code)
-(dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
-                                   sh-mode-hook))
-  (add-hook hook 'flyspell-prog-mode))
 
-(eval-after-load "flyspell" '(progn
-  (define-key flyspell-mouse-map (kbd "<C-down-mouse-3>") #'flyspell-correct-word)
-  (define-key flyspell-mouse-map (kbd "<C-mouse-3>") 'undefined) ))
+    ;; enable the likeness criteria
+    ;;(setq flyspell-sort-corrections nil)
+
+    ;; dash character (`-') is considered as a word delimiter
+    ;;(setq flyspell-consider-dash-as-word-delimiter-flag t)
+
+
+    (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+    (define-key flyspell-mouse-map [mouse-3] #'undefined)
+    ))
+
+
+  ;; (eval-after-load "flyspell"
+  ;;   '(progn
+  ;;      (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+  ;;      (define-key flyspell-mouse-map [mouse-3] #'undefined)))
