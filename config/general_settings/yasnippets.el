@@ -1,7 +1,7 @@
 ;; -*- mode: emasc-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Jeu 2014-11-27 22:00 svarrette>
+;; Time-stamp: <Jeu 2014-12-04 11:15 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -14,7 +14,7 @@
 
 (use-package yasnippet
   :if (not noninteractive)
-  :diminish yas-minor-mode
+  :diminish (yas-minor-mode . " Y") 
   :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
   :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
   :init
@@ -33,7 +33,7 @@
     (bind-keys :map yas-minor-mode-map
 			   ("<tab>"      . nil)  ; unbind tab
 			   ("TAB"        . nil)  ; idem
-               ("C-<return>" . yas-expand)
+               ("M-<return>" . yas-expand)
                ;; ("M-<return>" . yas-expand)
                ("C-c y n"    . yas-new-snippet)
                ("C-c y f"    . yas-find-snippets)

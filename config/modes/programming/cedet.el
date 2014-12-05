@@ -2,7 +2,7 @@
 ;; ----------------------------------------------------------------------
 ;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
 ;; Semantic and main programming stuff.
-;; Time-stamp: <Mar 2014-12-02 18:17 svarrette>
+;; Time-stamp: <Jeu 2014-12-04 22:50 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -59,16 +59,23 @@
 
 (use-package flycheck
   :commands global-flycheck-mode
-  :init (global-flycheck-mode)
-  :config (progn
-            (setq flycheck-check-syntax-automatically '(save mode-enabled))
-            (setq flycheck-standard-error-navigation nil)
-            ;; flycheck errors on a tooltip (doesnt work on console)
-            (when (display-graphic-p (selected-frame))
-              (eval-after-load 'flycheck
-                '(custom-set-variables
-                  '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
-              )))
+  :idle
+  (progn
+	(dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
+	  (add-hook hook 'flycheck-mode)))
+										;(global-flycheck-mode 1)
+  :config
+  (progn
+    (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
+    ))
+;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;; (setq flycheck-standard-error-navigation nil)
+;; ;; flycheck errors on a tooltip (doesnt work on console)
+;; (when (display-graphic-p (selected-frame))
+;;   (eval-after-load 'flycheck
+;;     '(custom-set-variables
+;;       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+;;   )))
 
 (use-package semantic
   :init
@@ -190,7 +197,15 @@
   )
 
 
-
+;; Takes care of whitespaces discretely by fixing up whitespaces only for those
+;; lines you touched. Hence, you won’t add any trailing whitespaces without
+;; littering your commits with tons of noise.
+(use-package ws-butler
+  :commands ws-butler-mode
+  :init (progn
+          (add-hook 'c-mode-common-hook 'ws-butler-mode)
+          (add-hook 'python-mode-hook 'ws-butler-mode)
+          (add-hook 'cython-mode-hook 'ws-butler-mode)))
 
 ;; (use-package auto-complete-c-headers
 ;;   :init

@@ -1,7 +1,7 @@
-;; -*- mode: elisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Mar 2014-12-02 16:59 svarrette>
+;; Time-stamp: <Jeu 2014-12-04 11:16 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
@@ -21,8 +21,10 @@
 (use-package pabbrev)
 
 (use-package company
+  :diminish " Comp"
   ;;:commands global-company-mode
-  :bind ("<C-tab>" . company-complete)
+  :bind (("<C-tab>"    . company-complete)
+		 ("C-<return>" . company-complete))
   :config
   (progn
     (setq company-tooltip-limit 10
@@ -38,27 +40,73 @@
                ("C-n" . company-select-next)
                ("C-p" . company-select-previous)
                ("C-d" . company-show-doc-buffer)
-			   ("C-=" . helm-company)
+               ("C-=" . helm-company)
                ("<tab>" . company-complete)
-			   ("TAB" . company-complete)
-			   )
-	(add-hook 'after-init-hook 'global-company-mode)
-	))
+               ("TAB" . company-complete)
+               )
+    ;;(add-hook 'after-init-hook 'global-company-mode)
+    ))
 
-(add-hook 'prog-mode-hook 'company-mode)
-(add-hook 'text-mode-hook 'company-mode)
+;; Default company mode colors are kind of ugly, I took these from auto-complete-mode defaults:
+(custom-set-faces
+ '(company-preview
+   ((t (:foreground "darkgray" :underline t))))
+ '(company-preview-common
+   ((t (:inherit company-preview))))
+ '(company-tooltip
+   ((t (:background "lightgray" :foreground "black"))))
+ '(company-tooltip-selection
+   ((t (:background "steelblue" :foreground "white"))))
+ '(company-tooltip-common
+   ((((type x)) (:inherit company-tooltip :weight bold))
+    (t (:inherit company-tooltip))))
+ '(company-tooltip-common-selection
+   ((((type x)) (:inherit company-tooltip-selection :weight bold))
+    (t (:inherit company-tooltip-selection)))))
+
+;; Defaults company backends for text-mode
+(add-hook 'text-mode-hook
+          '(lambda ()
+             (setq company-backends '(company-capf      ; completion-at-point-functions
+                                      company-yasnippet ; Yasnippets
+                                      company-dabbrev   ; dabbrev-like
+                                      company-files     ; file paths
+                                      ))
+             (company-mode)))
+
+
+;; Defaults company backends for text-mode
+(add-hook 'prog-mode-hook
+          '(lambda ()
+             (setq company-backends '(company-semantic  ; CEDET / Semantic
+									  company-clang     ; C language family frontend for LLVM
+									  company-dabbrev-code
+									  company-gtags
+									  company-etags
+									  company-capf      ; completion-at-point-functions
+                                      company-yasnippet ; Yasnippets
+									  company-keywords  ; Programming language keywords
+                                      company-dabbrev   ; dabbrev-like
+                                      company-files     ; file paths
+                                      ))
+             (company-mode)))
+
+
+
+
+
 
 ;; (use-package company-c-headers
 ;;   :config
 ;;   (progn
 ;;     (defun falkor/company-c-headers ()
-;; 	  (add-to-list 'company-backends 'company-c-headers))
+;;    (add-to-list 'company-backends 'company-c-headers))
 
-;; 	(add-hook 'c-mode-hook   'falkor/company-c-headers)
-;; 	(add-hook 'c++-mode-hook 'falkor/company-c-headers)))
+;;  (add-hook 'c-mode-hook   'falkor/company-c-headers)
+;;  (add-hook 'c++-mode-hook 'falkor/company-c-headers)))
 
 
-	
+
 ;; ;;     (setq company-backends (delete 'company-semantic company-backends))
 ;; ;;     (define-key c-mode-map  [(tab)]   'company-complete)
 ;; ;;     (define-key c++-mode-map  [(tab)] 'company-complete)

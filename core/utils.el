@@ -1,4 +1,4 @@
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
 
 ;; Helper to apply a given function to set of modes
