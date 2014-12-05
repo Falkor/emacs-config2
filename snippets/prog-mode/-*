@@ -1,0 +1,5 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: -*- mode: ; -*-
+# key: -*
+# --
+-*- mode: ${1:mode}; auto-fill-mode;  -*-

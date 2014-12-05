@@ -1,7 +1,7 @@
 ` README.md `
 Copyright (c) 2014 [Sebastien Varrette](mailto:<Sebastien.Varrette@uni.lu>) [www](http://varrette.gforge.uni.lu)
 
-        Time-stamp: <>
+        Time-stamp: <Lun 2014-11-10 13:24 svarrette>
                         _____     _ _              _
                        |  ___|_ _| | | _____  _ __( )___
                        | |_ / _` | | |/ / _ \| '__|// __|
@@ -38,7 +38,7 @@ Once cloned, initiate the potential git submodules etc. by running:
         $> brew install --cocoa --srgb emacs
         $> brew linkapps
             
-    The next step is probably to setup a new alias `emacs` to open the Cocoa version (by default it runs with the `-nw` option), typically as: 
+    The next step is probably to setup a new alias `emacs` to open the Cocoa version (by default it runs with the `-nw` option), typically as:
     
         alias emacs='/usr/local/Cellar/emacs/24.3/Emacs.app/Contents/MacOS/Emacs'
                 
@@ -102,7 +102,7 @@ where:
 
 Example: `1.0.0-b28`
 
-The current version number is stored in the file `VERSION`. __/!\ NEVER MAKE ANY MANUAL CHANGES TO THIS FILE__
+The current version number is stored in the file `VERSION`. __/!\  NEVER MAKE ANY MANUAL CHANGES TO THIS FILE__
 
 For more information on the version, run:
 

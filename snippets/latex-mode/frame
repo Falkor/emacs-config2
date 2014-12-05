@@ -1,8 +1,8 @@
-# -*- mode: snippet -*-
-# name: frame
-# key: fr
+#contributor : Sebastien Varrette <sebastien.varrette@uni.lu> 
+#name : \frame{ ... } 
 # --
-\begin{frame}${1:[$2]}
-        ${3:\frametitle{$4}}
-        $0
-\end{frame}
+%.......
+\frame{
+   \frametitle{${1:Frame Title}}
+   $0
+}

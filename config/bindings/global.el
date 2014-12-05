@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-09-18 22:38 svarrette>
+;; Time-stamp: <Mar 2014-12-02 10:37 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -28,30 +28,93 @@
 ;; ----------------------------------------------------------------------
 (require 'use-package)
 
+
+(defun check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+        (backward-char 1)
+        (if (looking-at "->") t nil)))))
+
+(defun do-yas-expand ()
+  (let ((yas-fallback-behavior 'return-nil))
+    (yas-expand)))
+
+(defun tab-indent-or-complete ()
+  (interactive)
+  (if (minibufferp)
+      (minibuffer-complete)
+    (if (or (not yas-minor-mode)
+            (null (do-yas-expand)))
+        (if (check-expansion)
+            (company-complete-common)
+          (indent-for-tab-command)))))
+
+(global-set-key (kbd "TAB") 'tab-indent-or-complete)
+
+
 ;; === Always indent on return ===
 (global-set-key (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-j") 'comment-indent-new-line) ;to reverse the normal binding
 
-;; Use helm to open files / recentf to open recent files
-;;(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x C-r") 'recentf-open-files)
+;; === expand etc. ===
+(global-set-key (kbd "M-=") 'hippie-expand)
+;; see also autocomplete.el and yasnippet.el
 
-;; (global-set-key (kbd "C-x C-g") 'helm-git-find-file)
+;; === join the following line onto the current one ===
+;; tips from http://whattheemacsd.com/
+(global-set-key (kbd "M-j")
+            (lambda ()
+                  (interactive)
+                  (join-line -1)))
 
+;; === Open files ===
+;; Use helm to open files in various context
+;; see config/modes/helm.el
+;;   "C-c h"   . helm-mini
+;;   "M-x"     . helm-M-x
+;;   "C-x C-f" . helm-find-files
+;;   "C-x C-r" . helm-recentf
+;;   "C-x C-g" . helm-do-grep
+;;   "C-x C-p" . helm-projectile
 
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
 
-;; === Git stuff ===
-(global-set-key (kbd "C-x g") 'magit-status)
+;; === Selection ===
+;; Using [expand-region](https://github.com/magnars/expand-region.el)
+;; see general_settings/expand-region.el
+;;  "C-@"  'er/expand-region
+;;	"C-&"  'er/contract-region
+;;
+;; Rectangular selection - C-SPC being tacken by Alfred, C-<return> by yasnippet ;)
+(setq cua-rectangle-mark-key (kbd "C-S-<return>"))
+(cua-selection-mode 1)
+
+
+;; Fix iedit bug in Mac -- see modes/cedel.el
+;; "C-c ;" 'iedit-mode 
+
+
+;; Select full buffer: Put mark at end of page, point at beginning.
+(global-set-key (kbd "M-a") 'mark-page)
+
+;; === Magit stuff ===
+;; see general_settings/magit.el
+;; "C-x g" . magit-status
 
 ;; === Buffer switching ===
-;; C-x b permits to switch among the buffer by entering a buffer name,
-;; with completion.
-;; See http://www.emacswiki.org/emacs/IswitchBuffers
-(require 'iswitchb)
-(iswitchb-mode t)
-;; to ignore the *...* special buffers from the list
-(setq iswitchb-buffer-ignore '("^ " "*Buffer"))
+;; NOW DONE WITH HELM
+;; ;; C-x b permits to switch among the buffer by entering a buffer name,
+;; ;; with completion.
+;; ;; See http://www.emacswiki.org/emacs/IswitchBuffers
+;; (require 'iswitchb)
+;; (iswitchb-mode t)
+;; ;; to ignore the *...* special buffers from the list
+;; (setq iswitchb-buffer-ignore '("^ " "*Buffer"))
+
+
 
 ;; Move from one buffer to another using 'C-<' and 'C->'
 ;;(load "cyclebuffer" nil 't)
@@ -59,10 +122,6 @@
 ;;(global-set-key (kbd "C->") 'cyclebuffer-backward)
 (global-set-key (kbd "C-<") 'previous-buffer)
 (global-set-key (kbd "C->") 'next-buffer)
-
-;; === helm ===
-(global-set-key (kbd "C-c h") 'helm-mini)
-(global-set-key (kbd "M-x")   'helm-M-x)
 
 ;; === Window switching ===
 (global-set-key [C-prior] 'other-window)
@@ -72,6 +131,12 @@
 ;; I may prefer C-+ and C-- for window enlarge/schrink
 (define-key global-map (kbd "C-+") 'text-scale-increase)
 (define-key global-map (kbd "C--") 'text-scale-decrease)
+
+;; === Fullscreen (starting Mac OS X Lion) ===
+(when is-mac
+  (global-set-key (kbd "C-M-f") 'ns-toggle-fullscreen))
+;;(define-key global-map "\C-\M-f" 'ns-toggle-fullscreen)
+
 
 ;; === Multi speed mouse scrolling ===
 ;; scroll:         normal speed
@@ -105,12 +170,17 @@
 (global-set-key (kbd "M-n") 'goto-line)          ; goto line number
 
 ;; === ECB / NerdTree like ===
+;; see general_settings/neotree.el
+;; Normally:
+;; F1: open neotree at the git root dir
+;; F2: toggle ECB
+
 ;; (use-package  neotree
 ;; 			  :bind "f1" 'neotree-toggle)
-(require 'neotree)
-(require 'find-file-in-project)
-(global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
-(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB (see ~/.emacs.d/init-cedet)
+;; (require 'neotree)
+;; (require 'find-file-in-project)
+;; (global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
+(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB 
 
 ;; === Shell pop ===
 (global-set-key [(f3)]     'shell-pop)
@@ -134,7 +204,10 @@
 (global-set-key (kbd "C-x C-i") 'ido-imenu)
 
 ;; === Compilation ===
-(global-set-key (kbd "C-x C-e") 'smart-compile)
+;; see modes/compile.el
+;; bind ("C-x C-e" . smart-compile))
+
+;;(global-set-key (kbd "C-x C-e") 'smart-compile)
 ;;(define-key ruby-mode-map [remap ruby-send-last-sexp ] nil)
 
 ;; === Kill this buffer ===
@@ -196,7 +269,7 @@
 
 ;; === Yasnippet ===
 ;; see config/modes/yasnippets for the setup
-(global-set-key (read-kbd-macro "C-<return>") 'yas/expand)
+;; Normally bind to C-RET and M-RET
 
 
 

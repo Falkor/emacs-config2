@@ -1,9 +1,17 @@
 auto-save-list
+.auto-save-list
 *.elc
 *~
 .recentf
 history
 places
 ac-comphist.dat
+.ac-comphist.dat
 .framegeometry
 .yas-compiled-snippets.el
+/.history
+/.saved-places
+/.projectile-bookmarks.eld
+/.projectile.cache
+/.emacs-semanticdb/
+/tests/

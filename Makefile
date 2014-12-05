@@ -1,6 +1,6 @@
 ####################################################################################
 # Makefile (configuration file for GNU make - see http://www.gnu.org/software/make/)
-# Time-stamp: <Ven 2014-09-19 12:17 svarrette>
+# Time-stamp: <Lun 2014-12-01 07:28 svarrette>
 #     __  __       _         __ _ _
 #    |  \/  | __ _| | _____ / _(_) | ___
 #    | |\/| |/ _` | |/ / _ \ |_| | |/ _ \
@@ -33,7 +33,8 @@ GIT_REMOTES    = $(shell git remote | xargs echo )
 GIT_DIRTY      = $(shell git diff --shortstat 2> /dev/null | tail -n1 )
 # Git subtrees repositories
 # Format: '<url>[|<branch>]' - don't forget the quotes. if branch is ignored, 'master' is used
-GIT_SUBTREE_REPOS = 'snippets|https://github.com/Falkor/yasnippet-snippets.git'
+GIT_SUBTREE_REPOS =
+# 'snippets|https://github.com/Falkor/yasnippet-snippets.git'
 # 'https://github.com/ULHPC/easybuild-framework.git|develop'  \
 # 					 'https://github.com/hpcugent/easybuild-wiki.git'
 
@@ -60,15 +61,18 @@ NO_COLOR     =\033[0m
 
 ### Emacs stuff
 EMACS	         = emacs
-DIRS	         = site-lisp defuns
+DIRS	         = site-lisp core
+SPECIAL_SOURCES  = config.el init.el 
 CONFIG_SOURCES   = $(shell find config   -name '*.el')
 SNIPPETS_SOURCES = $(shell find snippets -name '*.el')
-LIB_SOURCES    = $(foreach dir,$(DIRS),$(wildcard $(dir)/*.el)) $(SNIPPETS_SOURCES)
-INIT_SOURCES   = $(CONFIG_SOURCES) $(SNIPPETS_SOURCES) $(LIB_SOURCES) 
-TARGET	       = config.elc $(patsubst %.el,%.elc, $(LIB_SOURCES)) init.elc
+SNIPPETS_TARGET  = $(patsubst %.el,%.elc, $(SNIPPETS_SOURCES))
+LIB_SOURCES      = $(foreach dir,$(DIRS),$(wildcard $(dir)/*.el)) $(SNIPPETS_SOURCES)
+LIB_TARGET       = $(patsubst %.el,%.elc, $(LIB_SOURCES))
+INIT_SOURCES     = $(filter-out $(SPECIAL_SOURCES) custom.el,$(wildcard *.el)) $(LIB_SOURCES) 
+TARGET	         = $(patsubst %.el,%.elc, $(INIT_SOURCES)) 
 
-EMACS_BATCH  = $(EMACS) -Q -batch -l ~/.emacs
-MY_LOADPATH  = -L . $(patsubst %,-L %,$(DIRS))
+EMACS_BATCH  = $(EMACS) -Q -batch
+MY_LOADPATH  =  -l ~/.emacs -L . $(patsubst %,-L %,$(DIRS))
 BATCH_LOAD   = $(EMACS_BATCH) $(MY_LOADPATH)
 
 ### Main variables
@@ -78,18 +82,19 @@ BATCH_LOAD   = $(EMACS_BATCH) $(MY_LOADPATH)
 # Required rule : what's to be done each time
 all: $(TARGET)
 
-dirs:
-	@for dir in $(DIRS); do \
-		echo -e "$(COLOR_GREEN)==> Byte compiling the directory '$$dir/'$(NO_COLOR)"; \
-	    $(BATCH_LOAD) -f batch-byte-compile $$dir/*.el; \
-	done
+dirs: $(LIB_TARGET)
 
-snippets: $(SNIPPETS_SOURCES)
-	@for f in $%; do \
-		$(MAKE) `basename $$f .el`.elc; \
-	done
+# @for dir in $(DIRS); do \
+# 	echo -e "$(COLOR_GREEN)==> Byte compiling the directory '$$dir/'$(NO_COLOR)"; \
+#     $(EMACS_BATCH) -f batch-byte-compile $$dir/*.el; \
+# done
 
-config.elc: $(CONFIG_SOURCES)
+snippets: $(SNIPPETS_TARGET)
+
+init.elc: $(INIT_SOURCE)
+	$(BATCH_LOAD) -f batch-byte-compile init.el
+
+cfg config config.elc: $(CONFIG_SOURCES)
 	@echo -e "$(COLOR_GREEN)==> Generating centralised config.el[c] file from config/ directory$(NO_COLOR)"
 	$(BATCH_LOAD) --eval "(emc-merge-config-files)"
 	git commit -s -m "Update centralized config" config.el
@@ -99,15 +104,18 @@ config.elc: $(CONFIG_SOURCES)
 	$(BATCH_LOAD) -f batch-byte-compile $<
 
 eval_boottime:
-	@echo "==> Evaluate starting time of Emacs"
+	@echo -e "$(COLOR_GREEN)==> Minimal starting time of raw Emacs$(NO_COLOR)$(COLOR_RED) ... i.e. WITHOUT loading .emacs)$(NO_COLOR)"
+	$(EMACS_BATCH) --quick --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
+	@echo -e "$(COLOR_GREEN)==> Evaluate starting time of Emacs$(NO_COLOR)"
 	$(BATCH_LOAD) --eval "(message (number-to-string (time-to-seconds (time-subtract (current-time) before-init-time))))"
 
 # Clean option
 clean:
-	rm -f *.elc
-#	rm -f $(TARGET)
+	rm -f *.elc $(foreach dir,$(DIRS),$(wildcard $(dir)/*.elc))
+	rm -rf backups auto-save-list 
 
-
+clobber: clean
+	rm -f $(TARGET)
 
 # Test values of variables - for debug purposes 
 test:
