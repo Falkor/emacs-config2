@@ -1,4 +1,4 @@
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;;
 ;; Load package managers -- assumes you setup the variable packages-dir as the
 ;; root directory to host your packages. Then
@@ -56,6 +56,8 @@
                           flycheck
                           function-args
                           ggtags
+						  git-timemachine
+						  git-gutter-fringe
                           guide-key
                           guide-key-tip
                           helm
@@ -63,6 +65,7 @@
                           helm-gtags
                           helm-package
                           helm-projectile
+						  helm-swoop
                           htmlize
                           js2-mode
 						  json-mode
@@ -71,12 +74,14 @@
                           magit
                           magit-gitflow
                           markdown-mode
+						  markdown-toc
                           marmalade
                           mic-paren
                           neotree
                           nodejs-repl
                           org
 						  pabbrev
+						  pandoc-mode
                           paredit
                           php-mode
                           powerline
@@ -93,6 +98,7 @@
                           sr-speedbar
                           use-package
                           web-mode
+						  ws-butler
                           yaml-mode
                           yasnippet)
   "Default packages")
@@ -145,10 +151,8 @@
                :compile ("ecb.el"))
         ))
 
-(el-get 'sync)
-
-;; (setq my-packages
-;;       (append '(el-get)
-;;               (mapcar 'el-get-source-name el-get-sources)))
-;; (el-get 'sync my-packages)
+(setq my-packages
+      (append '(el-get)
+              (mapcar 'el-get-source-name el-get-sources)))
+(el-get 'sync my-packages)
 

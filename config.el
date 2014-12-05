@@ -440,7 +440,7 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/markdown.el
-;; -*- mode: elisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;; === Markdown ===
 ;; see http://jblevins.org/projects/markdown-mode/
 ;;(require 'markdown-mode)
@@ -456,9 +456,19 @@
   "markdown-mode-hook"
   (define-key markdown-mode-map (kbd "<tab>")     nil)
   (define-key markdown-mode-map (kbd "TAB")       nil)
-  (define-key markdown-mode-map (kbd "<backtab>") nil))
+  (define-key markdown-mode-map (kbd "<S-tab>")   nil)) ;th-complete-or-indent))
+
+
+;; alter markdown-mode way of handling tabs
+(defun cleanup-org-tables-for-markdown ()
+  (save-excursion
+    (goto-char (point-min))
+    (while (search-forward "-+-" nil t) (replace-match "-|-"))
+    ))
+
 
 (use-package markdown-mode
+  ;;:diminish " MD"
   :mode (("\\.txt\\'"   . markdown-mode)
          ("\\.md\\'"    . markdown-mode)
          ("\\.mdown\\'" . markdown-mode))
@@ -475,32 +485,30 @@
       :mode ("README\\.md\\'" . gfm-mode))
 
     (use-package pandoc-mode
-	  :bind ("C-c C-e" . pandoc-convert-to-pdf)
-	  :config
-	  (progn
-		(add-hook 'markdown-mode-hook 'pandoc-mode)))
+      :bind ("C-c C-e" . pandoc-convert-to-pdf)
+      :config
+      (progn
+        (add-hook 'markdown-mode-hook 'pandoc-mode)))
 
-	(require 'org-table)
-	(add-hook 'markdown-mode-hook 'orgtbl-mode)
-	
-	;; alter markdown-mode way of handling tabs
-	(defun cleanup-org-tables-for-markdown ()
-	  (save-excursion
-		(goto-char (point-min))
-		(while (search-forward "-+-" nil t) (replace-match "-|-"))
-		))
-	(add-hook 'markdown-mode-hook
-          (lambda()
-            (add-hook 'after-save-hook 'cleanup-org-tables  nil 'make-it-local)))
+	(use-package markdown-toc
+	  :bind ("C-c t"   . markdown-toc/generate-toc))
 
-	;; Finalize  configuration for markdown
+    (require 'org-table)
+    (add-hook 'markdown-mode-hook 'orgtbl-mode)
+
+    ;; Finalize  configuration for markdown
     (add-hook 'markdown-mode-hook
               (lambda ()
                 (visual-line-mode t)
                 (whitespace-mode  -1)
+				(setq tab-always-indent 'company-complete)
                 (flyspell-mode    t)))
 
-	(bind-key "<tab>" 'yas-expand markdown-mode-map)
+    (add-hook 'markdown-mode-hook
+              (lambda()
+                (add-hook 'after-save-hook 'cleanup-org-tables-for-markdown  nil 'make-it-local)))
+
+    ;;(bind-key "<tab>" 'yas-expand markdown-mode-map)
     ))
 ;; ############################################################################
 
@@ -529,7 +537,7 @@
 ;; ----------------------------------------------------------------------
 ;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
 ;; Semantic and main programming stuff.
-;; Time-stamp: <Mar 2014-12-02 18:17 svarrette>
+;; Time-stamp: <Jeu 2014-12-04 22:50 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -586,16 +594,23 @@
 
 (use-package flycheck
   :commands global-flycheck-mode
-  :init (global-flycheck-mode)
-  :config (progn
-            (setq flycheck-check-syntax-automatically '(save mode-enabled))
-            (setq flycheck-standard-error-navigation nil)
-            ;; flycheck errors on a tooltip (doesnt work on console)
-            (when (display-graphic-p (selected-frame))
-              (eval-after-load 'flycheck
-                '(custom-set-variables
-                  '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
-              )))
+  :idle
+  (progn
+	(dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
+	  (add-hook hook 'flycheck-mode)))
+										;(global-flycheck-mode 1)
+  :config
+  (progn
+    (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
+    ))
+;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;; (setq flycheck-standard-error-navigation nil)
+;; ;; flycheck errors on a tooltip (doesnt work on console)
+;; (when (display-graphic-p (selected-frame))
+;;   (eval-after-load 'flycheck
+;;     '(custom-set-variables
+;;       '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))
+;;   )))
 
 (use-package semantic
   :init
@@ -717,7 +732,15 @@
   )
 
 
-
+;; Takes care of whitespaces discretely by fixing up whitespaces only for those
+;; lines you touched. Hence, you won’t add any trailing whitespaces without
+;; littering your commits with tons of noise.
+(use-package ws-butler
+  :commands ws-butler-mode
+  :init (progn
+          (add-hook 'c-mode-common-hook 'ws-butler-mode)
+          (add-hook 'python-mode-hook 'ws-butler-mode)
+          (add-hook 'cython-mode-hook 'ws-butler-mode)))
 
 ;; (use-package auto-complete-c-headers
 ;;   :init
@@ -1149,54 +1172,6 @@
 
 
 ;; ############################################################################
-;; Config file: ~/.emacs.d/config/general_settings/framegeometry.el
-;; framegeometry.el
-;; use to restore the frame size of last session
-;; Courtesy from http://ck.kennt-wayne.de/2011/jul/emacs-restore-last-frame-size-on-startup
-
-(defun save-framegeometry ()
-  "Gets the current frame's geometry and saves to ~/.emacs.d/.framegeometry."
-  (let (
-        (framegeometry-left (frame-parameter (selected-frame) 'left))
-        (framegeometry-top (frame-parameter (selected-frame) 'top))
-        (framegeometry-width (frame-parameter (selected-frame) 'width))
-        (framegeometry-height (frame-parameter (selected-frame) 'height))
-        (framegeometry-file (expand-file-name "~/.emacs.d/.framegeometry"))
-        )
-
-    (with-temp-buffer
-      (insert
-       ";;; This is the previous emacs frame's geometry.\n"
-       ";;; Last generated " (current-time-string) ".\n"
-       "(setq initial-frame-alist\n"
-       "      '(\n"
-       (format "        (top . %d)\n" (max framegeometry-top 0))
-       (format "        (left . %d)\n" (max framegeometry-left 0))
-       (format "        (width . %d)\n" (max framegeometry-width 0))
-       (format "        (height . %d)))\n" (max framegeometry-height 0)))
-      (when (file-writable-p framegeometry-file)
-        (write-file framegeometry-file))))
-  )
-
-(defun load-framegeometry ()
-  "Loads ~/.emacs.d/.framegeometry which should load the previous frame's geometry."
-  (let ((framegeometry-file (expand-file-name "~/.emacs.d/.framegeometry")))
-    (when (file-readable-p framegeometry-file)
-      (load-file framegeometry-file)))
-  )
-
-;; Special work to do ONLY when there is a window system being used
-(if window-system
-    (progn
-      (add-hook 'after-init-hook 'load-framegeometry)
-      (add-hook 'kill-emacs-hook 'save-framegeometry))
-  )
-
-;; eof
-;; ############################################################################
-
-
-;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/ggtags.el
 ;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
@@ -1444,7 +1419,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: guide-key.el - Guide key usage
-;; Time-stamp: <Mar 2014-11-18 14:10 svarrette>
+;; Time-stamp: <Jeu 2014-12-04 08:03 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             see https://github.com/kai2nenobu/guide-key
@@ -1455,12 +1430,15 @@
 ;; It's hard to remember keyboard shortcuts. The guide-key package pops up help after a short delay.
 (use-package guide-key
   :init
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c" "C-c r" "C-c h"))
-  (setq guide-key/popup-window-position "bottom")
-  (setq guide-key/idle-delay 0.1)
-  (use-package guide-key-tip
-	:config (setq guide-key-tip/enabled t))
-  (guide-key-mode 1))  ; Enable guide-key-mode
+  (progn
+    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c r" "C-c h"))
+    (setq guide-key/popup-window-position "bottom")
+    (setq guide-key/idle-delay 0.1)
+    (use-package guide-key-tip
+      :config (setq guide-key-tip/enabled t))
+    (guide-key-mode 1))  ; Enable guide-key-mode
+  :diminish (guide-key-mode)
+  )
 ;; ############################################################################
 
 
@@ -1571,77 +1549,142 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/ispell.el
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
-;; LaTeX-sensitive spell checking
-(setq ispell-enable-tex-parser t)
+;; ---------------
+;; Flyspell
 
-;; defautl dictionnary
-(setq ispell-local-dictionary "en")
+;; Enable flyspell in text mode.
+(defun enable-flyspell-mode ()
+  "Enable Flyspell mode."
+  (flyspell-mode t))
 
-;; save the personal dictionary without confirmation
-(setq ispell-silently-savep t)
+;; Enable flyspell in programming mode.
+(defun enable-flyspell-prog-mode ()
+  "Enable Flyspell Programming mode."
+  (flyspell-prog-mode))
 
-;; enable the likeness criteria
-;;(setq flyspell-sort-corrections nil)
+;; Perfom all setup
+(defun falkor/flyspell-setup ()
+  (dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
+    (add-hook hook 'enable-flyspell-mode))
+  ;; disable flyspell in change log and log-edit mode that derives from text-mode
+  (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+    (add-hook hook (lambda () (flyspell-mode nil))))
+  (dolist (hook '(prog-mode-hook))
+    (add-hook hook 'enable-flyspell-prog-mode)))
 
-;; dash character (`-') is considered as a word delimiter
-;;(setq flyspell-consider-dash-as-word-delimiter-flag t)
+(use-package flyspell
+  :idle (falkor/flyspell-setup)
+  :bind ("<mouse-3>" . flyspell-correct-word)
+  :init
+  (progn
+	(setq ispell-program-name "aspell")
 
-;; Add flyspell to the following major modes
-(dolist (hook '(text-mode-hook html-mode-hook messsage-mode-hook))
-  (add-hook hook (lambda ()
-                   (flyspell-mode t))))
+	;; LaTeX-sensitive spell checking
+    (setq ispell-enable-tex-parser t)
+    ;; default dictionnary
+    (setq ispell-local-dictionary "en")
+    ;; save the personal dictionary without confirmation
+    (setq ispell-silently-savep t)
 
-;; disable flyspell in change log and log-edit mode that derives from text-mode
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode nil))))
+	;; Automatic dictionary switcher for flyspell
+	(use-package auto-dictionary
+	  :init (add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
 
-;; flyspell comments and strings in programming modes
-;; (preventing it from finding mistakes in the code)
-(dolist (hook '(autoconf-mode-hook autotest-mode-hook c++-mode-hook c-mode-hook cperl-mode-hook  emacs-lisp-mode-hook makefile-mode-hook nxml-mode-hook python-mode-hook
-                                   sh-mode-hook))
-  (add-hook hook 'flyspell-prog-mode))
 
-(eval-after-load "flyspell" '(progn
-  (define-key flyspell-mouse-map (kbd "<C-down-mouse-3>") #'flyspell-correct-word)
-  (define-key flyspell-mouse-map (kbd "<C-mouse-3>") 'undefined) ))
+    ;; enable the likeness criteria
+    ;;(setq flyspell-sort-corrections nil)
+
+    ;; dash character (`-') is considered as a word delimiter
+    ;;(setq flyspell-consider-dash-as-word-delimiter-flag t)
+
+
+    (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+    (define-key flyspell-mouse-map [mouse-3] #'undefined)
+    ))
+
+
+  ;; (eval-after-load "flyspell"
+  ;;   '(progn
+  ;;      (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+  ;;      (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 ;; ############################################################################
 
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
-;; -*- mode: lisp; -*-
-;; Time-stamp: <Ven 2014-09-26 12:51 svarrette>
+;; -*- mode: emacs-lisp; -*-
+;; Time-stamp: <Ven 2014-12-05 11:45 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
+  :diminish (magit-auto-revert-mode)
+  :bind     ("C-x g" . magit-status)
   :config
   (progn
-	;; (set-face-background 'magit-item-highlight "#121212")
-	;; (set-face-background 'diff-file-header "#121212")
-	;; (set-face-foreground 'diff-context "#666666")
-	;; (set-face-foreground 'diff-added "#00cc33")
-	;; (set-face-foreground 'diff-removed "#ff0000")
-	;;
-	(setq magit-stage-all-confirm   nil)
-	(setq magit-unstage-all-confirm nil)
-	;;
-	(setq magit-restore-window-configuration t)
-	;; commit management
-	(setq magit-commit-signoff                 t)
-	(setq magit-commit-ask-to-stage            nil) ; do not ask to stage all
-	(setq magit-commit-all-when-nothing-staged t)
+    ;; (set-face-background 'magit-item-highlight "#121212")
+    ;; (set-face-background 'diff-file-header "#121212")
+    ;; (set-face-foreground 'diff-context "#666666")
+    ;; (set-face-foreground 'diff-added "#00cc33")
+    ;; (set-face-foreground 'diff-removed "#ff0000")
+    ;;
+    (setq magit-stage-all-confirm   nil)
+    (setq magit-unstage-all-confirm nil)
+    ;;
+    (setq magit-restore-window-configuration t)
+    ;; commit management
+    (setq magit-commit-signoff                 t)
+    (setq magit-commit-ask-to-stage            nil) ; do not ask to stage all
+    (setq magit-commit-all-when-nothing-staged t)
+
+    ;; step forward (`n`) and backward (`p`) through the git history of a file
+    (use-package git-timemachine)
+
+    ;; Handle Git flow
+    (use-package magit-gitflow
+      :config
+      (progn
+        (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)))
+
+    ;; Port of GitGutter which is a plugin of Sublime Text
+    ;; See https://github.com/nonsequitur/git-gutter-plus
+    ;;(when (window-system)
+	;; (use-package git-gutter+
+	;;   :config
+	;;   (progn
+	;; 	(use-package git-gutter-fringe+)
+	;; 	(require 'git-gutter-fringe+)
+	;; 	(setq git-gutter-fr+-side 'right-fringe)
+	;; 	(git-gutter-fr+-minimal)
+	;; 	))
+   ))
+
+
+(use-package git-gutter-fringe
+  :init (global-git-gutter-mode t)
+  :config
+  (progn
+    (use-package fringe-helper)
+    (setq git-gutter:hide-gutter t)
+						  "......."
+						  "......."
+						  "XXXXX.."
+						  "......."
+						  "......."
+						  )
+    (fringe-helper-define 'git-gutter-fr:modified nil
+						  "..X...."
+						  ".XXX..."
+						  "XXXXX.."
+						  ".XXX..."
+						  "..X...."
+						  )
+	(set-face-foreground 'git-gutter-fr:modified "grey50")
+	(set-face-foreground 'git-gutter-fr:added    "grey50")
+	(set-face-foreground 'git-gutter-fr:deleted  "grey50")
 	)
-  :bind ("C-x g" . magit-status))
-
-(use-package magit-gitflow
-  :config
-  (progn
-	(add-hook 'magit-mode-hook 'turn-on-magit-gitflow)))
-
-
 ;; ############################################################################
 
 
@@ -1709,7 +1752,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Jeu 2014-11-27 01:33 svarrette>
+;; Time-stamp: <Jeu 2014-12-04 10:50 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1718,6 +1761,7 @@
 (setq projectile-keymap-prefix (kbd "C-c p"))
 
 (use-package projectile
+  :diminish " Proj"
   :init
   (progn
     (setq projectile-cache-file (get-conf-path ".projectile.cache"))
@@ -1813,7 +1857,7 @@
 ;; -*- mode: emasc-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: yasnippets.el - Yasnippet -- et Another Snippet extension for Emacs.
-;; Time-stamp: <Jeu 2014-11-27 22:00 svarrette>
+;; Time-stamp: <Jeu 2014-12-04 11:15 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1826,7 +1870,7 @@
 
 (use-package yasnippet
   :if (not noninteractive)
-  :diminish yas-minor-mode
+  :diminish (yas-minor-mode . " Y") 
   :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
   :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
   :init
@@ -1845,7 +1889,7 @@
     (bind-keys :map yas-minor-mode-map
 			   ("<tab>"      . nil)  ; unbind tab
 			   ("TAB"        . nil)  ; idem
-               ("C-<return>" . yas-expand)
+               ("M-<return>" . yas-expand)
                ;; ("M-<return>" . yas-expand)
                ("C-c y n"    . yas-new-snippet)
                ("C-c y f"    . yas-find-snippets)
