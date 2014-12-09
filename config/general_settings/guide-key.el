@@ -1,7 +1,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: guide-key.el - Guide key usage
-;; Time-stamp: <Jeu 2014-12-04 08:03 svarrette>
+;; Time-stamp: <Mar 2014-12-09 22:07 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             see https://github.com/kai2nenobu/guide-key
@@ -13,7 +13,7 @@
 (use-package guide-key
   :init
   (progn
-    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c r" "C-c h"))
+    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c r" "C-c h" "C-c p" "C-x g"))
     (setq guide-key/popup-window-position "bottom")
     (setq guide-key/idle-delay 0.1)
     (use-package guide-key-tip
