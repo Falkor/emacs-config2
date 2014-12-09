@@ -1,7 +1,7 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Jeu 2014-12-04 11:16 svarrette>
+;; Time-stamp: <Mar 2014-12-09 22:11 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
@@ -28,7 +28,7 @@
   :config
   (progn
     (setq company-tooltip-limit 10
-          company-idle-delay    0.5
+          company-idle-delay    0.2
           company-echo-delay    0
           ;; min prefix of 2 chars
           company-minimum-prefix-length 2

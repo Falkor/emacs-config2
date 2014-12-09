@@ -12,6 +12,8 @@
 ;; Increase the lisp interpretor depth 
 ;;(setq max-lisp-eval-depth 10000)
 
+;; use *.el before *.elc if newer
+(setq load-prefer-newer t)
 
 ;; Automatically fill comment
 ;; Bug on Latex mode

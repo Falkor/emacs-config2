@@ -1,4 +1,4 @@
-s;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;; === LaTeX ===
 
 ;; Does not work ;(
@@ -49,21 +49,19 @@ s;; -*- mode: lisp; -*-
     ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
     (setq TeX-view-program-list
           '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
-
-
+	(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
     (use-package auctex
       :mode ("\\.tex\\'" . TeX-latex-mode)
       :config
       (progn
-        ;;(use-package auto-complete-auctex)
+        (use-package company-auctex)
         (add-hook 'LaTeX-mode-hook
                   (lambda ()
                     (require 'auctex)
-                    (visual-line-mode t)
+				    (visual-line-mode t)
                     (LaTeX-math-mode)
-					(reftex-mode)
-                    (setq TeX-master nil)
+					(setq TeX-master nil)
                     (setq LaTeX-command "pdflatex -synctex=1")
                     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
                     ;; RefTex: manage cross references, bibliographies, indices, document navigation
@@ -86,7 +84,16 @@ s;; -*- mode: lisp; -*-
         (setq LaTeX-item-indent 0)
         (setq TeX-brace-indent-level 2)))
 
+	(use-package flymake
+	  :config
+	  (progn
+		(defun flymake-get-tex-args (file-name)
+		  (list "pdflatex"
+				(list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
+		;;(add-hook 'LaTeX-mode-hook 'flymake-mode)
+		))
 
+	
     ;; (use-package latex-extra
     ;;   :init
     ;;   (progn
@@ -110,3 +117,10 @@ s;; -*- mode: lisp; -*-
     ;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex) ; with AUCTeX LaTeX mode
     ;; (setq reftex-plug-into-AUCTeX t)
     ))
+
+(eval-after-load "company"
+  '(progn
+	 (use-package company-auctex
+	   :init
+	   (progn
+		 (company-auctex-init)))))

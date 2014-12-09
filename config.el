@@ -23,7 +23,7 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/auctex.el
-s;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;; === LaTeX ===
 
 ;; Does not work ;(
@@ -74,21 +74,19 @@ s;; -*- mode: lisp; -*-
     ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
     (setq TeX-view-program-list
           '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
-
-
+	(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
     (use-package auctex
       :mode ("\\.tex\\'" . TeX-latex-mode)
       :config
       (progn
-        ;;(use-package auto-complete-auctex)
+        (use-package company-auctex)
         (add-hook 'LaTeX-mode-hook
                   (lambda ()
                     (require 'auctex)
-                    (visual-line-mode t)
+				    (visual-line-mode t)
                     (LaTeX-math-mode)
-					(reftex-mode)
-                    (setq TeX-master nil)
+					(setq TeX-master nil)
                     (setq LaTeX-command "pdflatex -synctex=1")
                     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
                     ;; RefTex: manage cross references, bibliographies, indices, document navigation
@@ -111,7 +109,16 @@ s;; -*- mode: lisp; -*-
         (setq LaTeX-item-indent 0)
         (setq TeX-brace-indent-level 2)))
 
+	(use-package flymake
+	  :config
+	  (progn
+		(defun flymake-get-tex-args (file-name)
+		  (list "pdflatex"
+				(list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
+		;;(add-hook 'LaTeX-mode-hook 'flymake-mode)
+		))
 
+	
     ;; (use-package latex-extra
     ;;   :init
     ;;   (progn
@@ -135,6 +142,13 @@ s;; -*- mode: lisp; -*-
     ;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex) ; with AUCTeX LaTeX mode
     ;; (setq reftex-plug-into-AUCTeX t)
     ))
+
+(eval-after-load "company"
+  '(progn
+	 (use-package company-auctex
+	   :init
+	   (progn
+		 (company-auctex-init)))))
 ;; ############################################################################
 
 
@@ -804,8 +818,9 @@ s;; -*- mode: lisp; -*-
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/programming/ruby.el
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
+;; See http://crypt.codemancers.com/posts/2013-09-26-setting-up-emacs-as-development-environment-on-osx/
 
 ;; https://github.com/magnars/.emacs.d/blob/master/setup-ruby-mode.el
 
@@ -1261,6 +1276,8 @@ s;; -*- mode: lisp; -*-
 ;; Increase the lisp interpretor depth 
 ;;(setq max-lisp-eval-depth 10000)
 
+;; use *.el before *.elc if newer
+(setq load-prefer-newer t)
 
 ;; Automatically fill comment
 ;; Bug on Latex mode
@@ -1738,10 +1755,10 @@ s;; -*- mode: lisp; -*-
 
 (setq show-paren-style 'expression)
 (set-face-background 'show-paren-match-face "turquoise")
-;; (set-face-attribute 'show-paren-match-face nil 
+;; (set-face-attribute 'show-paren-match-face nil
 ;;                     :weight 'bold :underline nil :overline nil :slant 'normal)
-(set-face-foreground 'show-paren-mismatch-face "red") 
-(set-face-attribute 'show-paren-mismatch-face nil 
+(set-face-foreground 'show-paren-mismatch-face "red")
+(set-face-attribute 'show-paren-mismatch-face nil
                     :weight 'bold :underline t :overline nil :slant 'normal)
 
 
@@ -1752,8 +1769,18 @@ s;; -*- mode: lisp; -*-
 (use-package mic-paren
   :init
   (progn
-	(paren-activate)))
+    (paren-activate)))
 
+(use-package smartparens
+  :config
+  (progn
+    (require 'smartparens-config)
+    (require 'smartparens-ruby)
+    (smartparens-global-mode)
+    (show-smartparens-global-mode t)
+    (sp-with-modes '(rhtml-mode)
+                   (sp-local-pair "<" ">")
+                   (sp-local-pair "<%" "%>"))))
 ;; ############################################################################
 
 

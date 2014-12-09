@@ -48,6 +48,7 @@
                           ;;better-defaults
                           color-theme
                           company
+						  company-auctex
                           company-c-headers
                           expand-region
                           feature-mode
@@ -93,6 +94,7 @@
                           smart-compile
                           smart-tab
                           smart-tabs-mode
+						  smartparens
                           smex
                           solarized-theme
                           sr-speedbar
