@@ -47,6 +47,13 @@
 			(t "locate %s")))
 	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 	(define-key helm-map (kbd "C-z")   'helm-select-action)
-
 	))
+
+;; better search ;) 
+(use-package helm-swoop
+  :bind (("C-c C-SPC" . helm-swoop)
+         ;;("C-c o" . helm-multi-swoop-all)
+         ("C-s"   . helm-swoop)
+         ;;("C-r"   . helm-resume)
+		 ))
 

@@ -38,6 +38,9 @@
     ;;  (progn
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
+	
+	;; Directory containing automatically generated TeX information.
+	(setq TeX-auto-local ".texinfo")
     (setq-default TeX-master nil) ; Query for master file.
     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
     (setq TeX-PDF-mode t)

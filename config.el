@@ -63,6 +63,9 @@
     ;;  (progn
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
+	
+	;; Directory containing automatically generated TeX information.
+	(setq TeX-auto-local ".texinfo")
     (setq-default TeX-master nil) ; Query for master file.
     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
     (setq TeX-PDF-mode t)
@@ -416,8 +419,14 @@
 			(t "locate %s")))
 	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 	(define-key helm-map (kbd "C-z")   'helm-select-action)
-
 	))
+
+(use-package helm-swoop
+  :bind (("C-c C-SPC" . helm-swoop)
+         ;;("C-c o" . helm-multi-swoop-all)
+         ("C-s"   . helm-swoop)
+         ;;("C-r"   . helm-resume)
+		 ))
 
 ;; ############################################################################
 
@@ -1771,16 +1780,16 @@
   (progn
     (paren-activate)))
 
-(use-package smartparens
-  :config
-  (progn
-    (require 'smartparens-config)
-    (require 'smartparens-ruby)
-    (smartparens-global-mode)
-    (show-smartparens-global-mode t)
-    (sp-with-modes '(rhtml-mode)
-                   (sp-local-pair "<" ">")
-                   (sp-local-pair "<%" "%>"))))
+;; (use-package smartparens
+;;   :config
+;;   (progn
+;;     (require 'smartparens-config)
+;;     (require 'smartparens-ruby)
+;;     (smartparens-global-mode)
+;;     (show-smartparens-global-mode t)
+;;     (sp-with-modes '(rhtml-mode)
+;;                    (sp-local-pair "<" ">")
+;;                    (sp-local-pair "<%" "%>"))))
 ;; ############################################################################
 
 
@@ -1789,7 +1798,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Jeu 2014-12-04 10:50 svarrette>
+;; Time-stamp: <Mar 2014-12-09 23:08 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1953,7 +1962,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mar 2014-12-02 10:37 svarrette>
+;; Time-stamp: <Mar 2014-12-09 23:14 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -2178,8 +2187,8 @@
 
 ;; === Search [and replace] ===
                                         ; Use regex searches by default.
-(global-set-key (kbd "C-s")   'isearch-forward)
-(global-set-key (kbd "\C-r")  'isearch-backward)
+;;(global-set-key (kbd "C-s")   'isearch-forward)
+;;(global-set-key (kbd "\C-r")  'isearch-backward)
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-M-r") 'isearch-backward-regexp)
 (global-set-key (kbd "M-q")   'query-replace)

@@ -1,7 +1,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Jeu 2014-12-04 10:50 svarrette>
+;; Time-stamp: <Mar 2014-12-09 23:08 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------

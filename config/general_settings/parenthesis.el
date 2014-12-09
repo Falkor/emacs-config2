@@ -24,13 +24,13 @@
   (progn
     (paren-activate)))
 
-(use-package smartparens
-  :config
-  (progn
-    (require 'smartparens-config)
-    (require 'smartparens-ruby)
-    (smartparens-global-mode)
-    (show-smartparens-global-mode t)
-    (sp-with-modes '(rhtml-mode)
-                   (sp-local-pair "<" ">")
-                   (sp-local-pair "<%" "%>"))))
+;; (use-package smartparens
+;;   :config
+;;   (progn
+;;     (require 'smartparens-config)
+;;     (require 'smartparens-ruby)
+;;     (smartparens-global-mode)
+;;     (show-smartparens-global-mode t)
+;;     (sp-with-modes '(rhtml-mode)
+;;                    (sp-local-pair "<" ">")
+;;                    (sp-local-pair "<%" "%>"))))
