@@ -1,11 +1,13 @@
 ;; -*- mode: emacs-lisp; -*-
-;; Time-stamp: <Ven 2014-12-05 12:00 svarrette>
+;; Time-stamp: <Tue 2014-12-09 22:03 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
   :diminish (magit-auto-revert-mode)
-  :bind     ("C-x g" . magit-status)
+  :bind     (("C-x g s" . magit-status)
+			 ("C-x g d" . magit-diff)
+			 ("C-x g b" . magit-blame-mode))
   :config
   (progn
     ;; (set-face-background 'magit-item-highlight "#121212")
@@ -24,7 +26,8 @@
     (setq magit-commit-all-when-nothing-staged t)
 
     ;; step forward (`n`) and backward (`p`) through the git history of a file
-    (use-package git-timemachine)
+    (use-package git-timemachine
+	  :bind ("C-x g t" . git-timemachine))
 
     ;; Handle Git flow
     (use-package magit-gitflow
