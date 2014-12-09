@@ -1,5 +1,6 @@
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
+;; See http://crypt.codemancers.com/posts/2013-09-26-setting-up-emacs-as-development-environment-on-osx/
 
 ;; https://github.com/magnars/.emacs.d/blob/master/setup-ruby-mode.el
 
