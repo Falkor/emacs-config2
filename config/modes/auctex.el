@@ -1,4 +1,4 @@
-;; -*- mode: lisp; -*-
+s;; -*- mode: lisp; -*-
 ;; === LaTeX ===
 
 ;; Does not work ;(
@@ -52,21 +52,17 @@
 
 
 
-    (use-package latex-mode
-      :ensure auctex
-      :mode ("\\.tex\\'" . latex-mode)
+    (use-package auctex
+      :mode ("\\.tex\\'" . TeX-latex-mode)
       :config
       (progn
-
-
-
-
         ;;(use-package auto-complete-auctex)
         (add-hook 'LaTeX-mode-hook
                   (lambda ()
                     (require 'auctex)
                     (visual-line-mode t)
                     (LaTeX-math-mode)
+					(reftex-mode)
                     (setq TeX-master nil)
                     (setq LaTeX-command "pdflatex -synctex=1")
                     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))

@@ -23,7 +23,7 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/auctex.el
-;; -*- mode: lisp; -*-
+s;; -*- mode: lisp; -*-
 ;; === LaTeX ===
 
 ;; Does not work ;(
@@ -77,21 +77,17 @@
 
 
 
-    (use-package latex-mode
-      :ensure auctex
-      :mode ("\\.tex\\'" . latex-mode)
+    (use-package auctex
+      :mode ("\\.tex\\'" . TeX-latex-mode)
       :config
       (progn
-
-
-
-
         ;;(use-package auto-complete-auctex)
         (add-hook 'LaTeX-mode-hook
                   (lambda ()
                     (require 'auctex)
                     (visual-line-mode t)
                     (LaTeX-math-mode)
+					(reftex-mode)
                     (setq TeX-master nil)
                     (setq LaTeX-command "pdflatex -synctex=1")
                     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
@@ -1419,7 +1415,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: guide-key.el - Guide key usage
-;; Time-stamp: <Jeu 2014-12-04 08:03 svarrette>
+;; Time-stamp: <Mar 2014-12-09 22:07 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             see https://github.com/kai2nenobu/guide-key
@@ -1431,7 +1427,7 @@
 (use-package guide-key
   :init
   (progn
-    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c r" "C-c h"))
+    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c r" "C-c h" "C-c p" "C-x g"))
     (setq guide-key/popup-window-position "bottom")
     (setq guide-key/idle-delay 0.1)
     (use-package guide-key-tip
@@ -1615,13 +1611,15 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
 ;; -*- mode: emacs-lisp; -*-
-;; Time-stamp: <Ven 2014-12-05 12:00 svarrette>
+;; Time-stamp: <Tue 2014-12-09 22:03 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
   :diminish (magit-auto-revert-mode)
-  :bind     ("C-x g" . magit-status)
+  :bind     (("C-x g s" . magit-status)
+			 ("C-x g d" . magit-diff)
+			 ("C-x g b" . magit-blame-mode))
   :config
   (progn
     ;; (set-face-background 'magit-item-highlight "#121212")
@@ -1640,7 +1638,8 @@
     (setq magit-commit-all-when-nothing-staged t)
 
     ;; step forward (`n`) and backward (`p`) through the git history of a file
-    (use-package git-timemachine)
+    (use-package git-timemachine
+	  :bind ("C-x g t" . git-timemachine))
 
     ;; Handle Git flow
     (use-package magit-gitflow
