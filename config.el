@@ -421,6 +421,7 @@
 	(define-key helm-map (kbd "C-z")   'helm-select-action)
 	))
 
+;; better search ;) 
 (use-package helm-swoop
   :bind (("C-c C-SPC" . helm-swoop)
          ;;("C-c o" . helm-multi-swoop-all)
