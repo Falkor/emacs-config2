@@ -1,5 +1,5 @@
 ;; -*- mode: emacs-lisp; -*-
-;; Time-stamp: <Tue 2014-12-09 22:03 svarrette>
+;; Time-stamp: <Jeu 2014-12-11 22:44 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
@@ -50,6 +50,7 @@
 
 
 (use-package git-gutter-fringe
+  :diminish ""
   :init (global-git-gutter-mode t)
   :config
   (progn

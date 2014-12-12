@@ -63,9 +63,9 @@
     ;;  (progn
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
-	
-	;; Directory containing automatically generated TeX information.
-	(setq TeX-auto-local ".texinfo")
+
+    ;; Directory containing automatically generated TeX information.
+    (setq TeX-auto-local ".texinfo")
     (setq-default TeX-master nil) ; Query for master file.
     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
     (setq TeX-PDF-mode t)
@@ -77,19 +77,30 @@
     ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
     (setq TeX-view-program-list
           '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
-	(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
     (use-package auctex
       :mode ("\\.tex\\'" . TeX-latex-mode)
       :config
       (progn
-        (use-package company-auctex)
+        (use-package company-auctex
+		  :init   (company-auctex-init)
+          :config
+          (progn
+            (add-hook 'LaTeX-mode-hook
+                      (lambda ()
+                        (set (make-local-variable 'company-backends) '(company-auctex
+																	   company-capf      ; completion-at-point-functions
+                                                                       company-yasnippet ; Yasnippets
+                                                                       company-dabbrev   ; dabbrev-like
+                                                                       company-files     ; file paths
+																	   ))))))
         (add-hook 'LaTeX-mode-hook
                   (lambda ()
                     (require 'auctex)
-				    (visual-line-mode t)
+                    (visual-line-mode t)
                     (LaTeX-math-mode)
-					(setq TeX-master nil)
+                    (setq TeX-master nil)
                     (setq LaTeX-command "pdflatex -synctex=1")
                     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
                     ;; RefTex: manage cross references, bibliographies, indices, document navigation
@@ -112,16 +123,16 @@
         (setq LaTeX-item-indent 0)
         (setq TeX-brace-indent-level 2)))
 
-	(use-package flymake
-	  :config
-	  (progn
-		(defun flymake-get-tex-args (file-name)
-		  (list "pdflatex"
-				(list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
-		;;(add-hook 'LaTeX-mode-hook 'flymake-mode)
-		))
+    (use-package flymake
+      :config
+      (progn
+        (defun flymake-get-tex-args (file-name)
+          (list "pdflatex"
+                (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
+        ;;(add-hook 'LaTeX-mode-hook 'flymake-mode)
+        ))
 
-	
+
     ;; (use-package latex-extra
     ;;   :init
     ;;   (progn
@@ -146,12 +157,12 @@
     ;; (setq reftex-plug-into-AUCTeX t)
     ))
 
-(eval-after-load "company"
-  '(progn
-	 (use-package company-auctex
-	   :init
-	   (progn
-		 (company-auctex-init)))))
+;; (eval-after-load "company"
+;;   '(progn
+;;      (use-package company-auctex
+;;        :init
+;;        (progn
+;;          (company-auctex-init)))))
 ;; ############################################################################
 
 
@@ -521,7 +532,7 @@
               (lambda ()
                 (visual-line-mode t)
                 (whitespace-mode  -1)
-				(setq tab-always-indent 'company-complete)
+				;; (setq tab-always-indent 'company-complete)
                 (flyspell-mode    t)))
 
     (add-hook 'markdown-mode-hook
@@ -1384,7 +1395,7 @@
 (set-default 'indicate-empty-lines t)
 
 ;; Easily navigate sillycased words
-(global-subword-mode 1)
+;;(global-subword-mode 1)
 
 ;; break lines for me, please
 (setq-default truncate-lines nil)
@@ -1542,6 +1553,8 @@
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
 (setq-default tab-width 2)
+(setq-default tab-always-indent 'complete)
+
 (defvaralias 'c-basic-offset 	 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 
@@ -1638,7 +1651,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
 ;; -*- mode: emacs-lisp; -*-
-;; Time-stamp: <Tue 2014-12-09 22:03 svarrette>
+;; Time-stamp: <Jeu 2014-12-11 22:44 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
@@ -1689,6 +1702,7 @@
 
 
 (use-package git-gutter-fringe
+  :diminish ""
   :init (global-git-gutter-mode t)
   :config
   (progn
@@ -1963,7 +1977,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mar 2014-12-09 23:14 svarrette>
+;; Time-stamp: <Jeu 2014-12-11 22:06 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu

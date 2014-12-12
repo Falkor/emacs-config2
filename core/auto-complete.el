@@ -1,7 +1,7 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Mar 2014-12-09 22:11 svarrette>
+;; Time-stamp: <Jeu 2014-12-11 22:49 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
@@ -40,7 +40,7 @@
                ("C-n" . company-select-next)
                ("C-p" . company-select-previous)
                ("C-d" . company-show-doc-buffer)
-               ("C-=" . helm-company)
+               ;;("C-=" . helm-company)
                ("<tab>" . company-complete)
                ("TAB" . company-complete)
                )
