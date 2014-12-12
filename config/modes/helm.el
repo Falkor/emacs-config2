@@ -21,7 +21,8 @@
   :init
   (progn
     (require 'helm-config)
-	
+	(use-package helm-company)
+
     (setq helm-candidate-number-limit 100)
 
     (when (executable-find "curl")
@@ -30,6 +31,7 @@
 	)
   :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
+		 ("C-="     . helm-company)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
