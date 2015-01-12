@@ -40,5 +40,18 @@
   :init
   (progn
     (add-hook 'enh-ruby-mode-hook 'robe-mode)
-    (add-hook 'robe-mode-hook 'ac-robe-setup)))
+    ;;(add-hook 'robe-mode-hook 'ac-robe-setup)
+	))
 
+(use-package robe
+  :ensure robe
+  :init (progn
+		  (add-hook 'ruby-mode-hook 'robe-mode)
+		  (push 'company-robe company-backends)))
+
+(use-package rvm
+      :init (rvm-use-default)
+      :config (setq rvm-verbose nil))
+
+(defadvice inf-ruby-console-auto (before activate-rvm-for-robe activate)
+  (rvm-activate-corresponding-ruby))

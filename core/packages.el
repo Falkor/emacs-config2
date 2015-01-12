@@ -90,6 +90,7 @@
                           projectile
                           puppet-mode
                           restclient
+						  robe
                           ruby-compilation
                           rvm
                           smart-compile
