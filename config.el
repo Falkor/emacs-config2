@@ -80,7 +80,8 @@
     (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
     (use-package auctex
-      :mode ("\\.tex\\'" . TeX-latex-mode)
+      :mode (("\\.tex\\'" . TeX-latex-mode)
+            ("\\.tikz\\'" . TeX-latex-mode))
       :config
       (progn
         (use-package company-auctex
@@ -436,9 +437,10 @@
 
 ;; better search ;) 
 (use-package helm-swoop
+  ;;:config ((setq helm-swoop-pre-input-function (lambda () nil)))
   :bind (("C-c C-SPC" . helm-swoop)
          ;;("C-c o" . helm-multi-swoop-all)
-         ("C-s"   . helm-swoop)
+         ("C-s"   .  helm-swoop)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
          ;;("C-r"   . helm-resume)
 		 ))
 

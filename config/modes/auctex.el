@@ -55,7 +55,8 @@
     (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
     (use-package auctex
-      :mode ("\\.tex\\'" . TeX-latex-mode)
+      :mode (("\\.tex\\'" . TeX-latex-mode)
+            ("\\.tikz\\'" . TeX-latex-mode))
       :config
       (progn
         (use-package company-auctex
