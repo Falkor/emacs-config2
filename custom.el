@@ -12,6 +12,7 @@
  '(magit-commit-ask-to-stage nil)
  '(menu-bar-mode t)
  '(powerline-default-separator (quote arrow))
+ '(ruby-indent-level 2)
  '(safe-local-variable-values (quote ((encoding . utf-8) (require-final-newline))))
  '(truncate-lines nil))
 (custom-set-faces
