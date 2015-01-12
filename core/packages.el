@@ -50,6 +50,7 @@
                           company
 						  company-auctex
                           company-c-headers
+						  enh-ruby-mode
                           expand-region
                           feature-mode
                           fit-frame

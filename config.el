@@ -872,16 +872,20 @@
     (ruby--jump-to-test)))
 
 
-(setq auto-mode-alist
-      (append
-       '(("\\.rake$"        . ruby-mode)
-         ("\\.gemspec$"     . ruby-mode)
-         ("\\.rb$"          . ruby-mode)
-         ("Rakefile$"       . ruby-mode)
-         ("Gemfile$"        . ruby-mode)
-         ("Capfile$"        . ruby-mode)
-         ("Vagrantfile"     . ruby-mode))
-       auto-mode-alist))
+(use-package enh-ruby-mode
+  :mode (("\\.rake$"    . enh-ruby-mode)
+         ("\\.gemspec$" . enh-ruby-mode)
+         ("\\.ru$"      . enh-ruby-mode)
+         ("Rakefile$"   . enh-ruby-mode)
+         ("Gemfile$"    . enh-ruby-mode)
+         ("Capfile$"    . enh-ruby-mode)
+         ("Puppetfile$" . enh-ruby-mode)
+         ("Guardfile$"  . enh-ruby-mode)
+		 ("Vagrantfile" . enh-ruby-mode))
+  :init
+  (progn
+    (add-hook 'enh-ruby-mode-hook 'robe-mode)
+    (add-hook 'robe-mode-hook 'ac-robe-setup)))
 
 ;; ############################################################################
 
