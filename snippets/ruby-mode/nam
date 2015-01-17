@@ -1,0 +1,8 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: namespace ...
+# key: nam
+# --
+#.....................
+namespace :${1:`(file-name-base)`} do
+   $0
+end # namespace $1

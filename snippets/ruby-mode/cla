@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: class NAME < PARENT ... end
+# key: cla
+# --
+class ${1:Name} < ${2:Parent}
+   $0
+end # class $1

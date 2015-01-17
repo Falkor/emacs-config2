@@ -1,0 +1,8 @@
+#name : desc ... task :name ... end
+# --
+###########   $1   ###########
+desc "$1 ${2:Task description}"
+task :${1:name} do |t|
+  info "#{t.comment}"
+  $0
+end # task $1 

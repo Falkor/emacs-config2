@@ -1,0 +1,5 @@
+#name : Dir.chdir( ) do ... end 
+# --
+Dir.chdir($1:path) do
+  $0
+end
