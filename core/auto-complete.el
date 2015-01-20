@@ -1,7 +1,7 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Jeu 2014-12-11 22:49 svarrette>
+;; Time-stamp: <Mar 2015-01-20 12:04 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .

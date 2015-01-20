@@ -1,7 +1,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Mar 2014-12-09 23:08 svarrette>
+;; Time-stamp: <Mar 2015-01-20 12:03 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -10,7 +10,7 @@
 (setq projectile-keymap-prefix (kbd "C-c p"))
 
 (use-package projectile
-  :diminish " Proj"
+  :diminish " P"
   :init
   (progn
     (setq projectile-cache-file (get-conf-path ".projectile.cache"))

@@ -18,6 +18,7 @@
 (setq helm-command-prefix-key (kbd "C-c h"))
 
 (use-package helm
+  :diminish " H"
   :init
   (progn
     (require 'helm-config)
