@@ -1,0 +1,5 @@
+#name: it "#method -- should do something" do ... end
+# --
+it "#${1:method name} -- should ${2:do something}" do
+  $0
+end

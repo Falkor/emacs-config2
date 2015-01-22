@@ -44,6 +44,7 @@
 	))
 
 (use-package robe
+  :diminish " r"
   :ensure robe
   :init (progn
 		  (add-hook 'ruby-mode-hook 'robe-mode)

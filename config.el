@@ -890,6 +890,7 @@
 	))
 
 (use-package robe
+  :diminish " r"
   :ensure robe
   :init (progn
 		  (add-hook 'ruby-mode-hook 'robe-mode)
@@ -1108,9 +1109,9 @@
 ;; === display current time in the status bar ===
 ;; (setq display-time-day-and-date t
 ;;       display-time-24hr-format t)
-(setq display-time-string-forms
-      '(24-hours ":" minutes " " seconds))
-(display-time-mode 1)
+;;(setq display-time-string-forms
+;;      '(24-hours ":" minutes " " seconds))
+;;(display-time-mode 1)
 
 ;;
 ;; === Specify the frame title ===
@@ -1602,7 +1603,7 @@
 ;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
 ;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
 ;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
- (add-hook 'ruby-mode-hook (lambda () (setq ruby-indent-level 2)))
+ (add-hook 'ruby-mode-hook (lambda () (setq ruby-indent-level 4)))
 ;; ############################################################################
 
 
