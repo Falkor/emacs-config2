@@ -58,6 +58,7 @@
 				   ("C-t <"    . helm-gtags-previous-history) ; Move to previous history on context stack
 				   ("C-t >"    . helm-gtags-next-history)     ; Move to next history on context stack.
 				   ("C-t C-t"  . helm-gtags-pop-stack)        ; Move to previous 
+				   ("C-,"      . helm-gtags-pop-stack)        ; Move to previous 
 										; point on the stack. helm-gtags pushes
 										; current point to stack before
 										; executing each jump functions. 

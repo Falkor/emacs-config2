@@ -9,6 +9,7 @@
 	("/Users/svarrette/.emacs.d/packages/elpa/color-theme-20080305.34/themes/color-theme-library.elc")))
  '(ecb-options-version "2.40")
  '(ecb-tip-of-the-day nil)
+ '(enh-ruby-indent-level 4)
  '(magit-commit-ask-to-stage nil)
  '(menu-bar-mode t)
  '(powerline-default-separator (quote arrow))

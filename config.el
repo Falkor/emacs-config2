@@ -573,7 +573,7 @@
 ;; ----------------------------------------------------------------------
 ;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
 ;; Semantic and main programming stuff.
-;; Time-stamp: <Jeu 2014-12-04 22:50 svarrette>
+;; Time-stamp: <Wed 2015-02-11 11:41 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -610,6 +610,7 @@
   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
          ("\\.m\\'"                   . c-mode)
          ("\\.mm\\'"                  . c++-mode))
+  :bind ("M-q" . query-replace)
   :config
   ;; (progn
   ;;   (bind-key "#" 'self-insert-command c-mode-base-map)
@@ -1288,6 +1289,7 @@
 				   ("C-t <"    . helm-gtags-previous-history) ; Move to previous history on context stack
 				   ("C-t >"    . helm-gtags-next-history)     ; Move to next history on context stack.
 				   ("C-t C-t"  . helm-gtags-pop-stack)        ; Move to previous 
+				   ("C-,"      . helm-gtags-pop-stack)        ; Move to previous 
 										; point on the stack. helm-gtags pushes
 										; current point to stack before
 										; executing each jump functions. 
