@@ -13,6 +13,7 @@
  '(magit-commit-ask-to-stage nil)
  '(menu-bar-mode t)
  '(powerline-default-separator (quote arrow))
+ '(puppet-indent-level 4)
  '(ruby-indent-level 4)
  '(safe-local-variable-values (quote ((encoding . utf-8) (require-final-newline))))
  '(truncate-lines nil))
