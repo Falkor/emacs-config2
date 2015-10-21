@@ -38,9 +38,9 @@
         ("\\.cpp$"         . "C++")              ;
         ("\\.cc$"          . "C++")              ;
         ("\\.C$"           . "C++")              ;
-        ("CMakeLists.txt$" . "CMake")            ; CMake
         ("[Mm]akefile$"    . "Makefile")         ; Makefile
         ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
+        ("CMakeList*"     . "CMake")            ; CMake
         ("\\.md$"          . "Text")             ; Text
         ("\\.markdown$"    . "Text")             ; Text
         ("\\.mdown$"       . "Text")             ; Text
