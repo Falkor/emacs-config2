@@ -966,6 +966,7 @@
         ("\\.cpp$"         . "C++")              ;
         ("\\.cc$"          . "C++")              ;
         ("\\.C$"           . "C++")              ;
+        ("CMakeLists.txt$" . "CMake")            ; CMake
         ("[Mm]akefile$"    . "Makefile")         ; Makefile
         ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
         ("\\.md$"          . "Text")             ; Text
@@ -1001,6 +1002,7 @@
         ("Java"        . "insert.java")
         ("JavaSwing"   . "insertApp.java")
         ("C"           . "insert.c")
+        ("CMake"       . "insert.cmake")
         ("C Include"   . "insert.h")
         ("C++"         . "insert.cpp")
         ("Tools C++"   . "insert.tools_cpp.h")
