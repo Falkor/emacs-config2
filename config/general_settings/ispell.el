@@ -24,11 +24,11 @@
     (add-hook hook 'enable-flyspell-prog-mode)))
 
 (use-package flyspell
-  :idle (falkor/flyspell-setup)
   :bind ("<mouse-3>" . flyspell-correct-word)
   :init
   (progn
-	(setq ispell-program-name "aspell")
+    (falkor/flyspell-setup)
+    (setq ispell-program-name "aspell")
 
 	;; LaTeX-sensitive spell checking
     (setq ispell-enable-tex-parser t)
@@ -36,7 +36,8 @@
     (setq ispell-local-dictionary "en")
     ;; save the personal dictionary without confirmation
     (setq ispell-silently-savep t)
-
+    
+    
 	;; Automatic dictionary switcher for flyspell
 	(use-package auto-dictionary
 	  :init (add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))

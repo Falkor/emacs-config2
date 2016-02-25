@@ -60,13 +60,10 @@
 
 (use-package flycheck
   :commands global-flycheck-mode
-  :idle
-  (progn
-	(dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
-	  (add-hook hook 'flycheck-mode)))
-										;(global-flycheck-mode 1)
   :config
   (progn
+    (dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
+	  (add-hook hook 'flycheck-mode))
     (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
     ))
 ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
@@ -130,7 +127,7 @@
       )
     (add-hook 'c++-mode-hook 'falkor/semantic-include)
     (use-package company-c-headers
-      :init
+      :config
       (progn
         (add-to-list 'company-c-headers-path-system "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
         )

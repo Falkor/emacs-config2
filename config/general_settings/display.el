@@ -75,7 +75,7 @@
 ;; =================================================================
 ;; WITH color theme
 (use-package color-theme
-  :init
+  :config
   (progn
 	;; clean color-theme-libraries
 	;;

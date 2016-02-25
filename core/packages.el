@@ -26,12 +26,12 @@
 ;; === setup packages sources ===
 (setq package-archives '(
                          ("gnu"       . "http://elpa.gnu.org/packages/")
-                         ("melpa"     . "http://melpa.milkbox.net/packages/")
+                         ("melpa"     . "http://melpa.org/packages/")
                                         ;("marmalade" . "http://marmalade-repo.org/packages/")
                          ))
 
 (setq package-user-dir     (concat packages-dir "elpa/"))
-;;(setq package-enable-at-startup nil)
+(setq package-enable-at-startup nil)
 (package-initialize)
 
 ;;
@@ -60,7 +60,8 @@
                           ggtags
 						  git-timemachine
 						  git-gutter-fringe
-                          guide-key
+                          gitconfig-mode
+						  guide-key
                           guide-key-tip
                           helm
                           helm-c-yasnippet

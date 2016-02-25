@@ -23,20 +23,17 @@
                ("C-c g u" . ggtags-update-tags)
                ("M-,"     . pop-tag-mark))
 
-	;; See Suggested Key Mapping of https://github.com/syohex/emacs-helm-gtags
-	(setq helm-gtags-prefix-key (kbd "C-t"))
-	
     (use-package helm-gtags
-      :init
+      :config
       (progn
+		;; See Suggested Key Mapping of https://github.com/syohex/emacs-helm-gtags
+		(setq helm-gtags-prefix-key (kbd "C-t"))
         (setq
          helm-gtags-ignore-case         t
          helm-gtags-auto-update         t
          helm-gtags-use-input-at-cursor t
          helm-gtags-pulse-at-cursor     t
-         helm-gtags-suggested-key-mapping t))
-      :config
-      (progn
+         helm-gtags-suggested-key-mapping t)
         ;; Enable helm-gtags-mode in Dired so you can jump to any tag
         ;; when navigate project tree with Dired
         (add-hook 'dired-mode-hook 'helm-gtags-mode)

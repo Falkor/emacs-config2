@@ -45,8 +45,5 @@
     ;; (add-to-list 'hippie-expand-try-functions-list
     ;;              'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
 	(add-hook 'emacs-lisp-mode-hook #'(lambda () (yas-activate-extra-mode 'lisp-mode)))
-	)
-  :idle
-  (progn
-    (yas-reload-all)
-	))
+        (yas-reload-all)
+        ))

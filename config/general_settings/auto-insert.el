@@ -8,7 +8,7 @@
 ;; (autoload 'auto-insert-tkld
 ;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
 (use-package auto-insert-tkld
-  :init
+  :config
   (progn
 	(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
 	(setq auto-insert-automatically t)

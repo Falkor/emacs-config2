@@ -631,13 +631,10 @@
 
 (use-package flycheck
   :commands global-flycheck-mode
-  :idle
-  (progn
-	(dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
-	  (add-hook hook 'flycheck-mode)))
-										;(global-flycheck-mode 1)
   :config
   (progn
+    (dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
+	  (add-hook hook 'flycheck-mode))
     (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
     ))
 ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
@@ -701,7 +698,7 @@
       )
     (add-hook 'c++-mode-hook 'falkor/semantic-include)
     (use-package company-c-headers
-      :init
+      :config
       (progn
         (add-to-list 'company-c-headers-path-system "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
         )
@@ -936,7 +933,7 @@
 ;; (autoload 'auto-insert-tkld
 ;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
 (use-package auto-insert-tkld
-  :init
+  :config
   (progn
 	(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
 	(setq auto-insert-automatically t)
@@ -1157,7 +1154,7 @@
 ;; =================================================================
 ;; WITH color theme
 (use-package color-theme
-  :init
+  :config
   (progn
 	;; clean color-theme-libraries
 	;;
@@ -1256,20 +1253,17 @@
                ("C-c g u" . ggtags-update-tags)
                ("M-,"     . pop-tag-mark))
 
-	;; See Suggested Key Mapping of https://github.com/syohex/emacs-helm-gtags
-	(setq helm-gtags-prefix-key (kbd "C-t"))
-	
     (use-package helm-gtags
-      :init
+      :config
       (progn
+		;; See Suggested Key Mapping of https://github.com/syohex/emacs-helm-gtags
+		(setq helm-gtags-prefix-key (kbd "C-t"))
         (setq
          helm-gtags-ignore-case         t
          helm-gtags-auto-update         t
          helm-gtags-use-input-at-cursor t
          helm-gtags-pulse-at-cursor     t
-         helm-gtags-suggested-key-mapping t))
-      :config
-      (progn
+         helm-gtags-suggested-key-mapping t)
         ;; Enable helm-gtags-mode in Dired so you can jump to any tag
         ;; when navigate project tree with Dired
         (add-hook 'dired-mode-hook 'helm-gtags-mode)
@@ -1639,11 +1633,11 @@
     (add-hook hook 'enable-flyspell-prog-mode)))
 
 (use-package flyspell
-  :idle (falkor/flyspell-setup)
   :bind ("<mouse-3>" . flyspell-correct-word)
   :init
   (progn
-	(setq ispell-program-name "aspell")
+    (falkor/flyspell-setup)
+    (setq ispell-program-name "aspell")
 
 	;; LaTeX-sensitive spell checking
     (setq ispell-enable-tex-parser t)
@@ -1651,7 +1645,8 @@
     (setq ispell-local-dictionary "en")
     ;; save the personal dictionary without confirmation
     (setq ispell-silently-savep t)
-
+    
+    
 	;; Automatic dictionary switcher for flyspell
 	(use-package auto-dictionary
 	  :init (add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
@@ -1995,11 +1990,8 @@
     ;; (add-to-list 'hippie-expand-try-functions-list
     ;;              'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
 	(add-hook 'emacs-lisp-mode-hook #'(lambda () (yas-activate-extra-mode 'lisp-mode)))
-	)
-  :idle
-  (progn
-    (yas-reload-all)
-	))
+        (yas-reload-all)
+        ))
 ;; ############################################################################
 
 
