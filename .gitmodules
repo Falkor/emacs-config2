@@ -25,6 +25,3 @@
 [submodule "resources/emacs.d/capdevc"]
 	path = resources/emacs.d/capdevc
 	url = https://github.com/capdevc/dotfiles-cc.git
-[submodule "emacs"]
-	path = emacs
-	url = https://github.com/Falkor/emacs-config2
