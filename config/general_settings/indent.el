@@ -1,7 +1,7 @@
 ;; -*- mode: emacs-lisp; -*-
 
 ;;
-;; Helper functions 
+;; Helper functions
 ;;
 
 (defun untabify-buffer ()
@@ -51,6 +51,9 @@
 
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
+
+;; === Get ride of tabs most of the time ===
+(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
 (setq-default tab-width 2)
 (setq-default tab-always-indent 'complete)
 
@@ -60,12 +63,11 @@
 ;; === Show whitespaces/tabs etc. ===
 (setq x-stretch-cursor t)
 
-;; === Get ride of tabs most of the time ===
-(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(setq-default c-basic-offset 4
-              tab-width 4
-              indent-tabs-mode t)
+;;(setq-default c-basic-offset 4
+;;              tab-width 4
+;;              indent-tabs-mode t)
 
 ;; === enable automatic indentation ===
 (electric-indent-mode 1)
