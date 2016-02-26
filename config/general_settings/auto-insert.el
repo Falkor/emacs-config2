@@ -8,7 +8,7 @@
 ;; (autoload 'auto-insert-tkld
 ;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
 (use-package auto-insert-tkld
-  :init
+  :config
   (progn
 	(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
 	(setq auto-insert-automatically t)
@@ -40,6 +40,7 @@
         ("\\.C$"           . "C++")              ;
         ("[Mm]akefile$"    . "Makefile")         ; Makefile
         ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
+        ("CMakeList*"     . "CMake")            ; CMake
         ("\\.md$"          . "Text")             ; Text
         ("\\.markdown$"    . "Text")             ; Text
         ("\\.mdown$"       . "Text")             ; Text
@@ -73,6 +74,7 @@
         ("Java"        . "insert.java")
         ("JavaSwing"   . "insertApp.java")
         ("C"           . "insert.c")
+        ("CMake"       . "insert.cmake")
         ("C Include"   . "insert.h")
         ("C++"         . "insert.cpp")
         ("Tools C++"   . "insert.tools_cpp.h")

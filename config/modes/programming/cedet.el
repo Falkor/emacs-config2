@@ -2,7 +2,7 @@
 ;; ----------------------------------------------------------------------
 ;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
 ;; Semantic and main programming stuff.
-;; Time-stamp: <Jeu 2014-12-04 22:50 svarrette>
+;; Time-stamp: <Wed 2015-02-11 11:41 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -39,6 +39,7 @@
   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
          ("\\.m\\'"                   . c-mode)
          ("\\.mm\\'"                  . c++-mode))
+  :bind ("M-q" . query-replace)
   :config
   ;; (progn
   ;;   (bind-key "#" 'self-insert-command c-mode-base-map)
@@ -59,13 +60,10 @@
 
 (use-package flycheck
   :commands global-flycheck-mode
-  :idle
-  (progn
-	(dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
-	  (add-hook hook 'flycheck-mode)))
-										;(global-flycheck-mode 1)
   :config
   (progn
+    (dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
+	  (add-hook hook 'flycheck-mode))
     (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
     ))
 ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
@@ -129,7 +127,7 @@
       )
     (add-hook 'c++-mode-hook 'falkor/semantic-include)
     (use-package company-c-headers
-      :init
+      :config
       (progn
         (add-to-list 'company-c-headers-path-system "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
         )

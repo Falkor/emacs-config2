@@ -18,10 +18,12 @@
 (setq helm-command-prefix-key (kbd "C-c h"))
 
 (use-package helm
+  :diminish " H"
   :init
   (progn
     (require 'helm-config)
-	
+	(use-package helm-company)
+
     (setq helm-candidate-number-limit 100)
 
     (when (executable-find "curl")
@@ -30,6 +32,7 @@
 	)
   :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
+		 ("C-="     . helm-company)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
@@ -47,6 +50,14 @@
 			(t "locate %s")))
 	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 	(define-key helm-map (kbd "C-z")   'helm-select-action)
-
 	))
+
+;; better search ;) 
+(use-package helm-swoop
+  ;;:config ((setq helm-swoop-pre-input-function (lambda () nil)))
+  :bind (("C-c C-SPC" . helm-swoop)
+         ;;("C-c o" . helm-multi-swoop-all)
+         ("C-s"   .  helm-swoop)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
+         ;;("C-r"   . helm-resume)
+		 ))
 

@@ -1,5 +1,6 @@
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
+;; See http://crypt.codemancers.com/posts/2013-09-26-setting-up-emacs-as-development-environment-on-osx/
 
 ;; https://github.com/magnars/.emacs.d/blob/master/setup-ruby-mode.el
 
@@ -26,14 +27,32 @@
     (ruby--jump-to-test)))
 
 
-(setq auto-mode-alist
-      (append
-       '(("\\.rake$"        . ruby-mode)
-         ("\\.gemspec$"     . ruby-mode)
-         ("\\.rb$"          . ruby-mode)
-         ("Rakefile$"       . ruby-mode)
-         ("Gemfile$"        . ruby-mode)
-         ("Capfile$"        . ruby-mode)
-         ("Vagrantfile"     . ruby-mode))
-       auto-mode-alist))
+(use-package enh-ruby-mode
+  :mode (("\\.rake$"    . enh-ruby-mode)
+         ("\\.gemspec$" . enh-ruby-mode)
+         ("\\.ru$"      . enh-ruby-mode)
+         ("Rakefile$"   . enh-ruby-mode)
+         ("Gemfile$"    . enh-ruby-mode)
+         ("Capfile$"    . enh-ruby-mode)
+         ("Puppetfile$" . enh-ruby-mode)
+         ("Guardfile$"  . enh-ruby-mode)
+		 ("Vagrantfile" . enh-ruby-mode))
+  :init
+  (progn
+    (add-hook 'enh-ruby-mode-hook 'robe-mode)
+    ;;(add-hook 'robe-mode-hook 'ac-robe-setup)
+	))
 
+(use-package robe
+  :diminish " r"
+  :ensure robe
+  :init (progn
+		  (add-hook 'ruby-mode-hook 'robe-mode)
+		  (push 'company-robe company-backends)))
+
+(use-package rvm
+      :init (rvm-use-default)
+      :config (setq rvm-verbose nil))
+
+(defadvice inf-ruby-console-auto (before activate-rvm-for-robe activate)
+  (rvm-activate-corresponding-ruby))

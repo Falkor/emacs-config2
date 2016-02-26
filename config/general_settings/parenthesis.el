@@ -8,10 +8,10 @@
 
 (setq show-paren-style 'expression)
 (set-face-background 'show-paren-match-face "turquoise")
-;; (set-face-attribute 'show-paren-match-face nil 
+;; (set-face-attribute 'show-paren-match-face nil
 ;;                     :weight 'bold :underline nil :overline nil :slant 'normal)
-(set-face-foreground 'show-paren-mismatch-face "red") 
-(set-face-attribute 'show-paren-mismatch-face nil 
+(set-face-foreground 'show-paren-mismatch-face "red")
+(set-face-attribute 'show-paren-mismatch-face nil
                     :weight 'bold :underline t :overline nil :slant 'normal)
 
 
@@ -22,5 +22,15 @@
 (use-package mic-paren
   :init
   (progn
-	(paren-activate)))
+    (paren-activate)))
 
+;; (use-package smartparens
+;;   :config
+;;   (progn
+;;     (require 'smartparens-config)
+;;     (require 'smartparens-ruby)
+;;     (smartparens-global-mode)
+;;     (show-smartparens-global-mode t)
+;;     (sp-with-modes '(rhtml-mode)
+;;                    (sp-local-pair "<" ">")
+;;                    (sp-local-pair "<%" "%>"))))

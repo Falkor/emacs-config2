@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: <<-EOF ... EOF
+# key: <<
+# --
+<<-${1:EOF}
+  $0
+$1

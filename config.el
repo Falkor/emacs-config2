@@ -23,7 +23,7 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/auctex.el
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 ;; === LaTeX ===
 
 ;; Does not work ;(
@@ -63,6 +63,9 @@
     ;;  (progn
     (setq TeX-auto-save t)
     (setq TeX-parse-self t)
+
+    ;; Directory containing automatically generated TeX information.
+    (setq TeX-auto-local ".texinfo")
     (setq-default TeX-master nil) ; Query for master file.
     ;;(setq TeX-master (guess-TeX-master (buffer-file-name)))
     (setq TeX-PDF-mode t)
@@ -74,19 +77,25 @@
     ;;(add-hook 'TeX-mode-hook '(lambda () (setq TeX-command-default "make")))
     (setq TeX-view-program-list
           '(("PDF Viewer" "/Applications/Skim.app/Contents/SharedSupport/displayline -b -g %n %o %b")))
+    (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
 
-
-
-    (use-package latex-mode
-      :ensure auctex
-      :mode ("\\.tex\\'" . latex-mode)
+    (use-package auctex
+      :mode (("\\.tex\\'" . TeX-latex-mode)
+            ("\\.tikz\\'" . TeX-latex-mode))
       :config
       (progn
-
-
-
-
-        ;;(use-package auto-complete-auctex)
+        (use-package company-auctex
+		  :init   (company-auctex-init)
+          :config
+          (progn
+            (add-hook 'LaTeX-mode-hook
+                      (lambda ()
+                        (set (make-local-variable 'company-backends) '(company-auctex
+																	   company-capf      ; completion-at-point-functions
+                                                                       company-yasnippet ; Yasnippets
+                                                                       company-dabbrev   ; dabbrev-like
+                                                                       company-files     ; file paths
+																	   ))))))
         (add-hook 'LaTeX-mode-hook
                   (lambda ()
                     (require 'auctex)
@@ -115,6 +124,15 @@
         (setq LaTeX-item-indent 0)
         (setq TeX-brace-indent-level 2)))
 
+    (use-package flymake
+      :config
+      (progn
+        (defun flymake-get-tex-args (file-name)
+          (list "pdflatex"
+                (list "-file-line-error" "-draftmode" "-interaction=nonstopmode" file-name)))
+        ;;(add-hook 'LaTeX-mode-hook 'flymake-mode)
+        ))
+
 
     ;; (use-package latex-extra
     ;;   :init
@@ -139,6 +157,13 @@
     ;; (add-hook 'LaTeX-mode-hook 'turn-on-reftex) ; with AUCTeX LaTeX mode
     ;; (setq reftex-plug-into-AUCTeX t)
     ))
+
+;; (eval-after-load "company"
+;;   '(progn
+;;      (use-package company-auctex
+;;        :init
+;;        (progn
+;;          (company-auctex-init)))))
 ;; ############################################################################
 
 
@@ -377,10 +402,12 @@
 (setq helm-command-prefix-key (kbd "C-c h"))
 
 (use-package helm
+  :diminish " H"
   :init
   (progn
     (require 'helm-config)
-	
+	(use-package helm-company)
+
     (setq helm-candidate-number-limit 100)
 
     (when (executable-find "curl")
@@ -389,6 +416,7 @@
 	)
   :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
+		 ("C-="     . helm-company)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
@@ -406,8 +434,16 @@
 			(t "locate %s")))
 	(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 	(define-key helm-map (kbd "C-z")   'helm-select-action)
-
 	))
+
+;; better search ;) 
+(use-package helm-swoop
+  ;;:config ((setq helm-swoop-pre-input-function (lambda () nil)))
+  :bind (("C-c C-SPC" . helm-swoop)
+         ;;("C-c o" . helm-multi-swoop-all)
+         ("C-s"   .  helm-swoop)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
+         ;;("C-r"   . helm-resume)
+		 ))
 
 ;; ############################################################################
 
@@ -501,7 +537,7 @@
               (lambda ()
                 (visual-line-mode t)
                 (whitespace-mode  -1)
-				(setq tab-always-indent 'company-complete)
+				;; (setq tab-always-indent 'company-complete)
                 (flyspell-mode    t)))
 
     (add-hook 'markdown-mode-hook
@@ -537,7 +573,7 @@
 ;; ----------------------------------------------------------------------
 ;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
 ;; Semantic and main programming stuff.
-;; Time-stamp: <Jeu 2014-12-04 22:50 svarrette>
+;; Time-stamp: <Wed 2015-02-11 11:41 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -574,6 +610,7 @@
   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
          ("\\.m\\'"                   . c-mode)
          ("\\.mm\\'"                  . c++-mode))
+  :bind ("M-q" . query-replace)
   :config
   ;; (progn
   ;;   (bind-key "#" 'self-insert-command c-mode-base-map)
@@ -594,13 +631,10 @@
 
 (use-package flycheck
   :commands global-flycheck-mode
-  :idle
-  (progn
-	(dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
-	  (add-hook hook 'flycheck-mode)))
-										;(global-flycheck-mode 1)
   :config
   (progn
+    (dolist (hook '(c-common-mode-hook c-mode-hook c++-mode-hook))
+	  (add-hook hook 'flycheck-mode))
     (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
     ))
 ;; (setq flycheck-check-syntax-automatically '(save mode-enabled))
@@ -664,7 +698,7 @@
       )
     (add-hook 'c++-mode-hook 'falkor/semantic-include)
     (use-package company-c-headers
-      :init
+      :config
       (progn
         (add-to-list 'company-c-headers-path-system "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include/c++/v1")
         )
@@ -808,8 +842,9 @@
 
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/programming/ruby.el
-;; -*- mode: lisp; -*-
+;; -*- mode: emacs-lisp; -*-
 
+;; See http://crypt.codemancers.com/posts/2013-09-26-setting-up-emacs-as-development-environment-on-osx/
 
 ;; https://github.com/magnars/.emacs.d/blob/master/setup-ruby-mode.el
 
@@ -836,17 +871,35 @@
     (ruby--jump-to-test)))
 
 
-(setq auto-mode-alist
-      (append
-       '(("\\.rake$"        . ruby-mode)
-         ("\\.gemspec$"     . ruby-mode)
-         ("\\.rb$"          . ruby-mode)
-         ("Rakefile$"       . ruby-mode)
-         ("Gemfile$"        . ruby-mode)
-         ("Capfile$"        . ruby-mode)
-         ("Vagrantfile"     . ruby-mode))
-       auto-mode-alist))
+(use-package enh-ruby-mode
+  :mode (("\\.rake$"    . enh-ruby-mode)
+         ("\\.gemspec$" . enh-ruby-mode)
+         ("\\.ru$"      . enh-ruby-mode)
+         ("Rakefile$"   . enh-ruby-mode)
+         ("Gemfile$"    . enh-ruby-mode)
+         ("Capfile$"    . enh-ruby-mode)
+         ("Puppetfile$" . enh-ruby-mode)
+         ("Guardfile$"  . enh-ruby-mode)
+		 ("Vagrantfile" . enh-ruby-mode))
+  :init
+  (progn
+    (add-hook 'enh-ruby-mode-hook 'robe-mode)
+    ;;(add-hook 'robe-mode-hook 'ac-robe-setup)
+	))
 
+(use-package robe
+  :diminish " r"
+  :ensure robe
+  :init (progn
+		  (add-hook 'ruby-mode-hook 'robe-mode)
+		  (push 'company-robe company-backends)))
+
+(use-package rvm
+      :init (rvm-use-default)
+      :config (setq rvm-verbose nil))
+
+(defadvice inf-ruby-console-auto (before activate-rvm-for-robe activate)
+  (rvm-activate-corresponding-ruby))
 ;; ############################################################################
 
 
@@ -880,7 +933,7 @@
 ;; (autoload 'auto-insert-tkld
 ;;   "auto-insert-tkld" "Manage auto insertion of new file" t)
 (use-package auto-insert-tkld
-  :init
+  :config
   (progn
 	(setq auto-insert-path (cons (concat emacs-root "auto-insert") auto-insert-path))
 	(setq auto-insert-automatically t)
@@ -912,6 +965,7 @@
         ("\\.C$"           . "C++")              ;
         ("[Mm]akefile$"    . "Makefile")         ; Makefile
         ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
+        ("CMakeList*"     . "CMake")            ; CMake
         ("\\.md$"          . "Text")             ; Text
         ("\\.markdown$"    . "Text")             ; Text
         ("\\.mdown$"       . "Text")             ; Text
@@ -945,6 +999,7 @@
         ("Java"        . "insert.java")
         ("JavaSwing"   . "insertApp.java")
         ("C"           . "insert.c")
+        ("CMake"       . "insert.cmake")
         ("C Include"   . "insert.h")
         ("C++"         . "insert.cpp")
         ("Tools C++"   . "insert.tools_cpp.h")
@@ -1054,9 +1109,9 @@
 ;; === display current time in the status bar ===
 ;; (setq display-time-day-and-date t
 ;;       display-time-24hr-format t)
-(setq display-time-string-forms
-      '(24-hours ":" minutes " " seconds))
-(display-time-mode 1)
+;;(setq display-time-string-forms
+;;      '(24-hours ":" minutes " " seconds))
+;;(display-time-mode 1)
 
 ;;
 ;; === Specify the frame title ===
@@ -1099,7 +1154,7 @@
 ;; =================================================================
 ;; WITH color theme
 (use-package color-theme
-  :init
+  :config
   (progn
 	;; clean color-theme-libraries
 	;;
@@ -1198,20 +1253,17 @@
                ("C-c g u" . ggtags-update-tags)
                ("M-,"     . pop-tag-mark))
 
-	;; See Suggested Key Mapping of https://github.com/syohex/emacs-helm-gtags
-	(setq helm-gtags-prefix-key (kbd "C-t"))
-	
     (use-package helm-gtags
-      :init
+      :config
       (progn
+		;; See Suggested Key Mapping of https://github.com/syohex/emacs-helm-gtags
+		(setq helm-gtags-prefix-key (kbd "C-t"))
         (setq
          helm-gtags-ignore-case         t
          helm-gtags-auto-update         t
          helm-gtags-use-input-at-cursor t
          helm-gtags-pulse-at-cursor     t
-         helm-gtags-suggested-key-mapping t))
-      :config
-      (progn
+         helm-gtags-suggested-key-mapping t)
         ;; Enable helm-gtags-mode in Dired so you can jump to any tag
         ;; when navigate project tree with Dired
         (add-hook 'dired-mode-hook 'helm-gtags-mode)
@@ -1233,6 +1285,7 @@
 				   ("C-t <"    . helm-gtags-previous-history) ; Move to previous history on context stack
 				   ("C-t >"    . helm-gtags-next-history)     ; Move to next history on context stack.
 				   ("C-t C-t"  . helm-gtags-pop-stack)        ; Move to previous 
+				   ("C-,"      . helm-gtags-pop-stack)        ; Move to previous 
 										; point on the stack. helm-gtags pushes
 										; current point to stack before
 										; executing each jump functions. 
@@ -1265,6 +1318,8 @@
 ;; Increase the lisp interpretor depth 
 ;;(setq max-lisp-eval-depth 10000)
 
+;; use *.el before *.elc if newer
+(setq load-prefer-newer t)
 
 ;; Automatically fill comment
 ;; Bug on Latex mode
@@ -1361,7 +1416,7 @@
 (set-default 'indicate-empty-lines t)
 
 ;; Easily navigate sillycased words
-(global-subword-mode 1)
+;;(global-subword-mode 1)
 
 ;; break lines for me, please
 (setq-default truncate-lines nil)
@@ -1419,7 +1474,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: guide-key.el - Guide key usage
-;; Time-stamp: <Jeu 2014-12-04 08:03 svarrette>
+;; Time-stamp: <Mar 2014-12-09 22:07 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             see https://github.com/kai2nenobu/guide-key
@@ -1431,7 +1486,7 @@
 (use-package guide-key
   :init
   (progn
-    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c r" "C-c h"))
+    (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-c r" "C-c h" "C-c p" "C-x g"))
     (setq guide-key/popup-window-position "bottom")
     (setq guide-key/idle-delay 0.1)
     (use-package guide-key-tip
@@ -1468,7 +1523,7 @@
 ;; -*- mode: emacs-lisp; -*-
 
 ;;
-;; Helper functions 
+;; Helper functions
 ;;
 
 (defun untabify-buffer ()
@@ -1518,19 +1573,23 @@
 
 ;; === Indenting configuration ===
 ;; see http://www.emacswiki.org/emacs/IndentationBasics
+
+;; === Get ride of tabs most of the time ===
+(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
 (setq-default tab-width 2)
+(setq-default tab-always-indent 'complete)
+
 (defvaralias 'c-basic-offset 	 'tab-width)
 (defvaralias 'cperl-indent-level 'tab-width)
 
 ;; === Show whitespaces/tabs etc. ===
 (setq x-stretch-cursor t)
 
-;; === Get ride of tabs most of the time ===
-(setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-(setq-default c-basic-offset 4
-              tab-width 4
-              indent-tabs-mode t)
+;;(setq-default c-basic-offset 4
+;;              tab-width 4
+;;              indent-tabs-mode t)
 
 ;; === enable automatic indentation ===
 (electric-indent-mode 1)
@@ -1544,6 +1603,7 @@
 ;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
 ;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
 ;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
+ (add-hook 'ruby-mode-hook (lambda () (setq ruby-indent-level 4)))
 ;; ############################################################################
 
 
@@ -1575,11 +1635,11 @@
     (add-hook hook 'enable-flyspell-prog-mode)))
 
 (use-package flyspell
-  :idle (falkor/flyspell-setup)
   :bind ("<mouse-3>" . flyspell-correct-word)
   :init
   (progn
-	(setq ispell-program-name "aspell")
+    (falkor/flyspell-setup)
+    (setq ispell-program-name "aspell")
 
 	;; LaTeX-sensitive spell checking
     (setq ispell-enable-tex-parser t)
@@ -1587,7 +1647,8 @@
     (setq ispell-local-dictionary "en")
     ;; save the personal dictionary without confirmation
     (setq ispell-silently-savep t)
-
+    
+    
 	;; Automatic dictionary switcher for flyspell
 	(use-package auto-dictionary
 	  :init (add-hook 'flyspell-mode-hook (lambda () (auto-dictionary-mode 1))))
@@ -1615,13 +1676,15 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
 ;; -*- mode: emacs-lisp; -*-
-;; Time-stamp: <Ven 2014-12-05 11:45 svarrette>
+;; Time-stamp: <Mar 2015-01-20 12:00 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
   :diminish (magit-auto-revert-mode)
-  :bind     ("C-x g" . magit-status)
+  :bind     (("C-x g s" . magit-status)
+			 ("C-x g d" . magit-diff)
+			 ("C-x g b" . magit-blame-mode))
   :config
   (progn
     ;; (set-face-background 'magit-item-highlight "#121212")
@@ -1640,7 +1703,8 @@
     (setq magit-commit-all-when-nothing-staged t)
 
     ;; step forward (`n`) and backward (`p`) through the git history of a file
-    (use-package git-timemachine)
+    (use-package git-timemachine
+	  :bind ("C-x g t" . git-timemachine))
 
     ;; Handle Git flow
     (use-package magit-gitflow
@@ -1661,30 +1725,47 @@
 	;; 	))
    ))
 
-
-(use-package git-gutter-fringe
-  :init (global-git-gutter-mode t)
+(use-package git-gutter
+  :diminish ""
   :config
   (progn
-    (use-package fringe-helper)
-    (setq git-gutter:hide-gutter t)
-						  "......."
-						  "......."
-						  "XXXXX.."
-						  "......."
-						  "......."
-						  )
-    (fringe-helper-define 'git-gutter-fr:modified nil
-						  "..X...."
-						  ".XXX..."
-						  "XXXXX.."
-						  ".XXX..."
-						  "..X...."
-						  )
-	(set-face-foreground 'git-gutter-fr:modified "grey50")
-	(set-face-foreground 'git-gutter-fr:added    "grey50")
-	(set-face-foreground 'git-gutter-fr:deleted  "grey50")
-	)
+	(use-package git-gutter-fringe
+	  :diminish ""
+	  :init (global-git-gutter-mode t)
+	  :config
+	  (progn
+		(setq git-gutter:hide-gutter t)
+		;; Don't need log/message.
+		(setq git-gutter:verbosity 0)
+		;;(setq git-gutter-fr:side 'right-fringe)
+		(use-package fringe-helper)
+		(fringe-helper-define 'git-gutter-fr:added nil
+		  "..X...."
+		  "..X...."
+		  "XXXXX.."
+		  "..X...."
+		  "..X...."
+		  )
+		(fringe-helper-define 'git-gutter-fr:deleted nil
+		  "......."
+		  "......."
+		  "XXXXX.."
+		  "......."
+		  "......."
+		  )
+		(fringe-helper-define 'git-gutter-fr:modified nil
+		  "..X...."
+		  ".XXX..."
+		  "XXXXX.."
+		  ".XXX..."
+		  "..X...."
+		  )
+		(set-face-foreground 'git-gutter-fr:modified "grey50")
+		(set-face-foreground 'git-gutter-fr:added    "grey50")
+		(set-face-foreground 'git-gutter-fr:deleted  "grey50")
+		))))
+
+
 ;; ############################################################################
 
 
@@ -1728,10 +1809,10 @@
 
 (setq show-paren-style 'expression)
 (set-face-background 'show-paren-match-face "turquoise")
-;; (set-face-attribute 'show-paren-match-face nil 
+;; (set-face-attribute 'show-paren-match-face nil
 ;;                     :weight 'bold :underline nil :overline nil :slant 'normal)
-(set-face-foreground 'show-paren-mismatch-face "red") 
-(set-face-attribute 'show-paren-mismatch-face nil 
+(set-face-foreground 'show-paren-mismatch-face "red")
+(set-face-attribute 'show-paren-mismatch-face nil
                     :weight 'bold :underline t :overline nil :slant 'normal)
 
 
@@ -1742,8 +1823,18 @@
 (use-package mic-paren
   :init
   (progn
-	(paren-activate)))
+    (paren-activate)))
 
+;; (use-package smartparens
+;;   :config
+;;   (progn
+;;     (require 'smartparens-config)
+;;     (require 'smartparens-ruby)
+;;     (smartparens-global-mode)
+;;     (show-smartparens-global-mode t)
+;;     (sp-with-modes '(rhtml-mode)
+;;                    (sp-local-pair "<" ">")
+;;                    (sp-local-pair "<%" "%>"))))
 ;; ############################################################################
 
 
@@ -1752,7 +1843,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Jeu 2014-12-04 10:50 svarrette>
+;; Time-stamp: <Mar 2015-01-20 12:03 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1761,7 +1852,7 @@
 (setq projectile-keymap-prefix (kbd "C-c p"))
 
 (use-package projectile
-  :diminish " Proj"
+  :diminish " P"
   :init
   (progn
     (setq projectile-cache-file (get-conf-path ".projectile.cache"))
@@ -1901,11 +1992,8 @@
     ;; (add-to-list 'hippie-expand-try-functions-list
     ;;              'yas/hippie-try-expand) ;put yasnippet in hippie-expansion list
 	(add-hook 'emacs-lisp-mode-hook #'(lambda () (yas-activate-extra-mode 'lisp-mode)))
-	)
-  :idle
-  (progn
-    (yas-reload-all)
-	))
+        (yas-reload-all)
+        ))
 ;; ############################################################################
 
 
@@ -1916,7 +2004,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mar 2014-12-02 10:37 svarrette>
+;; Time-stamp: <Jeu 2014-12-11 22:06 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -2141,8 +2229,8 @@
 
 ;; === Search [and replace] ===
                                         ; Use regex searches by default.
-(global-set-key (kbd "C-s")   'isearch-forward)
-(global-set-key (kbd "\C-r")  'isearch-backward)
+;;(global-set-key (kbd "C-s")   'isearch-forward)
+;;(global-set-key (kbd "\C-r")  'isearch-backward)
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-M-r") 'isearch-backward-regexp)
 (global-set-key (kbd "M-q")   'query-replace)

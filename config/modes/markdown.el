@@ -59,7 +59,7 @@
               (lambda ()
                 (visual-line-mode t)
                 (whitespace-mode  -1)
-				(setq tab-always-indent 'company-complete)
+				;; (setq tab-always-indent 'company-complete)
                 (flyspell-mode    t)))
 
     (add-hook 'markdown-mode-hook

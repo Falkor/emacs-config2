@@ -1,0 +1,12 @@
+#-*- require-final-newline: nil -*-
+#contributor: gary <ge.iams@gmail.com>
+#name : context (String)
+# --
+############################################
+context '${1:description}' do
+
+  it 'should ${2:description}' do
+    $0
+  end
+
+end

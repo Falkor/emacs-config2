@@ -12,6 +12,8 @@
 ;; Increase the lisp interpretor depth 
 ;;(setq max-lisp-eval-depth 10000)
 
+;; use *.el before *.elc if newer
+(setq load-prefer-newer t)
 
 ;; Automatically fill comment
 ;; Bug on Latex mode
@@ -108,7 +110,7 @@
 (set-default 'indicate-empty-lines t)
 
 ;; Easily navigate sillycased words
-(global-subword-mode 1)
+;;(global-subword-mode 1)
 
 ;; break lines for me, please
 (setq-default truncate-lines nil)

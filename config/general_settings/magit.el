@@ -1,11 +1,13 @@
 ;; -*- mode: emacs-lisp; -*-
-;; Time-stamp: <Ven 2014-12-05 11:45 svarrette>
+;; Time-stamp: <Mar 2015-01-20 12:00 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
   :diminish (magit-auto-revert-mode)
-  :bind     ("C-x g" . magit-status)
+  :bind     (("C-x g s" . magit-status)
+			 ("C-x g d" . magit-diff)
+			 ("C-x g b" . magit-blame-mode))
   :config
   (progn
     ;; (set-face-background 'magit-item-highlight "#121212")
@@ -24,7 +26,8 @@
     (setq magit-commit-all-when-nothing-staged t)
 
     ;; step forward (`n`) and backward (`p`) through the git history of a file
-    (use-package git-timemachine)
+    (use-package git-timemachine
+	  :bind ("C-x g t" . git-timemachine))
 
     ;; Handle Git flow
     (use-package magit-gitflow
@@ -45,27 +48,44 @@
 	;; 	))
    ))
 
-
-(use-package git-gutter-fringe
-  :init (global-git-gutter-mode t)
+(use-package git-gutter
+  :diminish ""
   :config
   (progn
-    (use-package fringe-helper)
-    (setq git-gutter:hide-gutter t)
-						  "......."
-						  "......."
-						  "XXXXX.."
-						  "......."
-						  "......."
-						  )
-    (fringe-helper-define 'git-gutter-fr:modified nil
-						  "..X...."
-						  ".XXX..."
-						  "XXXXX.."
-						  ".XXX..."
-						  "..X...."
-						  )
-	(set-face-foreground 'git-gutter-fr:modified "grey50")
-	(set-face-foreground 'git-gutter-fr:added    "grey50")
-	(set-face-foreground 'git-gutter-fr:deleted  "grey50")
-	)
+	(use-package git-gutter-fringe
+	  :diminish ""
+	  :init (global-git-gutter-mode t)
+	  :config
+	  (progn
+		(setq git-gutter:hide-gutter t)
+		;; Don't need log/message.
+		(setq git-gutter:verbosity 0)
+		;;(setq git-gutter-fr:side 'right-fringe)
+		(use-package fringe-helper)
+		(fringe-helper-define 'git-gutter-fr:added nil
+		  "..X...."
+		  "..X...."
+		  "XXXXX.."
+		  "..X...."
+		  "..X...."
+		  )
+		(fringe-helper-define 'git-gutter-fr:deleted nil
+		  "......."
+		  "......."
+		  "XXXXX.."
+		  "......."
+		  "......."
+		  )
+		(fringe-helper-define 'git-gutter-fr:modified nil
+		  "..X...."
+		  ".XXX..."
+		  "XXXXX.."
+		  ".XXX..."
+		  "..X...."
+		  )
+		(set-face-foreground 'git-gutter-fr:modified "grey50")
+		(set-face-foreground 'git-gutter-fr:added    "grey50")
+		(set-face-foreground 'git-gutter-fr:deleted  "grey50")
+		))))
+
+

@@ -26,12 +26,12 @@
 ;; === setup packages sources ===
 (setq package-archives '(
                          ("gnu"       . "http://elpa.gnu.org/packages/")
-                         ("melpa"     . "http://melpa.milkbox.net/packages/")
-                                        ;("marmalade" . "http://marmalade-repo.org/packages/")
+                         ("melpa"     . "http://melpa.org/packages/")
+						 ("marmalade" . "http://marmalade-repo.org/packages/")
                          ))
 
 (setq package-user-dir     (concat packages-dir "elpa/"))
-;;(setq package-enable-at-startup nil)
+(setq package-enable-at-startup nil)
 (package-initialize)
 
 ;;
@@ -48,7 +48,9 @@
                           ;;better-defaults
                           color-theme
                           company
+						  company-auctex
                           company-c-headers
+						  enh-ruby-mode
                           expand-region
                           feature-mode
                           fit-frame
@@ -58,7 +60,8 @@
                           ggtags
 						  git-timemachine
 						  git-gutter-fringe
-                          guide-key
+                          gitconfig-mode
+						  guide-key
                           guide-key-tip
                           helm
                           helm-c-yasnippet
@@ -88,11 +91,13 @@
                           projectile
                           puppet-mode
                           restclient
+						  robe
                           ruby-compilation
                           rvm
                           smart-compile
                           smart-tab
                           smart-tabs-mode
+						  smartparens
                           smex
                           solarized-theme
                           sr-speedbar

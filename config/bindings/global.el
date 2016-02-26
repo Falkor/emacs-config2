@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Mar 2014-12-02 10:37 svarrette>
+;; Time-stamp: <Jeu 2014-12-11 22:06 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -228,8 +228,8 @@
 
 ;; === Search [and replace] ===
                                         ; Use regex searches by default.
-(global-set-key (kbd "C-s")   'isearch-forward)
-(global-set-key (kbd "\C-r")  'isearch-backward)
+;;(global-set-key (kbd "C-s")   'isearch-forward)
+;;(global-set-key (kbd "\C-r")  'isearch-backward)
 (global-set-key (kbd "C-M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "C-M-r") 'isearch-backward-regexp)
 (global-set-key (kbd "M-q")   'query-replace)

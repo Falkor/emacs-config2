@@ -30,9 +30,9 @@
 ;; === display current time in the status bar ===
 ;; (setq display-time-day-and-date t
 ;;       display-time-24hr-format t)
-(setq display-time-string-forms
-      '(24-hours ":" minutes " " seconds))
-(display-time-mode 1)
+;;(setq display-time-string-forms
+;;      '(24-hours ":" minutes " " seconds))
+;;(display-time-mode 1)
 
 ;;
 ;; === Specify the frame title ===
@@ -75,7 +75,7 @@
 ;; =================================================================
 ;; WITH color theme
 (use-package color-theme
-  :init
+  :config
   (progn
 	;; clean color-theme-libraries
 	;;
