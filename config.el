@@ -1579,8 +1579,10 @@
 (setq-default tab-width 2)
 (setq-default tab-always-indent 'complete)
 
-(defvaralias 'c-basic-offset 	 'tab-width)
-(defvaralias 'cperl-indent-level 'tab-width)
+(defvaralias 'c-basic-offset 	    'tab-width)
+(defvaralias 'cperl-indent-level    'tab-width)
+(defvaralias 'ruby-indent-level     'tab-width)
+(defvaralias 'enh-ruby-indent-level 'tab-width)
 
 ;; === Show whitespaces/tabs etc. ===
 (setq x-stretch-cursor t)
@@ -1603,7 +1605,7 @@
 ;; (add-hook 'ada-mode-hook (lambda ()      (setq ada-indent 4)))
 ;; (add-hook 'perl-mode-hook (lambda ()     (setq perl-basic-offset 4)))
 ;; (add-hook 'cperl-mode-hook (lambda ()    (setq cperl-indent-level 4)))
- (add-hook 'ruby-mode-hook (lambda () (setq ruby-indent-level 4)))
+;; (add-hook 'ruby-mode-hook (lambda () (setq ruby-indent-level 4)))
 ;; ############################################################################
 
 
