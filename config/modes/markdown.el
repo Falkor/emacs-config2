@@ -33,7 +33,7 @@
   :init
   (progn
     (setq markdown-command "pandoc --smart -f markdown -t pdf")
-    (setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
+    (setq markdown-css-paths (expand-file-name "markdown.css" emacs-root)))
   :bind (("C-c C-v" . markdown-preview-file)
          ;;("C-c C-e" . )
          )
