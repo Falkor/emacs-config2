@@ -1092,7 +1092,10 @@
 (setq column-number-mode  t)
 
 ;; === F... the beep ===
-(setq visible-bell        t)
+;;(setq visible-bell        t)  ;; this sucks under El Capitan
+;; El Capitan work-around
+(setq visible-bell nil) ;; The default
+(setq ring-bell-function 'ignore)
 
 ;; === Default size of the frame ===
 (set-frame-width (selected-frame) 145)

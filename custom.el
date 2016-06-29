@@ -6,16 +6,17 @@
  '(LaTeX-item-indent 0)
  '(color-theme-libraries
    (quote
-	("/Users/svarrette/.emacs.d/packages/elpa/color-theme-20080305.34/themes/color-theme-library.elc")))
+    ("/Users/svarrette/.emacs.d/packages/elpa/color-theme-20080305.34/themes/color-theme-library.elc")))
  '(ecb-options-version "2.40")
  '(ecb-tip-of-the-day nil)
- '(enh-ruby-indent-level 4)
+ '(flycheck-sh-shellcheck-executable "/usr/local/bin/shellcheck")
  '(magit-commit-ask-to-stage nil)
  '(menu-bar-mode t)
+ '(neo-window-width 35)
  '(powerline-default-separator (quote arrow))
  '(puppet-indent-level 4)
- '(ruby-indent-level 4)
  '(safe-local-variable-values (quote ((encoding . utf-8) (require-final-newline))))
+ '(tab-width 2)
  '(truncate-lines nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

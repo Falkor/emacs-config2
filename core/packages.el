@@ -48,9 +48,10 @@
                           ;;better-defaults
                           color-theme
                           company
-						  company-auctex
+			  company-auctex
                           company-c-headers
-						  enh-ruby-mode
+			  enh-ruby-mode
+			  exec-path-from-shell
                           expand-region
                           feature-mode
                           fit-frame
@@ -58,52 +59,52 @@
                           flycheck
                           function-args
                           ggtags
-						  git-timemachine
-						  git-gutter-fringe
+			  git-timemachine
+			  git-gutter-fringe
                           gitconfig-mode
-						  guide-key
+			  guide-key
                           guide-key-tip
                           helm
                           helm-c-yasnippet
                           helm-gtags
                           helm-package
                           helm-projectile
-						  helm-swoop
+			  helm-swoop
                           htmlize
                           js2-mode
-						  json-mode
+			  json-mode
                           latex-extra
                           ;;load-dir
                           magit
                           magit-gitflow
                           markdown-mode
-						  markdown-toc
+			  markdown-toc
                           marmalade
                           mic-paren
                           neotree
                           nodejs-repl
                           org
-						  pabbrev
-						  pandoc-mode
+			  pabbrev
+			  pandoc-mode
                           paredit
                           php-mode
                           powerline
                           projectile
                           puppet-mode
                           restclient
-						  robe
+			  robe
                           ruby-compilation
                           rvm
                           smart-compile
                           smart-tab
                           smart-tabs-mode
-						  smartparens
+			  smartparens
                           smex
                           solarized-theme
                           sr-speedbar
                           use-package
                           web-mode
-						  ws-butler
+			  ws-butler
                           yaml-mode
                           yasnippet)
   "Default packages")
