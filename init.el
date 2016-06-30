@@ -80,6 +80,9 @@
 ;; Now load/setup packages
 (load (get-conf-path "core/packages"))
 
+;; Set PATH
+(exec-path-from-shell-copy-env "PATH")
+
 ;; === KEY LIBRARIES ===
 ;; Below are the key libraries you wish to see loaded asap
 (require 'use-package)
