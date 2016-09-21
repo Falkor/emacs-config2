@@ -965,7 +965,8 @@
         ("\\.C$"           . "C++")              ;
         ("[Mm]akefile$"    . "Makefile")         ; Makefile
         ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
-        ("CMakeList*"     . "CMake")            ; CMake
+        ("CMakeList*"     . "CMake")             ; CMake
+        ("\\.lua$"         . "Lua")              ; Lua
         ("\\.md$"          . "Text")             ; Text
         ("\\.markdown$"    . "Text")             ; Text
         ("\\.mdown$"       . "Text")             ; Text
@@ -1005,6 +1006,7 @@
         ("Tools C++"   . "insert.tools_cpp.h")
         ("Logs C++"    . "insert.logs.cpp")
         ("Logs C++ Include" . "insert.logs.h")
+        ("Lua"         . "insert.lua")
         ("Makefile"    . "insert.makefile")
         ("Makefile.am" . "insert.makefile.am")
         ("Text"        . "insert.md")
