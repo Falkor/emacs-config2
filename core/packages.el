@@ -27,7 +27,7 @@
 (setq package-archives '(
                          ("gnu"       . "http://elpa.gnu.org/packages/")
                          ("melpa"     . "http://melpa.org/packages/")
-						 ("marmalade" . "http://marmalade-repo.org/packages/")
+;;			 ("marmalade" . "http://marmalade-repo.org/packages/")
                          ))
 
 (setq package-user-dir     (concat packages-dir "elpa/"))
@@ -74,6 +74,7 @@
                           js2-mode
 			  json-mode
                           latex-extra
+			  lua-mode
                           ;;load-dir
                           magit
                           magit-gitflow
