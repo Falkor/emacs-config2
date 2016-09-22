@@ -924,7 +924,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/auto-insert.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Dim 2014-11-16 10:30 svarrette>
+;; Time-stamp: <Thu 2016-09-22 00:46 svarrette>
 ;; ========================================================
 ;; Auto-insert: automatic insertion of text into new files
 ;; ========================================================
@@ -981,6 +981,7 @@
         ("\\.wml"          . "WML")              ; WML (Website Meta Language)
         ("\\.php"          . "PHP")              ; PHP
         ("\\.gnuplot"      . "Gnuplot")          ; Gnuplot
+        ("\\.py$"          . "Python")           ; Python
         ("\\.pl$"          . "Perl")             ; Perl
         ("\\.pm$"          . "Perl Module")      ; PerlModule
         ("\\.t$"           . "Perl Test")        ; Perl Test script
@@ -1017,6 +1018,7 @@
         ("WML"         . "insert.wml")
         ("PHP"         . "insert.php")
         ("Gnuplot"     . "insert.gnuplot")
+        ("Python"      . "insert.py")
         ("Perl"        . "insert.pl")
         ("Perl Module" . "insert.pm")
         ("Perl Test"   . "insert.t")
@@ -1025,7 +1027,6 @@
         ("R"           . "insert.R")
         ("OAR"         . "insert.oar")
         ))
-
 ;; ############################################################################
 
 
