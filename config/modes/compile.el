@@ -27,7 +27,7 @@
   (interactive)
   (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
       (set-face-background 'mode-line color)
-    (set-face-background 'modeline color)
+    (set-face-background 'mode-line color)
     )
   )
 
