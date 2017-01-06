@@ -1979,7 +1979,8 @@
                      text-mode-hook
                      org-mode-hook
                      ruby-mode-hook
-                     message-mode-hook))
+                     cmake-mode-hook
+		     message-mode-hook))
   ;;(add-to-list 'ac-sources 'ac-source-yasnippet)
   )
   :config

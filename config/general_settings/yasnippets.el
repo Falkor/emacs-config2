@@ -14,17 +14,18 @@
 
 (use-package yasnippet
   :if (not noninteractive)
-  :diminish (yas-minor-mode . " Y") 
+  :diminish (yas-minor-mode . " Y")
   :commands (yas-minor-mode yas-expand yas-new-snippet yas-find-snippets yas-reload-all yas-visit-snippet-file)
   :mode ("/\\.emacs\\.d/snippets/" . snippet-mode)
   :init
-  (progn 
+  (progn
   (hook-into-modes #'(lambda () (yas-minor-mode 1))
                    '(prog-mode-hook
                      text-mode-hook
                      org-mode-hook
                      ruby-mode-hook
-                     message-mode-hook))
+                     cmake-mode-hook
+		     message-mode-hook))
   ;;(add-to-list 'ac-sources 'ac-source-yasnippet)
   )
   :config
