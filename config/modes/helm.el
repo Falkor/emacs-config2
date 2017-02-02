@@ -52,12 +52,12 @@
 	(define-key helm-map (kbd "C-z")   'helm-select-action)
 	))
 
-;; better search ;) 
+;; better search ;)
 (use-package helm-swoop
   ;;:config ((setq helm-swoop-pre-input-function (lambda () nil)))
   :bind (("C-c C-SPC" . helm-swoop)
          ;;("C-c o" . helm-multi-swoop-all)
-         ("C-s"   .  helm-swoop)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
+         ("C-s"   .  helm-swoop-without-pre-input)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
          ;;("C-r"   . helm-resume)
 		 ))
 

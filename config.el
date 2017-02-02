@@ -477,7 +477,7 @@
   ;;:config ((setq helm-swoop-pre-input-function (lambda () nil)))
   :bind (("C-c C-SPC" . helm-swoop)
          ;;("C-c o" . helm-multi-swoop-all)
-         ("C-s"   .  helm-swoop)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
+         ("C-s"   .  helm-swoop-without-pre-input)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
          ;;("C-r"   . helm-resume)
 		 ))
 
@@ -609,7 +609,7 @@
 ;; ----------------------------------------------------------------------
 ;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
 ;; Semantic and main programming stuff.
-;; Time-stamp: <Sun 2017-01-08 19:21 svarrette>
+;; Time-stamp: <Mon 2017-01-09 10:01 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -860,8 +860,8 @@
 
 
 
-;; ;; ;; hs-minor-mode for folding source code
-;; ;; (add-hook 'c-mode-common-hook 'hs-minor-mode)
+;; hs-minor-mode for folding source code
+(add-hook 'c-mode-common-hook 'hs-minor-mode)
 
 ;; ;; ;; Enable EDE only in C/C++
 ;; ;; (require 'ede)
