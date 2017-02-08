@@ -1,6 +1,6 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mar 2014-12-02 11:53 svarrette>
+;; Time-stamp: <Wed 2017-02-08 16:54 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -11,7 +11,7 @@
 ;;      |_|  \__,_|_|_|\_\___/|_|    |___/ (_)___|_| |_| |_|\__,_|\___|___/
 ;;
 ;;
-;; Copyright (c) 2000-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; Copyright (c) 2000-2017 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             http://varrette.gforge.uni.lu
 ;;
 ;; -------------------------------------------------------------------------

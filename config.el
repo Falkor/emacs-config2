@@ -170,7 +170,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/company.el
 ;; -*- mode: elisp; -*-
-;; Time-stamp: <Mon 2017-01-09 09:59 svarrette>
+;; Time-stamp: <Wed 2017-02-08 17:04 svarrette>
 ;; ----------------------------------------------------------------------------
 ;; Company mode -- Complete Anything
 ;; See http://company-mode.github.io/
@@ -184,6 +184,8 @@
 
 ;; company
 (use-package company
+  :ensure t
+  :defer t
   :init
   (progn
     (global-company-mode 1)
@@ -609,7 +611,7 @@
 ;; ----------------------------------------------------------------------
 ;; `'cedet.el` - CEDET (Collection Of Emacs Development Environment Tools),
 ;; Semantic and main programming stuff.
-;; Time-stamp: <Mon 2017-01-09 10:01 svarrette>
+;; Time-stamp: <Wed 2017-02-08 17:08 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .       See http://cedet.sourceforge.net/
@@ -635,40 +637,41 @@
   :bind ("C-c ;" . iedit-mode))
 
 
+(defun my-irony-mode-hook ()
+  (define-key irony-mode-map [remap completion-at-point]
+    'irony-completion-at-point-async)
+  (define-key irony-mode-map [remap complete-symbol]
+    'irony-completion-at-point-async))
 
-(use-package irony-mode
+(use-package irony
   :config
   (progn
+    (use-package company-irony
+      :ensure t
+      :config
+      (progn
+        (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+        (setq company-backends (delete 'company-semantic company-backends))
+        (eval-after-load 'company
+          '(add-to-list
+            'company-backends 'company-irony))
+        (setq company-idle-delay 0)
+        (define-key c-mode-map [(tab)]   'company-complete)
+        (define-key c++-mode-map [(tab)] 'company-complete)
+        ))
+
+    (require 'company-irony-c-headers)
+    (eval-after-load 'company
+      '(add-to-list
+        'company-backends '(company-irony-c-headers company-irony)))
     (add-hook 'c++-mode-hook  'irony-mode)
     (add-hook 'c-mode-hook    'irony-mode)
     (add-hook 'objc-mode-hook 'irony-mode)
 
-    (defun my-irony-mode-hook ()
-      (define-key irony-mode-map [remap completion-at-point]
-        'irony-completion-at-point-async)
-      (define-key irony-mode-map [remap complete-symbol]
-        'irony-completion-at-point-async))
     (add-hook 'irony-mode-hook 'my-irony-mode-hook)
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
     ))
 
-(use-package company-irony
-  :config
-  (progn
-    (add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
-    (setq company-backends (delete 'company-semantic company-backends))
-    (eval-after-load 'company
-      '(add-to-list
-        'company-backends 'company-irony))
-    (setq company-idle-delay 0)
-    (define-key c-mode-map [(tab)]   'company-complete)
-    (define-key c++-mode-map [(tab)] 'company-complete)
-    ))
-
-(require 'company-irony-c-headers)
-(eval-after-load 'company
-  '(add-to-list
-    'company-backends '(company-irony-c-headers company-irony)))
 
 
 ;; (use-package cc-mode
@@ -1193,7 +1196,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/display.el
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Lun 2014-11-10 12:25 svarrette>
+;; Time-stamp: <Mon 2017-02-06 23:07 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -1261,7 +1264,21 @@
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
 (use-package powerline)
-(powerline-center-theme)
+;;(powerline-center-theme)
+;; https://github.com/AnthonyDiGirolamo/airline-themes
+(use-package airline-themes
+  :config
+  (progn
+    (setq powerline-utf-8-separator-left    #xe0b0
+      powerline-utf-8-separator-right       #xe0b2
+      airline-utf-glyph-separator-left      #xe0b0
+      airline-utf-glyph-separator-right     #xe0b2
+      airline-utf-glyph-subseparator-left   #xe0b1
+      airline-utf-glyph-subseparator-right  #xe0b3
+      airline-utf-glyph-branch              #xe0a0
+      airline-utf-glyph-readonly            #xe0a2
+      airline-utf-glyph-linenumber          #xe0a1)
+    (load-theme 'airline-papercolor t)))
 
 
 ;; =================================================================
@@ -1305,8 +1322,6 @@
 ;; run 'M-x fit-frame' for that
 ;;(require 'fit-frame)
 ;;(add-hook 'after-make-frame-functions 'fit-frame)
-
-
 ;; ############################################################################
 
 

@@ -1,5 +1,5 @@
 ;; -*- mode: elisp; -*-
-;; Time-stamp: <Mon 2017-01-09 09:59 svarrette>
+;; Time-stamp: <Wed 2017-02-08 17:04 svarrette>
 ;; ----------------------------------------------------------------------------
 ;; Company mode -- Complete Anything
 ;; See http://company-mode.github.io/
@@ -13,6 +13,8 @@
 
 ;; company
 (use-package company
+  :ensure t
+  :defer t
   :init
   (progn
     (global-company-mode 1)

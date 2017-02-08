@@ -1,95 +1,97 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: autocomplete.el -  See http://www.emacswiki.org/emacs/AutoComplete
-;; Time-stamp: <Mar 2015-01-20 12:04 svarrette>
+;; Time-stamp: <Wed 2017-02-08 17:04 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .
 ;; ----------------------------------------------------------------------
 
-(setq hippie-expand-try-functions-list '(try-expand-dabbrev
-                                         try-expand-dabbrev-all-buffers
-                                         try-expand-dabbrev-from-kill
-                                         try-complete-file-name-partially
-                                         try-complete-file-name
-                                         try-expand-all-abbrevs
-                                         try-expand-list
-                                         try-expand-line
-                                         try-complete-lisp-symbol-partially
-                                         try-complete-lisp-symbol))
+;; (setq hippie-expand-try-functions-list '(try-expand-dabbrev
+;;                                          try-expand-dabbrev-all-buffers
+;;                                          try-expand-dabbrev-from-kill
+;;                                          try-complete-file-name-partially
+;;                                          try-complete-file-name
+;;                                          try-expand-all-abbrevs
+;;                                          try-expand-list
+;;                                          try-expand-line
+;;                                          try-complete-lisp-symbol-partially
+;;                                          try-complete-lisp-symbol))
 
-(use-package pabbrev)
-
-(use-package company
-  :diminish " Comp"
-  ;;:commands global-company-mode
-  :bind (("<C-tab>"    . company-complete)
-		 ("C-<return>" . company-complete))
-  :config
-  (progn
-    (setq company-tooltip-limit 10
-          company-idle-delay    0.2
-          company-echo-delay    0
-          ;; min prefix of 2 chars
-          company-minimum-prefix-length 2
-          company-selection-wrap-around t
-          company-show-numbers t
-          company-dabbrev-downcase nil
-          company-transformers '(company-sort-by-occurrence))
-    (bind-keys :map company-active-map
-               ("C-n" . company-select-next)
-               ("C-p" . company-select-previous)
-               ("C-d" . company-show-doc-buffer)
-               ;;("C-=" . helm-company)
-               ("<tab>" . company-complete)
-               ("TAB" . company-complete)
-               )
-    ;;(add-hook 'after-init-hook 'global-company-mode)
-    ))
-
-;; Default company mode colors are kind of ugly, I took these from auto-complete-mode defaults:
-(custom-set-faces
- '(company-preview
-   ((t (:foreground "darkgray" :underline t))))
- '(company-preview-common
-   ((t (:inherit company-preview))))
- '(company-tooltip
-   ((t (:background "lightgray" :foreground "black"))))
- '(company-tooltip-selection
-   ((t (:background "steelblue" :foreground "white"))))
- '(company-tooltip-common
-   ((((type x)) (:inherit company-tooltip :weight bold))
-    (t (:inherit company-tooltip))))
- '(company-tooltip-common-selection
-   ((((type x)) (:inherit company-tooltip-selection :weight bold))
-    (t (:inherit company-tooltip-selection)))))
-
-;; Defaults company backends for text-mode
-(add-hook 'text-mode-hook
-          '(lambda ()
-             (setq company-backends '(company-capf      ; completion-at-point-functions
-                                      company-yasnippet ; Yasnippets
-                                      company-dabbrev   ; dabbrev-like
-                                      company-files     ; file paths
-                                      ))
-             (company-mode)))
+;; (use-package pabbrev)
 
 
-;; Defaults company backends for text-mode
-(add-hook 'prog-mode-hook
-          '(lambda ()
-             (setq company-backends '(company-semantic  ; CEDET / Semantic
-									  company-clang     ; C language family frontend for LLVM
-									  company-dabbrev-code
-									  company-gtags
-									  company-etags
-									  company-capf      ; completion-at-point-functions
-                                      company-yasnippet ; Yasnippets
-									  company-keywords  ; Programming language keywords
-                                      company-dabbrev   ; dabbrev-like
-                                      company-files     ; file paths
-                                      ))
-             (company-mode)))
+
+;; (use-package company
+;;   :diminish " Comp"
+;;   ;;:commands global-company-mode
+;;   :bind (("<C-tab>"    . company-complete)
+;; 		 ("C-<return>" . company-complete))
+;;   :config
+;;   (progn
+;;     (setq company-tooltip-limit 10
+;;           company-idle-delay    0.2
+;;           company-echo-delay    0
+;;           ;; min prefix of 2 chars
+;;           company-minimum-prefix-length 2
+;;           company-selection-wrap-around t
+;;           company-show-numbers t
+;;           company-dabbrev-downcase nil
+;;           company-transformers '(company-sort-by-occurrence))
+;;     (bind-keys :map company-active-map
+;;                ("C-n" . company-select-next)
+;;                ("C-p" . company-select-previous)
+;;                ("C-d" . company-show-doc-buffer)
+;;                ;;("C-=" . helm-company)
+;;                ("<tab>" . company-complete)
+;;                ("TAB" . company-complete)
+;;                )
+;;     ;;(add-hook 'after-init-hook 'global-company-mode)
+;;     ))
+
+;; ;; Default company mode colors are kind of ugly, I took these from auto-complete-mode defaults:
+;; (custom-set-faces
+;;  '(company-preview
+;;    ((t (:foreground "darkgray" :underline t))))
+;;  '(company-preview-common
+;;    ((t (:inherit company-preview))))
+;;  '(company-tooltip
+;;    ((t (:background "lightgray" :foreground "black"))))
+;;  '(company-tooltip-selection
+;;    ((t (:background "steelblue" :foreground "white"))))
+;;  '(company-tooltip-common
+;;    ((((type x)) (:inherit company-tooltip :weight bold))
+;;     (t (:inherit company-tooltip))))
+;;  '(company-tooltip-common-selection
+;;    ((((type x)) (:inherit company-tooltip-selection :weight bold))
+;;     (t (:inherit company-tooltip-selection)))))
+
+;; ;; Defaults company backends for text-mode
+;; (add-hook 'text-mode-hook
+;;           '(lambda ()
+;;              (setq company-backends '(company-capf      ; completion-at-point-functions
+;;                                       company-yasnippet ; Yasnippets
+;;                                       company-dabbrev   ; dabbrev-like
+;;                                       company-files     ; file paths
+;;                                       ))
+;;              (company-mode)))
+
+
+;; ;; Defaults company backends for text-mode
+;; (add-hook 'prog-mode-hook
+;;           '(lambda ()
+;;              (setq company-backends '(company-semantic  ; CEDET / Semantic
+;; 									  company-clang     ; C language family frontend for LLVM
+;; 									  company-dabbrev-code
+;; 									  company-gtags
+;; 									  company-etags
+;; 									  company-capf      ; completion-at-point-functions
+;;                                       company-yasnippet ; Yasnippets
+;; 									  company-keywords  ; Programming language keywords
+;;                                       company-dabbrev   ; dabbrev-like
+;;                                       company-files     ; file paths
+;;                                       ))
+;;              (company-mode)))
 
 
 

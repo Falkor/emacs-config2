@@ -1,5 +1,5 @@
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Lun 2014-11-10 12:25 svarrette>
+;; Time-stamp: <Mon 2017-02-06 23:07 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -67,7 +67,21 @@
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
 (use-package powerline)
-(powerline-center-theme)
+;;(powerline-center-theme)
+;; https://github.com/AnthonyDiGirolamo/airline-themes
+(use-package airline-themes
+  :config
+  (progn
+    (setq powerline-utf-8-separator-left    #xe0b0
+      powerline-utf-8-separator-right       #xe0b2
+      airline-utf-glyph-separator-left      #xe0b0
+      airline-utf-glyph-separator-right     #xe0b2
+      airline-utf-glyph-subseparator-left   #xe0b1
+      airline-utf-glyph-subseparator-right  #xe0b3
+      airline-utf-glyph-branch              #xe0a0
+      airline-utf-glyph-readonly            #xe0a2
+      airline-utf-glyph-linenumber          #xe0a1)
+    (load-theme 'airline-papercolor t)))
 
 
 ;; =================================================================
@@ -111,5 +125,3 @@
 ;; run 'M-x fit-frame' for that
 ;;(require 'fit-frame)
 ;;(add-hook 'after-make-frame-functions 'fit-frame)
-
-

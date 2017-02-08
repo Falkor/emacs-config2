@@ -7,6 +7,9 @@
  '(color-theme-libraries
    (quote
     ("/Users/svarrette/.emacs.d/packages/elpa/color-theme-20080305.34/themes/color-theme-library.elc")))
+ '(custom-safe-themes
+   (quote
+    ("9b1c580339183a8661a84f5864a6c363260c80136bd20ac9f00d7e1d662e936a" "962dacd99e5a99801ca7257f25be7be0cebc333ad07be97efd6ff59755e6148f" default)))
  '(ecb-options-version "2.40")
  '(ecb-tip-of-the-day nil)
  '(flycheck-sh-shellcheck-executable "/usr/local/bin/shellcheck")
@@ -15,7 +18,7 @@
  '(neo-window-width 35)
  '(package-selected-packages
    (quote
-    (flycheck-irony company-irony-c-headers company-irony rtags cmake-ide company smart-mode-line yaml-mode ws-butler web-mode vimrc-mode use-package sr-speedbar solarized-theme smex smartparens smart-tabs-mode smart-tab smart-compile rvm ruby-compilation robe restclient puppet-mode powerline php-mode paredit pandoc-mode pabbrev osx-plist nodejs-repl neotree mic-paren marmalade markdown-toc magit-gitflow lua-mode load-dir latex-extra json-mode js2-mode htmlize helm-swoop helm-projectile helm-package helm-gtags helm-company helm-c-yasnippet guide-key-tip gnuplot-mode gitconfig-mode git-timemachine git-gutter-fringe ggtags function-args flycheck fit-frame find-file-in-project feature-mode f expand-region exec-path-from-shell enh-ruby-mode company-c-headers company-auctex color-theme-modern color-theme cmake-mode better-defaults bats-mode autopair auto-dictionary auto-compile apache-mode alert ace-jump-mode)))
+    (airline-themes flycheck-irony company-irony-c-headers company-irony rtags cmake-ide company smart-mode-line yaml-mode ws-butler web-mode vimrc-mode use-package sr-speedbar solarized-theme smex smartparens smart-tabs-mode smart-tab smart-compile rvm ruby-compilation robe restclient puppet-mode powerline php-mode paredit pandoc-mode pabbrev osx-plist nodejs-repl neotree mic-paren marmalade markdown-toc magit-gitflow lua-mode load-dir latex-extra json-mode js2-mode htmlize helm-swoop helm-projectile helm-package helm-gtags helm-company helm-c-yasnippet guide-key-tip gnuplot-mode gitconfig-mode git-timemachine git-gutter-fringe ggtags function-args flycheck fit-frame find-file-in-project feature-mode f expand-region exec-path-from-shell enh-ruby-mode company-c-headers company-auctex color-theme-modern color-theme cmake-mode better-defaults bats-mode autopair auto-dictionary auto-compile apache-mode alert ace-jump-mode)))
  '(powerline-default-separator (quote arrow))
  '(puppet-indent-level 4)
  '(safe-local-variable-values (quote ((encoding . utf-8) (require-final-newline))))
