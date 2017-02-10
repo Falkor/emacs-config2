@@ -66,10 +66,12 @@
   :ensure t
   :demand t
   :diminish (visual-line-mode . "ω")
-  :diminish hs-minor-mode
+  :diminish (hs-minor-mode . "hs")
   :diminish abbrev-mode
   :diminish auto-fill-function
+  :diminish fundamental-mode
   :diminish subword-mode)
+
 ;; =================================================================
 ;; Powerline Status Bar
 ;; =================================================================
@@ -123,6 +125,11 @@
       '((cursor-color . "green")
         (cursor-type . box)))
 (set-default 'cursor-type 'box)
+
+;; === Icons ===
+;; see https://github.com/domtronn/all-the-icons.el
+;; (use-package all-the-icons)
+
 
 ;; === See the end of the file ===
 (setq-default indicate-empty-lines t)

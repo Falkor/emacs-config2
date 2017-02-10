@@ -18,12 +18,12 @@
         (message "Could not find git project root."))))
 
 (use-package neotree
-  :commands ( neo-buffer--unlock-width  neo-buffer--lock-width)
+  ;; :commands ( neo-buffer--unlock-width  neo-buffer--lock-width)
   :bind ("<f1>" . neotree-project-dir)
   :config
   (progn
     (setq neo-smart-open t)
     (setq projectile-switch-project-action 'neotree-projectile-action)
-    (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+    ; (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
     ))
 
