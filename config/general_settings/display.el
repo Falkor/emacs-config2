@@ -61,6 +61,15 @@
 ;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
 (add-to-list 'default-frame-alist '(font . "Monaco-12"))
 
+
+(use-package diminish
+  :ensure t
+  :demand t
+  :diminish (visual-line-mode . "ω")
+  :diminish hs-minor-mode
+  :diminish abbrev-mode
+  :diminish auto-fill-function
+  :diminish subword-mode)
 ;; =================================================================
 ;; Powerline Status Bar
 ;; =================================================================
@@ -72,6 +81,7 @@
 (use-package airline-themes
   :config
   (progn
+    (setq airline-display-directory         "Disabled")
     (setq powerline-utf-8-separator-left    #xe0b0
       powerline-utf-8-separator-right       #xe0b2
       airline-utf-glyph-separator-left      #xe0b0
@@ -83,6 +93,8 @@
       airline-utf-glyph-linenumber          #xe0a1)
     (load-theme 'airline-papercolor t)))
 
+;(use-package mode-icons)
+(use-package major-mode-icons)
 
 ;; =================================================================
 ;; Emacs Color Theme

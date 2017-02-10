@@ -170,7 +170,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/company.el
 ;; -*- mode: elisp; -*-
-;; Time-stamp: <Wed 2017-02-08 17:04 svarrette>
+;; Time-stamp: <Wed 2017-02-08 23:41 svarrette>
 ;; ----------------------------------------------------------------------------
 ;; Company mode -- Complete Anything
 ;; See http://company-mode.github.io/
@@ -186,10 +186,29 @@
 (use-package company
   :ensure t
   :defer t
+  :diminish company-mode
   :init
   (progn
     (global-company-mode 1)
-    (delete 'company-semantic company-backends)))
+    (delete 'company-semantic company-backends)
+
+    ;; Default company mode colors are kind of ugly...
+    (custom-set-faces
+     '(company-preview
+       ((t (:foreground "darkgray" :underline t))))
+     '(company-preview-common
+       ((t (:inherit company-preview))))
+     '(company-tooltip
+       ((t (:background "lightgray" :foreground "black"))))
+     '(company-tooltip-selection
+       ((t (:background "steelblue" :foreground "white"))))
+     '(company-tooltip-common
+       ((((type x)) (:inherit company-tooltip :weight bold))
+        (t (:inherit company-tooltip))))
+     '(company-tooltip-common-selection
+       ((((type x)) (:inherit company-tooltip-selection :weight bold))
+        (t (:inherit company-tooltip-selection)))))
+    ))
 
 ;; see http://syamajala.github.io/c-ide.html
 (require 'rtags)
@@ -208,180 +227,166 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/compile.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Lun 2014-11-10 10:46 svarrette>
+;; Time-stamp: <Wed 2017-02-08 23:54 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Compilation mode
 
 (use-package smart-compile)
 
-;; -------------
-;; Management of the modeline background color to represent the compilation
-;; process outputs  :
-;;
-;;   * blue:   compilation in progress
-;;   * green:  compilation finished successfully
-;;   * orange: compilation finished with warnnings
-;;   * red:    compilation finished with errors
-;;
-(defvar modeline-timer)
-(setq modeline-timer nil)
+;; ; -------------
+;; ;; Management of the modeline background color to represent the compilation
+;; ;; process outputs  :
+;; ;;
+;; ;;   * blue:   compilation in progress
+;; ;;   * green:  compilation finished successfully
+;; ;;   * orange: compilation finished with warnnings
+;; ;;   * red:    compilation finished with errors
+;; ;;
+;; (defvar modeline-timer)
+;; (setq modeline-timer nil)
 
-(defvar modeline-timeout)
-(setq modeline-timeout "2 sec")
+;; (defvar modeline-timeout)
+;; (setq modeline-timeout "2 sec")
 
-(defvar open-compilation-buffer-flag)
+;; (defvar open-compilation-buffer-flag)
 
-(defun modeline-set-color (color)
-  "Colors the modeline"
-  (interactive)
-  (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
-      (set-face-background 'mode-line color)
-    (set-face-background 'mode-line color)
-    )
-  )
+;; (defun modeline-set-color (color)
+;;   "Colors the modeline"
+;;   (interactive)
+;;   (if (and (>= emacs-major-version 24) (>= emacs-minor-version 3))
+;;       (set-face-background 'mode-line color)
+;;     (set-face-background 'mode-line color)
+;;     )
+;;   )
 
-(defun modeline-cancel-timer ()
-  (let ((m modeline-timer))
-    (when m
-      (cancel-timer m)
-      (setq modeline-timer nil))))
+;; (defun modeline-cancel-timer ()
+;;   (let ((m modeline-timer))
+;;     (when m
+;;       (cancel-timer m)
+;;       (setq modeline-timer nil))))
 
-(defun modeline-delayed-clean ()
-  (modeline-cancel-timer)
-  (setq modeline-timer
-        (run-at-time modeline-timeout nil 'modeline-set-color nil)))
+;; (defun modeline-delayed-clean ()
+;;   (modeline-cancel-timer)
+;;   (setq modeline-timer
+;;         (run-at-time modeline-timeout nil 'modeline-set-color nil)))
 
-(defun compilation-exit-hook (status code msg)
-  ;; If M-x compile exists with a 0
-                                        ;  (defvar current-frame)
-  (if (and (eq status 'exit) (zerop code))
-      (progn
-        (if (string-match "warning:" (buffer-string))
-            (modeline-set-color "orange")
-          (modeline-set-color "YellowGreen")
-          )
-        (other-buffer (get-buffer "*compilation*"))
-        (modeline-delayed-clean)
-                                        ;      (delete-windows-on (get-buffer "*compilation*"))
-        )
-    (progn
-      (modeline-set-color "OrangeRed")
-      (if open-compilation-buffer-flag
-          (open-compilation-buffer)
-        (modeline-delayed-clean)
-        )))
+;; (defun compilation-exit-hook (status code msg)
+;;   ;; If M-x compile exists with a 0
+;;                                         ;  (defvar current-frame)
+;;   (if (and (eq status 'exit) (zerop code))
+;;       (progn
+;;         (if (string-match "warning:" (buffer-string))
+;;             (modeline-set-color "orange")
+;;           (modeline-set-color "YellowGreen")
+;;           )
+;;         (other-buffer (get-buffer "*compilation*"))
+;;         (modeline-delayed-clean)
+;;                                         ;      (delete-windows-on (get-buffer "*compilation*"))
+;;         )
+;;     (progn
+;;       (modeline-set-color "OrangeRed")
+;;       (if open-compilation-buffer-flag
+;;           (open-compilation-buffer)
+;;         (modeline-delayed-clean)
+;;         )))
 
-                                        ;  (setq current-frame (car (car (cdr (current-frame-configuration)))))
-                                        ;  (select-frame-set-input-focus current-frame)
-  ;; Always return the anticipated result of compilation-exit-message-function
-  (cons msg code))
+;;                                         ;  (setq current-frame (car (car (cdr (current-frame-configuration)))))
+;;                                         ;  (select-frame-set-input-focus current-frame)
+;;   ;; Always return the anticipated result of compilation-exit-message-function
+;;   (cons msg code))
 
-(defadvice compile (around compile/save-window-excursion first () activate)
-  (save-window-excursion ad-do-it))
+;; (defadvice compile (around compile/save-window-excursion first () activate)
+;;   (save-window-excursion ad-do-it))
 
-(defadvice recompile (around compile/save-window-excursion first () activate)
-  (save-window-excursion ad-do-it))
+;; (defadvice recompile (around compile/save-window-excursion first () activate)
+;;   (save-window-excursion ad-do-it))
 
-; FIXME: nobody calls this
-(defun recompile-if-not-in-progress ()
-  (let ((buffer (compilation-find-buffer)))
-    (unless (get-buffer-process buffer)
-      (recompile)))
-  )
+;; ; FIXME: nobody calls this
+;; (defun recompile-if-not-in-progress ()
+;;   (let ((buffer (compilation-find-buffer)))
+;;     (unless (get-buffer-process buffer)
+;;       (recompile)))
+;;   )
 
-(defun interrupt-compilation ()
-  (setq compilation-exit-message-function 'nil)
-  (ignore-errors
-    (progn (delete-process "*compilation*")
-  	   (modeline-set-color "DeepSkyBlue")
-  	   (message "previous compilation aborted!")
-  	   (sit-for 1.5)
-  	   ))
+;; (defun interrupt-compilation ()
+;;   (setq compilation-exit-message-function 'nil)
+;;   (ignore-errors
+;;     (progn (delete-process "*compilation*")
+;;   	   (modeline-set-color "DeepSkyBlue")
+;;   	   (message "previous compilation aborted!")
+;;   	   (sit-for 1.5)
+;;   	   ))
 
-; (ignore-errors
-;   (progn (process-kill-without-query
-; 	    (get-buffer-process (get-buffer "*compilation*")))
-; 	   (modeline-set-color "DeepSkyBlue")))
+;; ; (ignore-errors
+;; ;   (progn (process-kill-without-query
+;; ; 	    (get-buffer-process (get-buffer "*compilation*")))
+;; ; 	   (modeline-set-color "DeepSkyBlue")))
 
-;  (condition-case nil
-;      (process-kill-without-query
-;       (get-buffer-process (get-buffer "*compilation*")))
-;    (error (modeline-set-color "DeepSkyBlue")))
-  )
-
-
-(defun interrupt-and-recompile ()
-  "Interrupt old compilation, if any, and recompile."
-  (interactive)
-  (interrupt-compilation)
-  (recompile)
-)
-
-(setq compilation-last-buffer nil)
-(defun compile-again ()
-   "Run the same compile as the last time.
-    If there was no last time, or there is a prefix argument, this acts like
-      M-x compile."
-   (interactive)
-
-   (setq compilation-process-setup-function
-	 (lambda() (progn (modeline-cancel-timer)
-			  (setq compilation-exit-message-function 'compilation-exit-hook)
-			  (modeline-set-color "LightBlue"))))
-
-   (if compilation-last-buffer
-       (progn
-;	 (condition-case nil
-;	     (set-buffer compilation-last-buffer)
-;	   (error 'ask-new-compile-command))
-	 (modeline-cancel-timer)
-	 (interrupt-and-recompile)
-	 )
-     (call-interactively 'smart-compile)
-     )
-   )
-
-(defun save-and-compile-again ()
-  (interactive)
-  (save-some-buffers 1)
-  (setq open-compilation-buffer-flag t)
-  (compile-again)
-  )
-
-(defun ask-new-compile-command ()
-  (interactive)
-  (setq compilation-last-buffer nil)
-  (save-and-compile-again)
-  )
-
-(defun open-compilation-buffer()
-  (interactive)
-  (display-buffer "*compilation*")
-  (modeline-delayed-clean)
-  )
+;; ;  (condition-case nil
+;; ;      (process-kill-without-query
+;; ;       (get-buffer-process (get-buffer "*compilation*")))
+;; ;    (error (modeline-set-color "DeepSkyBlue")))
+;;   )
 
 
-(global-set-key (kbd "C-x C-e")  'save-and-compile-again)
-(global-set-key (kbd "<f6>")     'save-and-compile-again)
+;; (defun interrupt-and-recompile ()
+;;   "Interrupt old compilation, if any, and recompile."
+;;   (interactive)
+;;   (interrupt-compilation)
+;;   (recompile)
+;; )
+
+;; (setq compilation-last-buffer nil)
+;; (defun compile-again ()
+;;    "Run the same compile as the last time.
+;;     If there was no last time, or there is a prefix argument, this acts like
+;;       M-x compile."
+;;    (interactive)
+
+;;    (setq compilation-process-setup-function
+;; 	 (lambda() (progn (modeline-cancel-timer)
+;; 			  (setq compilation-exit-message-function 'compilation-exit-hook)
+;; 			  (modeline-set-color "LightBlue"))))
+
+;;    (if compilation-last-buffer
+;;        (progn
+;; ;	 (condition-case nil
+;; ;	     (set-buffer compilation-last-buffer)
+;; ;	   (error 'ask-new-compile-command))
+;; 	 (modeline-cancel-timer)
+;; 	 (interrupt-and-recompile)
+;; 	 )
+;;      (call-interactively 'smart-compile)
+;;      )
+;;    )
+
+;; (defun save-and-compile-again ()
+;;   (interactive)
+;;   (save-some-buffers 1)
+;;   (setq open-compilation-buffer-flag t)
+;;   (compile-again)
+;;   )
+
+;; (defun ask-new-compile-command ()
+;;   (interactive)
+;;   (setq compilation-last-buffer nil)
+;;   (save-and-compile-again)
+;;   )
+
+;; (defun open-compilation-buffer()
+;;   (interactive)
+;;   (display-buffer "*compilation*")
+;;   (modeline-delayed-clean)
+;;   )
 
 
-; Kill compilation buffer upon successful compilation
-;; ;; Courtesy from http://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close
-;; (defun bury-compile-buffer-if-successful (buffer string)
-;;   "Bury a compilation buffer if succeeded without warnings "
-;;   (if (and
-;;        (string-match "compilation" (buffer-name buffer))
-;;        (string-match "finished" string)
-;;        (not
-;;         (with-current-buffer buffer
-;;           (search-forward "warning" nil t))))
-;;       (run-with-timer 1 nil
-;;                       (lambda (buf)
-;;                         (bury-buffer bufq)
-;;                         (switch-to-prev-buffer (get-buffer-window buf) 'kill))
-;;                       buffer)))
 
-;; (add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
+(use-package bury-successful-compilation
+  :config (bury-successful-compilation 1))
+
+(setq compilation-window-height 10)
+
+
 
 
 ;; Below version does not work with ECB and lead to the error:
@@ -449,7 +454,7 @@
     (setq helm-candidate-number-limit 100)
 
     (when (executable-find "curl")
-      (setq helm-google-suggest-use-curl-p t))
+      (setq helm-net-prefer-curl t))
     (helm-mode t)
 	)
   :bind (("M-y"     . helm-show-kill-ring)
@@ -482,7 +487,6 @@
          ("C-s"   .  helm-swoop-without-pre-input)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
          ;;("C-r"   . helm-resume)
 		 ))
-
 ;; ############################################################################
 
 
@@ -636,6 +640,30 @@
 (use-package iedit
   :bind ("C-c ;" . iedit-mode))
 
+;; ==========================================
+;; (optional) bind TAB for indent-or-complete
+;; ==========================================
+(defun irony--check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+        (backward-char 1)
+        (if (looking-at "->") t nil)))))
+(defun irony--indent-or-complete ()
+  "Indent or Complete"
+  (interactive)
+  (cond ((and (not (use-region-p))
+              (irony--check-expansion))
+         (message "complete")
+         (company-complete-common))
+        (t
+         (message "indent")
+         (call-interactively 'c-indent-line-or-region))))
+(defun irony-mode-keys ()
+  "Modify keymaps used by `irony-mode'."
+  (local-set-key (kbd "TAB") 'irony--indent-or-complete)
+  (local-set-key [tab] 'irony--indent-or-complete))
 
 (defun my-irony-mode-hook ()
   (define-key irony-mode-map [remap completion-at-point]
@@ -644,6 +672,7 @@
     'irony-completion-at-point-async))
 
 (use-package irony
+  :diminish irony-mode
   :config
   (progn
     (use-package company-irony
@@ -656,8 +685,9 @@
           '(add-to-list
             'company-backends 'company-irony))
         (setq company-idle-delay 0)
-        (define-key c-mode-map [(tab)]   'company-complete)
-        (define-key c++-mode-map [(tab)] 'company-complete)
+        (add-hook 'c-mode-common-hook 'irony-mode-keys)
+        ;(define-key c-mode-map [(tab)]   'company-complete)
+        ;(define-key c++-mode-map [(tab)] 'company-complete)
         ))
 
     (require 'company-irony-c-headers)
@@ -1258,6 +1288,15 @@
 ;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
 (add-to-list 'default-frame-alist '(font . "Monaco-12"))
 
+
+(use-package diminish
+  :ensure t
+  :demand t
+  :diminish (visual-line-mode . "ω")
+  :diminish hs-minor-mode
+  :diminish abbrev-mode
+  :diminish auto-fill-function
+  :diminish subword-mode)
 ;; =================================================================
 ;; Powerline Status Bar
 ;; =================================================================
@@ -1269,6 +1308,7 @@
 (use-package airline-themes
   :config
   (progn
+    (setq airline-display-directory         "Disabled")
     (setq powerline-utf-8-separator-left    #xe0b0
       powerline-utf-8-separator-right       #xe0b2
       airline-utf-glyph-separator-left      #xe0b0
@@ -1280,6 +1320,8 @@
       airline-utf-glyph-linenumber          #xe0a1)
     (load-theme 'airline-papercolor t)))
 
+;(use-package mode-icons)
+(use-package major-mode-icons)
 
 ;; =================================================================
 ;; Emacs Color Theme
@@ -1383,7 +1425,7 @@
 ;; (setq comment-auto-fill-only-comments t)
 
 ;; Correct copy-paste to clipboard
-(setq x-select-enable-clipboard t)
+(setq select-enable-clipboard t)
 ;; after mouse selection in X11, you can paste by `yank' in emacs
 ;;(Setq x-select-enable-primary t)
 (setq mouse-drag-copy-region  t)
@@ -1409,9 +1451,6 @@
 (use-package ansi-color)
 
 ;; === Sane defaults configurations ===
-
-;; Allow pasting selection outside of Emacs
-(setq x-select-enable-clipboard t)
 
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
@@ -1520,9 +1559,6 @@
       ad-do-it)
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
-
-
-
 ;; ############################################################################
 
 
@@ -1636,7 +1672,8 @@
 (setq-default tab-width 2)
 (setq-default tab-always-indent 'complete)
 
-(defvaralias 'c-basic-offset 	    'tab-width)
+(setq c-basic-offset 4)
+(defvaralias 'c-basic-offset 	      'tab-width)
 (defvaralias 'cperl-indent-level    'tab-width)
 (defvaralias 'ruby-indent-level     'tab-width)
 (defvaralias 'enh-ruby-indent-level 'tab-width)
@@ -1851,7 +1888,12 @@
 
 (use-package neotree
   :commands ( neo-buffer--unlock-width  neo-buffer--lock-width)
-  :bind ("<f1>" . neotree-project-dir))
+  :bind ("<f1>" . neotree-project-dir)
+  :config
+  (progn
+    (setq neo-smart-open t)
+    (setq projectile-switch-project-action 'neotree-projectile-action)
+    ))
 
 ;; ############################################################################
 
@@ -1902,7 +1944,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Mar 2015-01-20 12:03 svarrette>
+;; Time-stamp: <Fri 2017-02-10 09:34 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -1918,7 +1960,7 @@
     (setq projectile-known-projects-file (get-conf-path ".projectile-bookmarks.eld")))
   :config
   (progn
-    (projectile-global-mode t)
+    (projectile-mode t)
     (setq projectile-enable-caching nil)
     ;;(setq projectile-require-project-root nil)
     (setq projectile-completion-system 'default)
@@ -2064,7 +2106,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-12-11 22:06 svarrette>
+;; Time-stamp: <Fri 2017-02-10 09:35 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -2099,7 +2141,7 @@
         (if (looking-at "->") t nil)))))
 
 (defun do-yas-expand ()
-  (let ((yas-fallback-behavior 'return-nil))
+  (let ((yas-expand 'return-nil))
     (yas-expand)))
 
 (defun tab-indent-or-complete ()
@@ -2241,7 +2283,7 @@
 ;; (require 'neotree)
 ;; (require 'find-file-in-project)
 ;; (global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
-(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB
+;; (global-set-key [(f2)] 'ecb-toggle) ; Activate ECB
 
 ;; === Shell pop ===
 (global-set-key [(f3)]     'shell-pop)
@@ -2334,6 +2376,8 @@
 
 
 
+(global-set-key (kbd "C-x C-e")  'compile)
+(global-set-key (kbd "<f6>")     'compile)
 
 
 

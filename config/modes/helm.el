@@ -27,7 +27,7 @@
     (setq helm-candidate-number-limit 100)
 
     (when (executable-find "curl")
-      (setq helm-google-suggest-use-curl-p t))
+      (setq helm-net-prefer-curl t))
     (helm-mode t)
 	)
   :bind (("M-y"     . helm-show-kill-ring)
@@ -60,4 +60,3 @@
          ("C-s"   .  helm-swoop-without-pre-input)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
          ;;("C-r"   . helm-resume)
 		 ))
-

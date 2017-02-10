@@ -1,5 +1,5 @@
 ;; -*- mode: elisp; -*-
-;; Time-stamp: <Wed 2017-02-08 17:04 svarrette>
+;; Time-stamp: <Wed 2017-02-08 23:41 svarrette>
 ;; ----------------------------------------------------------------------------
 ;; Company mode -- Complete Anything
 ;; See http://company-mode.github.io/
@@ -15,10 +15,29 @@
 (use-package company
   :ensure t
   :defer t
+  :diminish company-mode
   :init
   (progn
     (global-company-mode 1)
-    (delete 'company-semantic company-backends)))
+    (delete 'company-semantic company-backends)
+
+    ;; Default company mode colors are kind of ugly...
+    (custom-set-faces
+     '(company-preview
+       ((t (:foreground "darkgray" :underline t))))
+     '(company-preview-common
+       ((t (:inherit company-preview))))
+     '(company-tooltip
+       ((t (:background "lightgray" :foreground "black"))))
+     '(company-tooltip-selection
+       ((t (:background "steelblue" :foreground "white"))))
+     '(company-tooltip-common
+       ((((type x)) (:inherit company-tooltip :weight bold))
+        (t (:inherit company-tooltip))))
+     '(company-tooltip-common-selection
+       ((((type x)) (:inherit company-tooltip-selection :weight bold))
+        (t (:inherit company-tooltip-selection)))))
+    ))
 
 ;; see http://syamajala.github.io/c-ide.html
 (require 'rtags)

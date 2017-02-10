@@ -3,7 +3,7 @@
 ;;       Part of my emacs configuration (see ~/.emacs or init.el)
 ;;
 ;; Creation:  08 Jan 2010
-;; Time-stamp: <Jeu 2014-12-11 22:06 svarrette>
+;; Time-stamp: <Fri 2017-02-10 09:35 svarrette>
 ;;
 ;; Copyright (c) 2010-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;;               http://varrette.gforge.uni.lu
@@ -38,7 +38,7 @@
         (if (looking-at "->") t nil)))))
 
 (defun do-yas-expand ()
-  (let ((yas-fallback-behavior 'return-nil))
+  (let ((yas-expand 'return-nil))
     (yas-expand)))
 
 (defun tab-indent-or-complete ()
@@ -94,7 +94,7 @@
 
 
 ;; Fix iedit bug in Mac -- see modes/cedel.el
-;; "C-c ;" 'iedit-mode 
+;; "C-c ;" 'iedit-mode
 
 
 ;; Select full buffer: Put mark at end of page, point at beginning.
@@ -180,7 +180,7 @@
 ;; (require 'neotree)
 ;; (require 'find-file-in-project)
 ;; (global-set-key [(f1)] 'neotree-project-dir) ; open neotree at the git root dir
-(global-set-key [(f2)] 'ecb-toggle) ; Activate ECB 
+;; (global-set-key [(f2)] 'ecb-toggle) ; Activate ECB
 
 ;; === Shell pop ===
 (global-set-key [(f3)]     'shell-pop)
@@ -273,6 +273,8 @@
 
 
 
+(global-set-key (kbd "C-x C-e")  'compile)
+(global-set-key (kbd "<f6>")     'compile)
 
 
 

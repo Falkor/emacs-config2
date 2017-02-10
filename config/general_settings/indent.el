@@ -57,7 +57,8 @@
 (setq-default tab-width 2)
 (setq-default tab-always-indent 'complete)
 
-(defvaralias 'c-basic-offset 	    'tab-width)
+(setq c-basic-offset 4)
+(defvaralias 'c-basic-offset 	      'tab-width)
 (defvaralias 'cperl-indent-level    'tab-width)
 (defvaralias 'ruby-indent-level     'tab-width)
 (defvaralias 'enh-ruby-indent-level 'tab-width)

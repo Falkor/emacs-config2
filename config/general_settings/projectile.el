@@ -1,7 +1,7 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Mar 2015-01-20 12:03 svarrette>
+;; Time-stamp: <Fri 2017-02-10 09:34 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
@@ -17,7 +17,7 @@
     (setq projectile-known-projects-file (get-conf-path ".projectile-bookmarks.eld")))
   :config
   (progn
-    (projectile-global-mode t)
+    (projectile-mode t)
     (setq projectile-enable-caching nil)
     ;;(setq projectile-require-project-root nil)
     (setq projectile-completion-system 'default)

@@ -27,6 +27,30 @@
 (use-package iedit
   :bind ("C-c ;" . iedit-mode))
 
+;; ==========================================
+;; (optional) bind TAB for indent-or-complete
+;; ==========================================
+(defun irony--check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+        (backward-char 1)
+        (if (looking-at "->") t nil)))))
+(defun irony--indent-or-complete ()
+  "Indent or Complete"
+  (interactive)
+  (cond ((and (not (use-region-p))
+              (irony--check-expansion))
+         (message "complete")
+         (company-complete-common))
+        (t
+         (message "indent")
+         (call-interactively 'c-indent-line-or-region))))
+(defun irony-mode-keys ()
+  "Modify keymaps used by `irony-mode'."
+  (local-set-key (kbd "TAB") 'irony--indent-or-complete)
+  (local-set-key [tab] 'irony--indent-or-complete))
 
 (defun my-irony-mode-hook ()
   (define-key irony-mode-map [remap completion-at-point]
@@ -35,6 +59,7 @@
     'irony-completion-at-point-async))
 
 (use-package irony
+  :diminish irony-mode
   :config
   (progn
     (use-package company-irony
@@ -47,8 +72,9 @@
           '(add-to-list
             'company-backends 'company-irony))
         (setq company-idle-delay 0)
-        (define-key c-mode-map [(tab)]   'company-complete)
-        (define-key c++-mode-map [(tab)] 'company-complete)
+        (add-hook 'c-mode-common-hook 'irony-mode-keys)
+        ;(define-key c-mode-map [(tab)]   'company-complete)
+        ;(define-key c++-mode-map [(tab)] 'company-complete)
         ))
 
     (require 'company-irony-c-headers)
