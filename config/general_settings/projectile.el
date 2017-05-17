@@ -31,4 +31,5 @@
 (use-package helm-projectile
   :config (setq projectile-completion-system 'helm)
   :bind (("C-c p h" . helm-projectile)
-         ("C-x C-p" . helm-projectile)))
+         ("C-x C-p" . helm-projectile)
+         ("C-x C-p" . helm-projectile-switch-project)))

@@ -464,11 +464,11 @@
 	)
   :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
-		 ("C-="     . helm-company)
+		     ("C-="     . helm-company)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
-		 ("C-x b"   . helm-buffers-list)
+		     ("C-x b"   . helm-buffers-list)
          ;; see projectile.el for C-x C-p
          )
   :config
@@ -2010,7 +2010,8 @@
 (use-package helm-projectile
   :config (setq projectile-completion-system 'helm)
   :bind (("C-c p h" . helm-projectile)
-         ("C-x C-p" . helm-projectile)))
+         ("C-x C-p" . helm-projectile)
+         ("C-x C-p" . helm-projectile-switch-project)))
 ;; ############################################################################
 
 
@@ -2222,6 +2223,7 @@
 ;;   "C-x C-r" . helm-recentf
 ;;   "C-x C-g" . helm-do-grep
 ;;   "C-x C-p" . helm-projectile
+;;   "C-x C-P" . helm-projectile-switch-project
 
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)

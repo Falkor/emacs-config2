@@ -32,11 +32,11 @@
 	)
   :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
-		 ("C-="     . helm-company)
+		     ("C-="     . helm-company)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
-		 ("C-x b"   . helm-buffers-list)
+		     ("C-x b"   . helm-buffers-list)
          ;; see projectile.el for C-x C-p
          )
   :config

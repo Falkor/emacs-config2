@@ -78,6 +78,7 @@
 ;;   "C-x C-r" . helm-recentf
 ;;   "C-x C-g" . helm-do-grep
 ;;   "C-x C-p" . helm-projectile
+;;   "C-x C-P" . helm-projectile-switch-project
 
 ;; === Another comment binding (also M-;) ===
 (global-set-key (kbd "C-;") 'comment-or-uncomment-region)
