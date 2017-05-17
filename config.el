@@ -8,7 +8,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/modes/ace-jump.el
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Mer 2014-09-24 23:42 svarrette>
+;; Time-stamp: <Mon 2017-02-13 13:48 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Ace-jump-mode --  a quick cursor location minor mode for emacs
 ;; see http://www.emacswiki.org/AceJump
@@ -17,7 +17,10 @@
 
 (use-package ace-jump-mode
   :commands (ace-jump-mode)
-  :bind ("C-c C-j" . ace-jump-mode))
+  :bind (
+         ("C-c C-j w" . ace-jump-word-mode)
+         ("C-c C-j c" . ace-jump-char-mode)
+         ("C-c C-j w" . ace-jump-word-mode)))
 ;; ############################################################################
 
 
@@ -214,13 +217,15 @@
 (require 'rtags)
 (require 'company-rtags)
 
-(setq rtags-completions-enabled t)
+;;(setq rtags-completions-enabled t)
 (eval-after-load 'company
   '(add-to-list
     'company-backends 'company-rtags))
 (setq rtags-autostart-diagnostics t)
 (rtags-enable-standard-keybindings)
-(setq rtags-use-helm t)
+(use-package rtags-helm
+  :config
+  (setq rtags-use-helm t))
 ;; ############################################################################
 
 
@@ -704,11 +709,11 @@
 
 
 
-;; (use-package cc-mode
-;;   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
-;;          ("\\.m\\'"                   . c-mode)
-;;          ("\\.mm\\'"                  . c++-mode))
-;;   ;;:bind ("M-q" . query-replace)
+ (use-package cc-mode
+   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
+          ("\\.m\\'"                   . c-mode)
+          ("\\.mm\\'"                  . c++-mode))
+   :bind ("M-q" . query-replace))
 ;;   ;;:init
 ;;   ;; (progn
 ;;   ;;   (define-key c-mode-map    [(tab)] 'company-complete)
@@ -1226,7 +1231,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/display.el
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Mon 2017-02-06 23:07 svarrette>
+;; Time-stamp: <Mon 2017-02-13 11:19 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -1238,6 +1243,8 @@
 (setq truncate-partial-width-windows nil)
 (setq line-number-mode    t)
 (setq column-number-mode  t)
+(global-hl-line-mode      t)
+(set-face-background hl-line-face "white smoke")
 
 ;; === F... the beep ===
 ;;(setq visible-bell        t)  ;; this sucks under El Capitan
@@ -1292,21 +1299,41 @@
 (use-package diminish
   :ensure t
   :demand t
-  :diminish (visual-line-mode . "ω")
-  :diminish (hs-minor-mode . "hs")
-  :diminish abbrev-mode
-  :diminish auto-fill-function
+  :diminish (visual-line-mode . " ω")
+  :diminish hs-minor-mode
   :diminish fundamental-mode
+  :diminish abbrev-mode
+  :diminish helm-mode
+  :diminish auto-fill-function
   :diminish subword-mode)
+
+;; =================================================================
+;; Spaceline Status Bar
+;; =================================================================
+;; See https://github.com/TheBB/spaceline
+(use-package spaceline
+  :ensure t
+  :init
+  (require 'spaceline-config)
+  ;;(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  :config
+  (spaceline-spacemacs-theme))
 
 ;; =================================================================
 ;; Powerline Status Bar
 ;; =================================================================
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
-(use-package powerline)
-;;(powerline-center-theme)
-;; https://github.com/AnthonyDiGirolamo/airline-themes
+;; (use-package powerline)
+;; (use-package powerline                  ; The work-horse of Spaceline
+;;   :ensure t
+;;   :after spaceline-config
+;;   :config (validate-setq
+;;            powerline-height (truncate (* 1.0 (frame-char-height)))
+;;            powerline-default-separator 'utf-8))
+;; __________________________
+;; ;;(powerline-center-theme)
+;; ;; https://github.com/AnthonyDiGirolamo/airline-themes
 (use-package airline-themes
   :config
   (progn
@@ -1322,8 +1349,9 @@
       airline-utf-glyph-linenumber          #xe0a1)
     (load-theme 'airline-papercolor t)))
 
+
 ;(use-package mode-icons)
-(use-package major-mode-icons)
+;;(use-package major-mode-icons)
 
 ;; =================================================================
 ;; Emacs Color Theme
@@ -2015,12 +2043,17 @@
 ;; Time-stamp: <Ven 2014-09-26 11:41 svarrette>
 ;; -------------------------------------------------------------------------
 ;; Saving Emacs Sessions (cursor position etc. in a previously visited file)
-(use-package saveplace
-  :init
-  (progn
-	(setq-default save-place t)
-	(setq save-place-file (get-conf-path ".saved-places"))
-))
+
+; For GNU Emacs 25.1 and newer versions
+(save-place-mode 1)
+(setq save-place-file (get-conf-path ".saved-places"))
+
+;(use-package saveplace
+  ;:init
+  ;(progn
+	;(setq-default save-place t)
+	;(setq save-place-file (get-conf-path ".saved-places"))
+;))
 ;; ############################################################################
 
 
@@ -2386,6 +2419,7 @@
 
 (global-set-key (kbd "C-x C-e")  'compile)
 (global-set-key (kbd "<f6>")     'compile)
+(global-set-key (kbd "<f2>")     'linum-mode)
 
 
 

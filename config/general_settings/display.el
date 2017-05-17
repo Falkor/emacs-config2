@@ -1,5 +1,5 @@
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Mon 2017-02-06 23:07 svarrette>
+;; Time-stamp: <Mon 2017-02-13 11:19 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -11,6 +11,8 @@
 (setq truncate-partial-width-windows nil)
 (setq line-number-mode    t)
 (setq column-number-mode  t)
+(global-hl-line-mode      t)
+(set-face-background hl-line-face "white smoke")
 
 ;; === F... the beep ===
 ;;(setq visible-bell        t)  ;; this sucks under El Capitan
@@ -65,21 +67,41 @@
 (use-package diminish
   :ensure t
   :demand t
-  :diminish (visual-line-mode . "ω")
-  :diminish (hs-minor-mode . "hs")
-  :diminish abbrev-mode
-  :diminish auto-fill-function
+  :diminish (visual-line-mode . " ω")
+  :diminish hs-minor-mode
   :diminish fundamental-mode
+  :diminish abbrev-mode
+  :diminish helm-mode
+  :diminish auto-fill-function
   :diminish subword-mode)
+
+;; =================================================================
+;; Spaceline Status Bar
+;; =================================================================
+;; See https://github.com/TheBB/spaceline
+(use-package spaceline
+  :ensure t
+  :init
+  (require 'spaceline-config)
+  ;;(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  :config
+  (spaceline-spacemacs-theme))
 
 ;; =================================================================
 ;; Powerline Status Bar
 ;; =================================================================
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
-(use-package powerline)
-;;(powerline-center-theme)
-;; https://github.com/AnthonyDiGirolamo/airline-themes
+;; (use-package powerline)
+;; (use-package powerline                  ; The work-horse of Spaceline
+;;   :ensure t
+;;   :after spaceline-config
+;;   :config (validate-setq
+;;            powerline-height (truncate (* 1.0 (frame-char-height)))
+;;            powerline-default-separator 'utf-8))
+;; __________________________
+;; ;;(powerline-center-theme)
+;; ;; https://github.com/AnthonyDiGirolamo/airline-themes
 (use-package airline-themes
   :config
   (progn
@@ -95,8 +117,9 @@
       airline-utf-glyph-linenumber          #xe0a1)
     (load-theme 'airline-papercolor t)))
 
+
 ;(use-package mode-icons)
-(use-package major-mode-icons)
+;;(use-package major-mode-icons)
 
 ;; =================================================================
 ;; Emacs Color Theme

@@ -91,11 +91,11 @@
 
 
 
-;; (use-package cc-mode
-;;   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
-;;          ("\\.m\\'"                   . c-mode)
-;;          ("\\.mm\\'"                  . c++-mode))
-;;   ;;:bind ("M-q" . query-replace)
+ (use-package cc-mode
+   :mode (("\\.h\\(h?\\|xx\\|pp\\)\\'" . c++-mode)
+          ("\\.m\\'"                   . c-mode)
+          ("\\.mm\\'"                  . c++-mode))
+   :bind ("M-q" . query-replace))
 ;;   ;;:init
 ;;   ;; (progn
 ;;   ;;   (define-key c-mode-map    [(tab)] 'company-complete)

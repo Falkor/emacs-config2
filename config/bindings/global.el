@@ -275,6 +275,7 @@
 
 (global-set-key (kbd "C-x C-e")  'compile)
 (global-set-key (kbd "<f6>")     'compile)
+(global-set-key (kbd "<f2>")     'linum-mode)
 
 
 
