@@ -54,7 +54,7 @@
 
 ;; === Get ride of tabs most of the time ===
 (setq-default indent-tabs-mode nil)     ; indentation can't insert tabs
-(setq-default tab-width 2)
+(setq-default tab-width 4)
 (setq-default tab-always-indent 'complete)
 
 (setq c-basic-offset 4)
