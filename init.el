@@ -1,6 +1,6 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Wed 2017-02-08 16:54 svarrette>
+;; Time-stamp: <Thu 2017-08-24 14:50 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -129,3 +129,4 @@
                  (message "Loading %s...done (%.3fs) [after-init]"
                           ,load-file-name elapsed)))
             t))
+(put 'downcase-region 'disabled nil)

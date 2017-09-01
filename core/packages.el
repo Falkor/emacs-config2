@@ -72,6 +72,7 @@
                           helm-projectile
                           helm-swoop
                           htmlize
+                          indent-guide
                           irony
                           js2-mode
                           json-mode
