@@ -1,5 +1,5 @@
 ;; -*- mode: elisp; -*-
-;; Time-stamp: <Wed 2017-02-08 23:41 svarrette>
+;; Time-stamp: <Tue 2018-11-20 12:12 svarrette>
 ;; ----------------------------------------------------------------------------
 ;; Company mode -- Complete Anything
 ;; See http://company-mode.github.io/
@@ -49,6 +49,6 @@
     'company-backends 'company-rtags))
 (setq rtags-autostart-diagnostics t)
 (rtags-enable-standard-keybindings)
-(use-package rtags-helm
-  :config
-  (setq rtags-use-helm t))
+;; (use-package rtags-helm
+;;   :config
+;;   (setq rtags-use-helm t))

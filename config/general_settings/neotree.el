@@ -1,6 +1,6 @@
 ;; ----------------------------------------------------------------------
 ;; File: neotree.el - NerdTree like
-;; Time-stamp: <Mer 2014-09-24 12:12 svarrette>
+;; Time-stamp: <Tue 2018-11-20 12:02 svarrette>
 ;; ----------------------------------------------------------------------
 ;; see http://www.emacswiki.org/emacs/NeoTree
 
@@ -24,6 +24,5 @@
   (progn
     (setq neo-smart-open t)
     (setq projectile-switch-project-action 'neotree-projectile-action)
-    ; (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+    (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
     ))
-

@@ -39,6 +39,7 @@
 ;;
 (defvar falkor/packages '(ace-jump-mode
                           alert
+                          all-the-icons
                           airline-themes
                           apache-mode
                           auctex
@@ -51,6 +52,7 @@
                           company
                           company-auctex
                           company-c-headers
+                          diminish
                           enh-ruby-mode
                           exec-path-from-shell
                           expand-region
