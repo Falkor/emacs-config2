@@ -16,3 +16,4 @@ ac-comphist.dat
 /.emacs-semanticdb/
 /tests/
 tramp
+elpa/
