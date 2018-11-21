@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: case
+# key: case
+# --
+case $${1:1} in
+    -${4:f} | --${5:file}) ${6:shift;} ${7:FILE}=\$1;;
+    *) $0;;
+esac
+shift

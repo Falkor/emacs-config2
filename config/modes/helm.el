@@ -27,16 +27,16 @@
     (setq helm-candidate-number-limit 100)
 
     (when (executable-find "curl")
-      (setq helm-google-suggest-use-curl-p t))
+      (setq helm-net-prefer-curl t))
     (helm-mode t)
 	)
   :bind (("M-y"     . helm-show-kill-ring)
          ("M-x"     . helm-M-x)
-		 ("C-="     . helm-company)
+		     ("C-="     . helm-company)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf)
          ("C-x C-g" . helm-do-grep)
-		 ("C-x b"   . helm-buffers-list)
+		     ("C-x b"   . helm-buffers-list)
          ;; see projectile.el for C-x C-p
          )
   :config
@@ -52,12 +52,11 @@
 	(define-key helm-map (kbd "C-z")   'helm-select-action)
 	))
 
-;; better search ;) 
+;; better search ;)
 (use-package helm-swoop
   ;;:config ((setq helm-swoop-pre-input-function (lambda () nil)))
   :bind (("C-c C-SPC" . helm-swoop)
          ;;("C-c o" . helm-multi-swoop-all)
-         ("C-s"   .  helm-swoop)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
+         ("C-s"   .  helm-swoop-without-pre-input)  ;; (lambda() (interactive) (helm-swoop :$query nil)))
          ;;("C-r"   . helm-resume)
 		 ))
-

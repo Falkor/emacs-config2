@@ -9,7 +9,7 @@
 (setq initial-major-mode 'text-mode)    ; to avoid autoloads for lisp mode
 (setq require-final-newline t)          ; ensure a file ends in a newline when it
 
-;; Increase the lisp interpretor depth 
+;; Increase the lisp interpretor depth
 ;;(setq max-lisp-eval-depth 10000)
 
 ;; use *.el before *.elc if newer
@@ -20,7 +20,7 @@
 ;; (setq comment-auto-fill-only-comments t)
 
 ;; Correct copy-paste to clipboard
-(setq x-select-enable-clipboard t)
+(setq select-enable-clipboard t)
 ;; after mouse selection in X11, you can paste by `yank' in emacs
 ;;(Setq x-select-enable-primary t)
 (setq mouse-drag-copy-region  t)
@@ -46,9 +46,6 @@
 (use-package ansi-color)
 
 ;; === Sane defaults configurations ===
-
-;; Allow pasting selection outside of Emacs
-(setq x-select-enable-clipboard t)
 
 ;; Auto refresh buffers
 (global-auto-revert-mode 1)
@@ -96,7 +93,7 @@
 ;;(setq auto-fill-mode t)                 ; activate by default
 
 ;;Finally, visual-line-mode is so much better than auto-fill-mode. It doesn't
-;;actually break the text into multiple lines - it only looks that way.  
+;;actually break the text into multiple lines - it only looks that way.
 (remove-hook 'text-mode-hook #'turn-on-auto-fill)
 (add-hook 'text-mode-hook 'turn-on-visual-line-mode)
 
@@ -157,6 +154,3 @@
       ad-do-it)
     (dotimes (i 10)
       (when (= p (point)) ad-do-it))))
-
-
-

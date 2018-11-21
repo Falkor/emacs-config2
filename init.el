@@ -1,6 +1,6 @@
 ;; -*- mode: emacs-lisp; -*-
 ;; -------------------------------------------------------------------------
-;; Time-stamp: <Mar 2014-12-02 11:53 svarrette>
+;; Time-stamp: <Thu 2017-08-24 14:50 svarrette>
 ;;
 ;; .emacs -- my personnal Emacs Init File -- see http://github.com/Falkor/emacs-config2
 ;;
@@ -11,12 +11,19 @@
 ;;      |_|  \__,_|_|_|\_\___/|_|    |___/ (_)___|_| |_| |_|\__,_|\___|___/
 ;;
 ;;
-;; Copyright (c) 2000-2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
+;; Copyright (c) 2000-2017 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; .             http://varrette.gforge.uni.lu
 ;;
 ;; -------------------------------------------------------------------------
 
 ;; Initialization - save start time
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (defconst emacs-start-time (current-time))
 
 (unless noninteractive
@@ -80,6 +87,9 @@
 ;; Now load/setup packages
 (load (get-conf-path "core/packages"))
 
+;; Set PATH
+(exec-path-from-shell-copy-env "PATH")
+
 ;; === KEY LIBRARIES ===
 ;; Below are the key libraries you wish to see loaded asap
 (require 'use-package)
@@ -119,3 +129,4 @@
                  (message "Loading %s...done (%.3fs) [after-init]"
                           ,load-file-name elapsed)))
             t))
+(put 'downcase-region 'disabled nil)

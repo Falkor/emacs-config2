@@ -1,6 +1,6 @@
 ;; ----------------------------------------------------------------------
-;; File: neotree.el - NerdTree like 
-;; Time-stamp: <Mer 2014-09-24 12:12 svarrette>
+;; File: neotree.el - NerdTree like
+;; Time-stamp: <Tue 2018-11-20 12:02 svarrette>
 ;; ----------------------------------------------------------------------
 ;; see http://www.emacswiki.org/emacs/NeoTree
 
@@ -18,6 +18,11 @@
         (message "Could not find git project root."))))
 
 (use-package neotree
-  :commands ( neo-buffer--unlock-width  neo-buffer--lock-width)
-  :bind ("<f1>" . neotree-project-dir))
-
+  ;; :commands ( neo-buffer--unlock-width  neo-buffer--lock-width)
+  :bind ("<f1>" . neotree-project-dir)
+  :config
+  (progn
+    (setq neo-smart-open t)
+    (setq projectile-switch-project-action 'neotree-projectile-action)
+    (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+    ))

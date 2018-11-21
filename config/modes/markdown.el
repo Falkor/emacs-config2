@@ -33,7 +33,7 @@
   :init
   (progn
     (setq markdown-command "pandoc --smart -f markdown -t pdf")
-    (setq markdown-css-path (expand-file-name "markdown.css" emacs-root)))
+    (setq markdown-css-paths (expand-file-name "markdown.css" emacs-root)))
   :bind (("C-c C-v" . markdown-preview-file)
          ;;("C-c C-e" . )
          )
@@ -48,8 +48,8 @@
       (progn
         (add-hook 'markdown-mode-hook 'pandoc-mode)))
 
-	(use-package markdown-toc
-	  :bind ("C-c t"   . markdown-toc/generate-toc))
+	  (use-package markdown-toc
+	    :bind ("C-c t"   . markdown-toc/generate-toc))
 
     (require 'org-table)
     (add-hook 'markdown-mode-hook 'orgtbl-mode)

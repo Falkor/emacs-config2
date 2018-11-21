@@ -1,5 +1,5 @@
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Lun 2014-11-10 12:25 svarrette>
+;; Time-stamp: <Wed 2018-11-21 08:46 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -11,9 +11,14 @@
 (setq truncate-partial-width-windows nil)
 (setq line-number-mode    t)
 (setq column-number-mode  t)
+(global-hl-line-mode      t)
+(set-face-background hl-line-face "white smoke")
 
 ;; === F... the beep ===
-(setq visible-bell        t)
+;;(setq visible-bell        t)  ;; this sucks under El Capitan
+;; El Capitan work-around
+(setq visible-bell nil) ;; The default
+(setq ring-bell-function 'ignore)
 
 ;; === Default size of the frame ===
 (set-frame-width (selected-frame) 145)
@@ -58,14 +63,74 @@
 ;; Snow Leopard users may try Menlo-12, other should consider Monaco-12.
 (add-to-list 'default-frame-alist '(font . "Monaco-12"))
 
+
+(use-package diminish
+  :ensure t
+  :demand t
+  :diminish (visual-line-mode . " ω")
+  :diminish hs-minor-mode
+  :diminish fundamental-mode
+  :diminish abbrev-mode
+  :diminish helm-mode
+  :diminish auto-fill-function
+  :diminish subword-mode)
+
+;; =================================================================
+;; Spaceline Status Bar
+;; =================================================================
+;; See https://github.com/TheBB/spaceline
+(use-package spaceline
+  :ensure t
+  :init
+  (require 'spaceline-config)
+  ;;(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
+  :config
+  (spaceline-spacemacs-theme)
+  ;; see https://github.com/domtronn/spaceline-all-the-icons.el
+  ;; (use-package spaceline-all-the-icons
+  ;;   :after spaceline
+  ;;   :config
+  ;;   (spaceline-all-the-icons-theme)
+  ;;   (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+  ;;   (spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
+  ;;   (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
+  ;;   (spaceline-toggle-all-the-icons-buffer-position-on))
+  )
+
+
 ;; =================================================================
 ;; Powerline Status Bar
 ;; =================================================================
 ;; See https://github.com/milkypostman/powerline
 ;; inspired by [vim-powerline](https://github.com/Lokaltog/vim-powerline).
-(use-package powerline)
-(powerline-center-theme)
+;; (use-package powerline)
+;; (use-package powerline                  ; The work-horse of Spaceline
+;;   :ensure t
+;;   :after spaceline-config
+;;   :config (validate-setq
+;;            powerline-height (truncate (* 1.0 (frame-char-height)))
+;;            powerline-default-separator 'utf-8))
+;; __________________________
+;; ;;(powerline-center-theme)
+;; ;; https://github.com/AnthonyDiGirolamo/airline-themes
+(use-package airline-themes
+  :config
+  (progn
+    (setq airline-display-directory         "Disabled")
+    (setq powerline-utf-8-separator-left    #xe0b0
+      powerline-utf-8-separator-right       #xe0b2
+      airline-utf-glyph-separator-left      #xe0b0
+      airline-utf-glyph-separator-right     #xe0b2
+      airline-utf-glyph-subseparator-left   #xe0b1
+      airline-utf-glyph-subseparator-right  #xe0b3
+      airline-utf-glyph-branch              #xe0a0
+      airline-utf-glyph-readonly            #xe0a2
+      airline-utf-glyph-linenumber          #xe0a1)
+    (load-theme 'airline-papercolor t)))
 
+
+;(use-package mode-icons)
+;;(use-package major-mode-icons)
 
 ;; =================================================================
 ;; Emacs Color Theme
@@ -95,6 +160,11 @@
         (cursor-type . box)))
 (set-default 'cursor-type 'box)
 
+;; === Icons ===
+;; see https://github.com/domtronn/all-the-icons.el
+;; (use-package all-the-icons)
+
+
 ;; === See the end of the file ===
 (setq-default indicate-empty-lines t)
 (when (not indicate-empty-lines)
@@ -108,5 +178,3 @@
 ;; run 'M-x fit-frame' for that
 ;;(require 'fit-frame)
 ;;(add-hook 'after-make-frame-functions 'fit-frame)
-
-

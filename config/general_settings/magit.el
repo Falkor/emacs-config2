@@ -1,12 +1,12 @@
 ;; -*- mode: emacs-lisp; -*-
-;; Time-stamp: <Mar 2015-01-20 12:00 svarrette>
+;; Time-stamp: <Wed 2018-11-21 08:23 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
   :diminish (magit-auto-revert-mode)
   :bind     (("C-x g s" . magit-status)
-			 ("C-x g d" . magit-diff)
+			 ("C-x g d" . magit-diff-range)
 			 ("C-x g b" . magit-blame-mode))
   :config
   (progn
@@ -87,5 +87,3 @@
 		(set-face-foreground 'git-gutter-fr:added    "grey50")
 		(set-face-foreground 'git-gutter-fr:deleted  "grey50")
 		))))
-
-

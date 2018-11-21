@@ -1,5 +1,5 @@
 ;; -*- mode: lisp; -*-
-;; Time-stamp: <Dim 2014-11-16 10:30 svarrette>
+;; Time-stamp: <Thu 2016-09-22 00:46 svarrette>
 ;; ========================================================
 ;; Auto-insert: automatic insertion of text into new files
 ;; ========================================================
@@ -40,12 +40,13 @@
         ("\\.C$"           . "C++")              ;
         ("[Mm]akefile$"    . "Makefile")         ; Makefile
         ("[Mm]akefile.am$" . "Makefile.am")      ; Makefile.am (Automake)
-        ("CMakeList*"     . "CMake")            ; CMake
+        ("CMakeList*"     . "CMake")             ; CMake
+        ("\\.lua$"         . "Lua")              ; Lua
         ("\\.md$"          . "Text")             ; Text
         ("\\.markdown$"    . "Text")             ; Text
         ("\\.mdown$"       . "Text")             ; Text
         ("\\.txt$"         . "Text")             ; Text
-        ("\\.gpg$"         . "GPG")              ; GPG 
+        ("\\.gpg$"         . "GPG")              ; GPG
         ("[Rr]eadme$"      . "Readme")           ; Readme
         ("README$"         . "Readme")           ;
         ("\\.sh$"          . "Shell")            ; Shell
@@ -55,6 +56,7 @@
         ("\\.wml"          . "WML")              ; WML (Website Meta Language)
         ("\\.php"          . "PHP")              ; PHP
         ("\\.gnuplot"      . "Gnuplot")          ; Gnuplot
+        ("\\.py$"          . "Python")           ; Python
         ("\\.pl$"          . "Perl")             ; Perl
         ("\\.pm$"          . "Perl Module")      ; PerlModule
         ("\\.t$"           . "Perl Test")        ; Perl Test script
@@ -80,6 +82,7 @@
         ("Tools C++"   . "insert.tools_cpp.h")
         ("Logs C++"    . "insert.logs.cpp")
         ("Logs C++ Include" . "insert.logs.h")
+        ("Lua"         . "insert.lua")
         ("Makefile"    . "insert.makefile")
         ("Makefile.am" . "insert.makefile.am")
         ("Text"        . "insert.md")
@@ -90,6 +93,7 @@
         ("WML"         . "insert.wml")
         ("PHP"         . "insert.php")
         ("Gnuplot"     . "insert.gnuplot")
+        ("Python"      . "insert.py")
         ("Perl"        . "insert.pl")
         ("Perl Module" . "insert.pm")
         ("Perl Test"   . "insert.t")
@@ -98,4 +102,3 @@
         ("R"           . "insert.R")
         ("OAR"         . "insert.oar")
         ))
-
