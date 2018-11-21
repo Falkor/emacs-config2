@@ -1,13 +1,14 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Fri 2017-02-10 09:34 svarrette>
+;; Time-stamp: <Wed 2018-11-21 08:22 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
 
 
 (setq projectile-keymap-prefix (kbd "C-c p"))
+;;(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 (use-package projectile
   :diminish " P"
@@ -33,4 +34,3 @@
   :bind (("C-c p h" . helm-projectile)
          ("C-x C-p" . helm-projectile)
          ("C-x C-o" . helm-projectile-switch-project)))
-

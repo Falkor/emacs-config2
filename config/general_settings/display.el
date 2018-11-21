@@ -1,5 +1,5 @@
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Mon 2017-02-13 11:19 svarrette>
+;; Time-stamp: <Wed 2018-11-21 08:46 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -85,7 +85,18 @@
   (require 'spaceline-config)
   ;;(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
   :config
-  (spaceline-spacemacs-theme))
+  (spaceline-spacemacs-theme)
+  ;; see https://github.com/domtronn/spaceline-all-the-icons.el
+  ;; (use-package spaceline-all-the-icons
+  ;;   :after spaceline
+  ;;   :config
+  ;;   (spaceline-all-the-icons-theme)
+  ;;   (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+  ;;   (spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
+  ;;   (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
+  ;;   (spaceline-toggle-all-the-icons-buffer-position-on))
+  )
+
 
 ;; =================================================================
 ;; Powerline Status Bar

@@ -1237,7 +1237,7 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/display.el
 ;; -*- mode:lisp -*-
-;; Time-stamp: <Mon 2017-02-13 11:19 svarrette>
+;; Time-stamp: <Wed 2018-11-21 08:46 svarrette>
 ;; ========================================================================
 ;; Setup basic look and feel for emacs (scrolling, fonts, color theme etc.)
 ;; ========================================================================
@@ -1323,7 +1323,18 @@
   (require 'spaceline-config)
   ;;(setq spaceline-highlight-face-func 'spaceline-highlight-face-evil-state)
   :config
-  (spaceline-spacemacs-theme))
+  (spaceline-spacemacs-theme)
+  ;; see https://github.com/domtronn/spaceline-all-the-icons.el
+  ;; (use-package spaceline-all-the-icons
+  ;;   :after spaceline
+  ;;   :config
+  ;;   (spaceline-all-the-icons-theme)
+  ;;   (spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+  ;;   (spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
+  ;;   (spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
+  ;;   (spaceline-toggle-all-the-icons-buffer-position-on))
+  )
+
 
 ;; =================================================================
 ;; Powerline Status Bar
@@ -1813,14 +1824,14 @@
 ;; ############################################################################
 ;; Config file: ~/.emacs.d/config/general_settings/magit.el
 ;; -*- mode: emacs-lisp; -*-
-;; Time-stamp: <Mar 2015-01-20 12:00 svarrette>
+;; Time-stamp: <Wed 2018-11-21 08:23 svarrette>
 ;; ----------------------------------------------------------------------
 ;; Magit management
 
 (use-package magit
   :diminish (magit-auto-revert-mode)
   :bind     (("C-x g s" . magit-status)
-			 ("C-x g d" . magit-diff)
+			 ("C-x g d" . magit-diff-range)
 			 ("C-x g b" . magit-blame-mode))
   :config
   (progn
@@ -1901,8 +1912,6 @@
 		(set-face-foreground 'git-gutter-fr:added    "grey50")
 		(set-face-foreground 'git-gutter-fr:deleted  "grey50")
 		))))
-
-
 ;; ############################################################################
 
 
@@ -1985,13 +1994,14 @@
 ;; -*- mode: lisp; -*-
 ;; ----------------------------------------------------------------------
 ;; File: projectile.el - Manage projects via projectile
-;; Time-stamp: <Fri 2017-02-10 09:34 svarrette>
+;; Time-stamp: <Wed 2018-11-21 08:22 svarrette>
 ;;
 ;; Copyright (c) 2014 Sebastien Varrette <Sebastien.Varrette@uni.lu>
 ;; ----------------------------------------------------------------------
 
 
 (setq projectile-keymap-prefix (kbd "C-c p"))
+;;(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 (use-package projectile
   :diminish " P"
@@ -2017,7 +2027,6 @@
   :bind (("C-c p h" . helm-projectile)
          ("C-x C-p" . helm-projectile)
          ("C-x C-o" . helm-projectile-switch-project)))
-
 ;; ############################################################################
 
 

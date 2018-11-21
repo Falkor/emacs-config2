@@ -107,6 +107,7 @@
                           smartparens
                           smex
                           solarized-theme
+                          spaceline-all-the-icons
                           sr-speedbar
                           use-package
                           web-mode
