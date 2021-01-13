@@ -47,7 +47,7 @@
 ;;(use-package cl-lib)
 
 ;; keep all emacs-related stuff under ~/emacs.d
-(defvar emacs-root "~/.emacs.d/"
+(defvar emacs-root "~/.config/emacs/"
   "the root of my personal emacs load-path.")
 
 ;; Helper function for root path
