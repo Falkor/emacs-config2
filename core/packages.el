@@ -107,6 +107,8 @@
                           smartparens
                           smex
                           solarized-theme
+                          solidity-mode
+                          solidity-flycheck
                           spaceline-all-the-icons
                           sr-speedbar
                           use-package
