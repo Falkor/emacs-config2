@@ -1,3 +1,15 @@
+---------------
+
+**`/!\ IMPORTANT`: This repository holds OBSOLETE configuration which are kept for archiving purposes!**
+
+**If you are interested in my [LATEST](https://github.com/Falkor/spacemacs-config) up-to-date Emacs configuration, kindly refer to the following repository:**
+
+<p align="center">
+<b><a href="https://github.com/Falkor/spacemacs-config"><code>Falkor/spacemacs-config</code></a></b>
+</p>
+
+---- 
+
 ` README.md `
 Copyright (c) 2014 [Sebastien Varrette](mailto:<Sebastien.Varrette@uni.lu>) [www](http://varrette.gforge.uni.lu)
 
